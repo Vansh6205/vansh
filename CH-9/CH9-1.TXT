@@ -1,0 +1,797 @@
+SQL> 
+SQL> CL SCR
+SQL> REM SQL HAS 5 SUB LANGUAGES
+SQL> 
+SQL> REM 1 DRL/DQL 2 DML 3 TCL 4 DDL 5 DCL
+SQL> 
+SQL> REM DRL/DQL : DATA RETRIEVAL/QUERY LANGUAGE : SELECT
+SQL> 
+SQL> REM DML : DATA MANIPULATION LANGUAGE : INSERT UPDATE DELETE      MERGE
+SQL> 
+SQL> REM TCL : TRANSACTION CONTROL LANGUAGE : COMMIT ROLLBACK SAVEPOINT
+SQL> 
+SQL> REM DDL : DATA DEFINITION LANGUAGE : CREATE DROP FLASHBACK PURGE TRUNCATE    RENAME COMMENT ALTER
+SQL> 
+SQL> REM DCL : DATA CONTROL LANGUAGE : GRANT REVOKE
+SQL> 
+SQL>  
+SQL> REM DML + TCL + DDL + CONCEPTS
+SQL> 
+SQL> REM INSERT UPDATE DELETE
+SQL> 
+SQL> REM COMMIT ROLLBACK SAVEPOINT
+SQL> 
+SQL> REM ALTER DROP FLASHBACK PURGE TRUNCATE
+SQL> 
+SQL> REM CONCEPTS : 1 READ CONSISTANCY 2 CONCURRENCY 3 LOCKING/UNLOCKING 4 DEAD LOCK SITUATION
+SQL> 
+SQL> 
+SQL> REM INSERT : TO ADD NEW ROWS TO THE EXISTING TABLE
+SQL> 
+SQL> REM UPDATE : TO UPDATE/MODIFY/CHANGE/EDIT EXISTING ROW VALUES
+SQL> 
+SQL> REM DELETE : TO DELETE/REMOVE EXISTING ROWS OF THE TABLE
+SQL> 
+SQL> 
+SQL> 
+SQL> DESC EMPLOYEES
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(10)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(10)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> REM ANY CHANGES DONE USING DML STATEMENT ARE TEMPORARY. IT IS AVAILABLE ONLY IN RAM.
+SQL> 
+SQL> REM TRANSACTION : BUNCH/GROUP OF DML STATEMENTS EXECUTED ON SINGLE/MULTIPLE TABLES WITHIN SINGLE SESSION.
+SQL> 
+SQL> REM SESSION : TIME PERIOD BETWEEN LOG IN AND LOG OUT.
+SQL> 
+SQL> REM TRANSACTION STARTS WITH FIRST DML STATEMENT EXECUTION.
+SQL> 
+SQL> REM TRANSACTION ENDS WITH EITHER COMMIT/ROLLBACK.
+SQL> 
+SQL> 
+SQL> REM COMMIT : TO SAVE THE CURRENT TRANSACTION CHANGES IN TABLE PERMANENTLY.
+SQL> 
+SQL> REM ROLLBACK : TO UNDO THE CURRENT TRANSACTION CHANGES FROM RAM/MEMORY/SGA (SYSTEM GLOBAL AREA)
+SQL> 
+SQL> 
+SQL> REM SAVEPOINT : TO BREAK TRANSACTION INTO PARTS. SO AFTERWARDS WE CAN USE IT FOR PARTIAL UNDO/ROLLBACK.
+SQL> 
+SQL> DROP TABLE R1;
+
+Table dropped.
+
+SQL> CREATE TABLE R1 AS SELECT * FROM REGIONS WHERE 1 = 2;
+CREATE TABLE R1 AS SELECT * FROM EMPLOYEES WHERE 1=2;
+
+Table created.
+
+SQL> DESC REGIONS
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ REGION_ID                                                                                                         NOT NULL NUMBER
+ REGION_NAME                                                                                                                VARCHAR2(25)
+
+SQL> DESC R12
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ REGION_ID                                                                                                         NOT NULL NUMBER
+ REGION_NAME                                                                                                                VARCHAR2(25)
+
+SQL> SELECT * FROM REGIONS;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 Europe                                                                                                                                                                                       
+         2 Americas                                                                                                                                                                                     
+         3 Asia                                                                                                                                                                                         
+         4 Middle East and Africa                                                                                                                                                                       
+
+SQL> DESC R1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ REGION_ID                                                                                                         NOT NULL NUMBER
+ REGION_NAME                                                                                                                VARCHAR2(25)
+
+SQL> SELECT * FROM R1;
+
+no rows selected
+
+SQL> REM BELOW DML STATEMENT WILL START NEW TRANSACTION.
+SQL> 
+SQL> INSERT INTO R1 VALUES (1,'ASIA');
+
+1 row created.
+
+SQL> REM RAM : 1 ROW , TABLE : 0 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+
+SQL> INSERT INTO R1 VALUES (2,'AMERICA');
+
+1 row created.
+
+SQL> REM RAM : 2 ROW , TABLE : 0 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> REM RAM : 0 ROW , TABLE : 0 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+no rows selected
+
+SQL> REM BELOW DML STATEMENT WILL START NEW TRANSACTION.
+SQL> 
+SQL> INSERT INTO R1 VALUES (1,'ASIA');
+
+1 row created.
+
+SQL> REM RAM : 1 ROW , TABLE : 0 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+
+SQL> INSERT INTO R1 VALUES (2,'AMERICA');
+
+1 row created.
+
+SQL> REM RAM : 2 ROW , TABLE : 0 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+
+SQL> COMMIT;
+
+
+Commit complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+
+SQL> INSERT INTO R1 VALUES (3,'AFRICA');
+
+1 row created.
+
+SQL> REM RAM : 1 ROW , TABLE : 2 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+
+SQL> REM RAM : 0 ROW , TABLE : 2 ROW
+SQL> 
+SQL> REM BELOW DML STATEMENT WILL START NEW TRANSACTION.
+SQL> 
+SQL> INSERT INTO R1 VALUES (3,'AFRICA');
+
+1 row created.
+
+SQL> REM RAM : 1 ROW , TABLE : 2 ROW
+SQL> 
+SQL> SELECT * FROM R1;
+  
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> SAVEPOINT A;
+
+Savepoint created.
+
+SQL> REM ABOVE COMMAND WILL CREATE A SAVEPOINT NAMED 'A', WHICH WE CAN USE WITH ROLLBACK COMMAND.
+SQL> 
+SQL> REM ABOVE COMMAND HAS BROKEN THE TRANSACTION INTO TWO PARTS.
+SQL> 
+SQL> INSERT INTO R1 VALUES (4,'ANTARCTICA');
+
+1 row created.
+
+SQL> REM RAM : 2 ROWS , TABLE : 2 ROWS
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         4 ANTARCTICA                                                                                                                                                                                   
+
+SQL> REM POSSIBILITIES : 1 COMMIT : TO SAVE WHOLE TRANSACTION
+SQL> 
+SQL> REM 2 ROLLBACK : TO UNDO WHOLE TRANSACTION
+SQL> 
+SQL> REM 3 ROLLBACK TO A; + COMMIT; : FOR PARTIAL UNDO AND PARTIAL SAVE
+SQL> 
+SQL> ROLLBACK TO A;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> REM RAM : 1 ROW , TABLE : 2 ROWS
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> REM RAM : 0 ROW , TABLE : 3 ROWS
+SQL> 
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> REM INSERT : TO ADD NEW ROWS TO THE EXISTING TABLE
+SQL> 
+SQL> REM INSERT HAS TWO SYNTAXES :
+SQL> 
+SQL> REM 1 INSERT ... VALUES
+SQL> 
+SQL> REM 2 INSERT ... SUB QUERY
+SQL> 
+SQL> 
+SQL> REM 1 INSERT ... VALUES : IT CAN INSERT SINGLE ROW PER SINGLE STATEMENT EXECUTION
+SQL> 
+SQL> REM 2 INSERT ... SUB QUERY : IT CAN INSERT ZERO , ONE , MULTIPLE OR ALL ROWS RETURNED BY SUB QUERY.
+SQL> 
+SQL> 
+SQL> REM INSERT ... VALUES SYNTAX :
+SQL> 
+SQL> REM INSERT ... VALUES SYNTAX : INSERT INTO table_name (column list) VALUES (value list);
+SQL> 
+SQL> DROP TABLE E1;
+DROP TABLE E1
+           *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> DROP TABLE D1;
+
+Table dropped.
+
+SQL> CREATE TABLE D1 AS SELECT * FROM DEPARTMENTS WHERE ROWNUM = 0;
+
+Table created.
+
+SQL> DESC D1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+ DEPARTMENT_NAME                                                                                                   NOT NULL VARCHAR2(30)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ LOCATION_ID                                                                                                                NUMBER(4)
+
+SQL> SELECT * FROM D1;
+
+no rows selected
+
+SQL> INSERT INTO D1 VALUES (10,'ACC',101,1500);
+
+1 row created.
+
+SQL> INSERT INTO D1 (DEPARTMENT_NAME , MANAGER_ID , LOCATION_ID , DEPARTMENT_ID) VALUES ('RES',102,1700,20);
+
+1 row created.
+
+SQL> INSERT INTO D1 VALUES (30,'SAL',NULL,'');
+
+1 row created.
+
+SQL> INSERT INTO D1 VALUES (40,'',NULL,'');
+INSERT INTO D1 VALUES (40,'',NULL,'')
+                          *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."D1"."DEPARTMENT_NAME") 
+
+
+SQL> INSERT INTO D1 VALUES (30,'SAL',DEFAULT,'');
+
+1 row created.
+
+SQL> INSERT INTO D1 (DEPARTMENT_NAME , MANAGER_ID ) VALUES ('RES',102);
+
+1 row created.
+
+SQL> INSERT INTO D1 (DEPARTMENT_NAME , MANAGER_ID ) VALUES ('RES',102+3);
+
+1 row created.
+
+SQL> INSERT INTO D1 (DEPARTMENT_NAME , MANAGER_ID ) VALUES (LOWER('RES'),102+3);
+
+1 row created.
+
+SQL> INSERT INTO D1 (DEPARTMENT_NAME , MANAGER_ID ) VALUES (LOWER('RES'),(SELECT EMPLOYEE_ID FROM EMPLOYEES WHERE FIRST_NAME='Steven'));
+
+1 row created.
+
+SQL> REM SCALAR SUB QUERY : IT MUST RETURN SINGLE VALUE I.E. SINGLE COLUMN AND SINGLE ROW
+SQL> 
+SQL> REM INSERT ... SUB QUERY :
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 ACC                                   101        1500                                                                                                                                     
+           20 RES                                   102        1700                                                                                                                                     
+           30 SAL                                                                                                                                                                                       
+           30 SAL                                                                                                                                                                                       
+              RES                                   102                                                                                                                                                 
+              RES                                   105                                                                                                                                                 
+              res                                   105                                                                                                                                                 
+              res                                   100                                                                                                                                                 
+
+8 rows selected.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE 1 <> 1;
+
+0 rows created.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 ACC                                   101        1500                                                                                                                                     
+           20 RES                                   102        1700                                                                                                                                     
+           30 SAL                                                                                                                                                                                       
+           30 SAL                                                                                                                                                                                       
+              RES                                   102                                                                                                                                                 
+              RES                                   105                                                                                                                                                 
+              res                                   105                                                                                                                                                 
+              res                                   100                                                                                                                                                 
+
+8 rows selected.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID = 90;
+
+1 row created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID < 60;
+
+3 rows created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS;
+
+8 rows created.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 ACC                                   101        1500                                                                                                                                     
+           20 RES                                   102        1700                                                                                                                                     
+           30 SAL                                                                                                                                                                                       
+           30 SAL                                                                                                                                                                                       
+              RES                                   102                                                                                                                                                 
+              RES                                   105                                                                                                                                                 
+              res                                   105                                                                                                                                                 
+              res                                   100                                                                                                                                                 
+           90 Executive                             100        1700                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+
+20 rows selected.
+
+SQL> INSERT INTO D1 (DEPARTMENT_ID , DEPARTMENT_NAME) SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS WHERE DEPARTMENT_ID IN (10,110);
+
+2 rows created.
+
+SQL> SELECT * FROM D1;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 ACC                                   101        1500                                                                                                                                     
+           20 RES                                   102        1700                                                                                                                                     
+           30 SAL                                                                                                                                                                                       
+           30 SAL                                                                                                                                                                                       
+              RES                                   102                                                                                                                                                 
+              RES                                   105                                                                                                                                                 
+              res                                   105                                                                                                                                                 
+              res                                   100                                                                                                                                                 
+           90 Executive                             100        1700                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+           10 Administration                                                                                                                                                                            
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+          110 Accounting                                                                                                                                                                                
+
+22 rows selected.
+
+SQL> SET PAGES 100
+SQL> 
+SQL> R
+  1* SELECT * FROM D1
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 ACC                                   101        1500                                                                                                                                     
+           20 RES                                   102        1700                                                                                                                                     
+           30 SAL                                                                                                                                                                                       
+           30 SAL                                                                                                                                                                                       
+              RES                                   102                                                                                                                                                 
+              RES                                   105                                                                                                                                                 
+              res                                   105                                                                                                                                                 
+              res                                   100                                                                                                                                                 
+           90 Executive                             100        1700                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+           10 Administration                                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+
+22 rows selected.
+
+SQL> CREATE TABLE E1 AS SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES WHERE 1 < 0;
+
+Table created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH','4-APR-04');
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH','4-APRIL-04');
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH','4-APRIL-2004');
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH','4-4-2004');
+INSERT INTO E1 VALUES ('GANESH','4-4-2004')
+                                *
+ERROR at line 1:
+ORA-01843: not a valid month 
+
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004','DD-MM-RRRR'));
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 8:10:25','DD-MM-RRRR HH:MI.SS AM'));
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 8:10:25','DD-MM-RRRR HH:MI.SS'));
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 8:10:25','DD-MM-RRRR HH:MI.SS PM'));
+
+1 row created.
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 20:10:25','DD-MM-RRRR HH:MI.SS'));
+INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 20:10:25','DD-MM-RRRR HH:MI.SS'))
+                                        *
+ERROR at line 1:
+ORA-01849: hour must be between 1 and 12 
+
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 20:10:25','DD-MM-RRRR HH24:MI.SS'));
+
+1 row created.
+
+SQL> SELECT * FROM E1;
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+GANESH     04-APR-04                                                                                                                                                                                    
+
+8 rows selected.
+
+SQL> ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-RRRR HH:MI.SS AM';
+
+Session altered.
+
+SQL> 
+SQL> SELECT * FROM E1;
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- -----------------------                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 PM                                                                                                                                                                      
+
+8 rows selected.
+
+SQL> INSERT INTO E1 VALUES ('GANESH',TO_DATE('4-4-2004 8:10:25 PM','DD-MM-RRRR HH:MI.SS PM'));
+
+1 row created.
+
+SQL> SELECT * FROM E1;
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- -----------------------                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 12:00.00 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 AM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 PM                                                                                                                                                                      
+GANESH     04-APR-2004 08:10.25 PM                                                                                                                                                                      
+
+9 rows selected.
+
+SQL> INSERT INTO R1 VALUES (&RID,'&RNM');
+Enter value for rid: 1
+Enter value for rnm: ASIA
+old   1: INSERT INTO R1 VALUES (&RID,'&RNM')
+new   1: INSERT INTO R1 VALUES (1,'ASIA')
+
+1 row created.
+
+SQL> /
+Enter value for rid: 2
+Enter value for rnm: AMERICA
+old   1: INSERT INTO R1 VALUES (&RID,'&RNM')
+new   1: INSERT INTO R1 VALUES (2,'AMERICA')
+
+1 row created.
+
+SQL> 3
+SP2-0226: Invalid line number 
+SQL> /
+Enter value for rid: 3
+Enter value for rnm: AFRICA
+old   1: INSERT INTO R1 VALUES (&RID,'&RNM')
+new   1: INSERT INTO R1 VALUES (3,'AFRICA')
+
+1 row created.
+
+SQL> REM DELETE : TO DELETE/REMOVE EXISTING ROWS OF TABLE.
+SQL> 
+SQL> REM 'WHERE' CLAUSE IS OPTIONAL.
+SQL> 
+SQL> REM WHEN WE OMIT 'WHERE' CLAUSE, IT WILL AFFECT ALL ROWS.
+SQL> 
+SQL> REM BE CAUTIOUS, WHILE SKIPPING 'WHERE' CLAUSE.
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+6 rows selected.
+
+SQL> DELETE R1;
+
+6 rows deleted.
+
+SQL> SELECT * FROM R1;
+
+no rows selected
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+6 rows selected.
+
+SQL> DELETE FROM R1;
+
+6 rows deleted.
+
+SQL> SELECT * FROM R1;
+
+no rows selected
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         1 ASIA                                                                                                                                                                                         
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+6 rows selected.
+
+SQL> DELETE R1 WHERE REGION_ID = 1;
+
+2 rows deleted.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+         2 AMERICA                                                                                                                                                                                      
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> SELECT * FROM COUNTRIES;
+
+CO COUNTRY_NAME                              REGION_ID                                                                                                                                                  
+-- ---------------------------------------- ----------                                                                                                                                                  
+CA Canada                                            2                                                                                                                                                  
+DE Germany                                           1                                                                                                                                                  
+UK United Kingdom                                    1                                                                                                                                                  
+US United States of America                          2                                                                                                                                                  
+
+SQL> DELETE R1 WHERE REGION_ID IN (SELECT REGION_ID FROM COUNTRIES WHERE COUNTRY_NAME = 'Canada');
+
+2 rows deleted.
+
+SQL> SELECT * FROM R1;
+
+ REGION_ID REGION_NAME                                                                                                                                                                                  
+---------- -------------------------                                                                                                                                                                    
+         3 AFRICA                                                                                                                                                                                       
+         3 AFRICA                                                                                                                                                                                       
+
+SQL> roll
+Rollback complete.
+SQL> SPOOL OFF

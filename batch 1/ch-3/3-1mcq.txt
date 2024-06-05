@@ -1,0 +1,163 @@
+SELECT CONCAT('Amar Akbar',Anthony) FROM DUAL;
+*
+1 point
+A. Amar AkbarAnthony
+B. Amar Akbar Anthony
+C. AmarAkbarAnthony
+D. All of the above.
+E. None of the above.
+BELOW COMMAND WILL DISPLAY NON-DUPLICATE JOB_ID VALUES ONLY.
+*
+1 point
+A. SELECT NONDUPLICATE JOB_ID FROM EMPLOYEES;
+B. SELECT DISTINCT JOB_ID FROM EMPLOYEES;
+C. SELECT UNIK JOB_ID FROM EMPLOYEES;
+D. All of the above.
+E. None of the above.
+SELECT LENGTH(TRIM('  R A M  ')) FROM DUAL; (STRING HAS 2 SPACES EACH AS PREFIX AS WELL AS SUFFIX AND SINGLE SPACE BETWEEN ALPHABETS)
+*
+1 point
+A. 3
+B. 7
+C. 9
+D. All of the above.
+E. None of the above.
+SELECT INITCAP('aDU1MaRcHa$KothMIR') FROM DUAL;
+*
+1 point
+A. Adu1Marcha$Kothmir
+B. Adu Marcha Kothmir
+C. Adu1marcha$Kothmir
+D. All of the above.
+E. None of the above.
+SELECT RTRIM(LTRIM('12-MAY-98','18'),'9') FROM DUAL;
+*
+1 point
+A. 2-MAY-8
+B. 2-MAY-98
+C. 2-MAY-
+D. All of the above.
+E. None of the above.
+SELECT INSTR('NeElKaMAL','a',-2,2) FROM DUAL;
+*
+1 point
+A. 8
+B. 6
+C. 0
+D. All of the above.
+E. None of the above.
+SELECT REPLACE(INITCAP(TRANSLATE('HIREN','H','V')),'n','ndra') FROM DUAL;
+*
+1 point
+A. Viren
+B. VIREndra
+C. Virendra
+D. All of the above.
+E. None of the above.
+SELECT upper(LOWER(iNITCAP('ShRi rAm'))) FROM DUAL;
+*
+1 point
+A. SHRI RAM
+B. Shri Ram
+C. shri ram
+D. All of the above.
+E. None of the above.
+SELECT LPAD(RPAD('GANESH',10,'#'),8,'+') FROM DUAL;
+*
+1 point
+A. ++++++++GANESH##########
+B. GANESH####
+C. GANESH##
+D. All of the above.
+E. None of the above.
+HOW TO GET 'ShivRam'?
+*
+1 point
+A. SELECT SUBSTR('LaxmanShivRamKrishnan',7,7) FROM DUAL;
+B. SELECT SUBSTR('LaxmanShivRamKrishnan',7,13) FROM DUAL;
+C. SELECT SUBSTR('LaxmanShivRamKrishnan',-15,-8) FROM DUAL;
+D. All of the above.
+E. None of the above.
+=======================================================================================================
+WHICH COMMAND(S) IS/ARE CORRECT TO GET DAYS BETWEEN TWO DATES?
+*
+1 point
+A. SELECT '13-MAR-73' - '15JANUARY71' FROM DUAL;
+B. SELECT '13-03-73' - '15-01-71' FROM DUAL;
+C. SELECT TO_DATE('13MARCH73') - TO_DATE('15-01-71','DD-MM-RR') FROM DUAL;
+D. All of the above.
+E. None of the above.
+HOW TO ADD 2 AND HALF YEARS TO DATE?
+*
+1 point
+A. SELECT ADD_YEARS(SYSDATE,2.5) FROM DUAL;
+B. SELECT ADD_MONTHS(SYSDATE,30) FROM DUAL;
+C. SELECT ADD_MONTHS(ADD_YEARS(SYSDATE,2),6) FROM DUAL;
+D. All of the above.
+E. None of the above.
+HOW TO FIND COMPLETED YEARS FOR WHICH EMPLOYEE IS WORKING WITH COMPANY?
+*
+1 point
+A. SELECT TRUNC((SYSDATE - HIRE_DATE)/365) COMPLETED_YEARS FROM EMPLOYEES;
+B. SELECT TRUNC((SYSDATE - HIRE_DATE)/365.25) COMPLETED_YEARS FROM EMPLOYEES;
+C. SELECT TRUNC(MONTHS_BETWEEN(SYSDATE, HIRE_DATE)/12) COMPLETED_YEARS FROM EMPLOYEES;
+D. All of the above.
+E. None of the above.
+HOW TO FIND DIFFERENCE IN MONTHS BETWEEN TWO DATE VALUES?
+*
+1 point
+A. SELECT (SYSDATE - HIRE_DATE) / 30 MONTHS FROM EMPLOYEES;
+B. SELECT MONTHS_BETWEEN(SYSDATE - HIRE_DATE) MONTHS FROM EMPLOYEES;
+C. SELECT MONTHS_BETWEEN(SYSDATE , HIRE_DATE) MONTHS FROM EMPLOYEES;
+D. All of the above.
+E. None of the above.
+WHICH COMMANDS WILL PRODUCE IDENTICAL RESULTS FOR BOTH FUNCTIONS?
+*
+1 point
+A. SELECT TRUNC(3.99) , ROUND(3.49) FROM DUAL;
+B. SELECT TRUNC(1234.59,1), ROUND(1234.45,1) FROM DUAL;
+C. SELECT TRUNC(12345,-2) , ROUND(12345,-2) FROM DUAL;
+D. All of the above.
+E. None of the above.
+WHICH BELOW COMMAND(S) WILL DISPLAY 4 AS RESULT ?
+*
+1 point
+A. SELECT MOD(19,5) FROM DUAL;
+B. SELECT POWER(16,1/2) FROM DUAL;
+C. SELECT ROUND(3.5) FROM DUAL;
+D. All of the above.
+E. None of the above.
+WHICH FUNCTION RETURNS LOCAL MACHINE'S DATE ?
+*
+1 point
+A. LOCALDATE
+B. CLIENTDATE
+C. CURRENT_DATE
+D. All of the above.
+E. None of the above.
+WHICH COMMAND WILL ADD MINUTES TO DATE VALUE?
+*
+1 point
+A. SELECT SYSDATE + 5 / 1440 FROM DUAL;
+B. SELECT SYSDATE + (5 / 24 * 60) FROM DUAL;
+C. SELECT SYSDATE + (5 / (24 * 60) ) FROM DUAL;
+D. All of the above.
+E. None of the above.
+HOW TO SUBTRACT 8 MONTHS FROM DATE?
+*
+1 point
+A. SELECT SYSDATE - (30*8) FROM DUAL;
+B. SELECT SUBTRACT_MONTHS(SYSDATE , 8) FROM DUAL;
+C. SELECT ADD_MONTHS(SYSDATE , -8) FROM DUAL;
+D. All of the above.
+E. None of the above.
+HOW TO SUBTRACT DAYS AND SECONDS FROM DATE ?
+*
+1 point
+A. SELECT SYSDATE - 5 - 10/1440 FROM DUAL;
+B. SELECT SYSDATE - (5 - 10/86400) FROM DUAL;
+C. SELECT SYSDATE - (5 + (10/(24*60*60))) FROM DUAL;
+D. All of the above.
+E. None of the above.
+
+ 

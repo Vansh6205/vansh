@@ -1,0 +1,1139 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM WE MUST FOLLOW SOME RULES WHEN WE USE SET OPERATOR IN OUR COMPOUND QUERY.
+SQL> 
+SQL> REM ALL SELECT STATEMENT MUST HAVE SAME NUMBER OF ITEMS SELECTED.
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT EMPLOYEE_ID FROM EMPLOYEES;
+SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+*
+ERROR at line 1:
+ORA-01789: query block has incorrect number of result columns 
+
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+           10 Administration                                                                                                                                                                            
+           20 Marketing                                                                                                                                                                                 
+           50 Shiping                                                                                                                                                                                   
+           60 IT                                                                                                                                                                                        
+           80 Sales                                                                                                                                                                                     
+           90 Executive                                                                                                                                                                                 
+          110 Accounting                                                                                                                                                                                
+          190 Contracting                                                                                                                                                                               
+          100 Steven                                                                                                                                                                                    
+          101 Neena                                                                                                                                                                                     
+          102 Lex                                                                                                                                                                                       
+          103 Alexander                                                                                                                                                                                 
+          104 Bruce                                                                                                                                                                                     
+          107 Diana                                                                                                                                                                                     
+          124 Kevin                                                                                                                                                                                     
+          141 Trenna                                                                                                                                                                                    
+          142 Curtis                                                                                                                                                                                    
+          143 Randall                                                                                                                                                                                   
+          144 Peter                                                                                                                                                                                     
+          149 Eleni                                                                                                                                                                                     
+          174 Ellen                                                                                                                                                                                     
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+          176 Jonathon                                                                                                                                                                                  
+          178 Kimerely                                                                                                                                                                                  
+          200 Jennifer                                                                                                                                                                                  
+          201 Michael                                                                                                                                                                                   
+          202 Pat                                                                                                                                                                                       
+          205 Shelley                                                                                                                                                                                   
+          206 William                                                                                                                                                                                   
+
+28 rows selected.
+
+SQL> REM DATA TYPES OF EACH CORRESPONDING ITEM, MUST MATCH, IF NOT WE MUST CONVERT THEM INTO CHARACTER TYPE.
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT FIRST_NAME , EMPLOYEE_ID FROM EMPLOYEES;
+SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+       *
+ERROR at line 1:
+ORA-01790: expression must have same datatype as corresponding expression 
+
+
+SQL> SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT FIRST_NAME , TO_CHAR(EMPLOYEE_ID) FROM EMPLOYEES;
+
+TO_CHAR(DEPARTMENT_ID)                   DEPARTMENT_NAME                                                                                                                                                
+---------------------------------------- ----------------------------------------                                                                                                                       
+10                                       Administration                                                                                                                                                 
+20                                       Marketing                                                                                                                                                      
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+110                                      Accounting                                                                                                                                                     
+190                                      Contracting                                                                                                                                                    
+Steven                                   100                                                                                                                                                            
+Neena                                    101                                                                                                                                                            
+Lex                                      102                                                                                                                                                            
+Alexander                                103                                                                                                                                                            
+Bruce                                    104                                                                                                                                                            
+Diana                                    107                                                                                                                                                            
+Kevin                                    124                                                                                                                                                            
+Trenna                                   141                                                                                                                                                            
+Curtis                                   142                                                                                                                                                            
+Randall                                  143                                                                                                                                                            
+Peter                                    144                                                                                                                                                            
+Eleni                                    149                                                                                                                                                            
+Ellen                                    174                                                                                                                                                            
+
+TO_CHAR(DEPARTMENT_ID)                   DEPARTMENT_NAME                                                                                                                                                
+---------------------------------------- ----------------------------------------                                                                                                                       
+Jonathon                                 176                                                                                                                                                            
+Kimerely                                 178                                                                                                                                                            
+Jennifer                                 200                                                                                                                                                            
+Michael                                  201                                                                                                                                                            
+Pat                                      202                                                                                                                                                            
+Shelley                                  205                                                                                                                                                            
+William                                  206                                                                                                                                                            
+
+28 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  4  
+SQL> SELECT FIRST_NAME , TO_CHAR(HIRE_DATE) FROM EMPLOYEES
+  2  UNION ALL
+  3  SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS;
+
+FIRST_NAME                               TO_CHAR(HIRE_DATE)                                                                                                                                             
+---------------------------------------- ------------------------------                                                                                                                                 
+Steven                                   17-JUL-87                                                                                                                                                      
+Neena                                    21-SEP-89                                                                                                                                                      
+Lex                                      13-JAN-93                                                                                                                                                      
+Alexander                                03-JAN-90                                                                                                                                                      
+Bruce                                    21-MAY-91                                                                                                                                                      
+Diana                                    07-FEB-99                                                                                                                                                      
+Kevin                                    16-NOV-99                                                                                                                                                      
+Trenna                                   17-OCT-95                                                                                                                                                      
+Curtis                                   29-JAN-97                                                                                                                                                      
+Randall                                  15-MAR-98                                                                                                                                                      
+Peter                                    09-JUL-98                                                                                                                                                      
+Eleni                                    29-JAN-00                                                                                                                                                      
+Ellen                                    11-MAY-96                                                                                                                                                      
+Jonathon                                 24-MAR-98                                                                                                                                                      
+Kimerely                                 24-MAY-99                                                                                                                                                      
+Jennifer                                 17-SEP-87                                                                                                                                                      
+Michael                                  17-FEB-96                                                                                                                                                      
+Pat                                      17-AUG-97                                                                                                                                                      
+Shelley                                  07-JUN-94                                                                                                                                                      
+William                                  07-JUN-94                                                                                                                                                      
+10                                       Administration                                                                                                                                                 
+
+FIRST_NAME                               TO_CHAR(HIRE_DATE)                                                                                                                                             
+---------------------------------------- ------------------------------                                                                                                                                 
+20                                       Marketing                                                                                                                                                      
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+110                                      Accounting                                                                                                                                                     
+190                                      Contracting                                                                                                                                                    
+
+28 rows selected.
+
+SQL> SET PAGES 300
+SQL> 
+SQL> R
+  1  SELECT FIRST_NAME , TO_CHAR(HIRE_DATE) FROM EMPLOYEES
+  2  UNION ALL
+  3* SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS
+
+FIRST_NAME                               TO_CHAR(HIRE_DATE)                                                                                                                                             
+---------------------------------------- ------------------------------                                                                                                                                 
+Steven                                   17-JUL-87                                                                                                                                                      
+Neena                                    21-SEP-89                                                                                                                                                      
+Lex                                      13-JAN-93                                                                                                                                                      
+Alexander                                03-JAN-90                                                                                                                                                      
+Bruce                                    21-MAY-91                                                                                                                                                      
+Diana                                    07-FEB-99                                                                                                                                                      
+Kevin                                    16-NOV-99                                                                                                                                                      
+Trenna                                   17-OCT-95                                                                                                                                                      
+Curtis                                   29-JAN-97                                                                                                                                                      
+Randall                                  15-MAR-98                                                                                                                                                      
+Peter                                    09-JUL-98                                                                                                                                                      
+Eleni                                    29-JAN-00                                                                                                                                                      
+Ellen                                    11-MAY-96                                                                                                                                                      
+Jonathon                                 24-MAR-98                                                                                                                                                      
+Kimerely                                 24-MAY-99                                                                                                                                                      
+Jennifer                                 17-SEP-87                                                                                                                                                      
+Michael                                  17-FEB-96                                                                                                                                                      
+Pat                                      17-AUG-97                                                                                                                                                      
+Shelley                                  07-JUN-94                                                                                                                                                      
+William                                  07-JUN-94                                                                                                                                                      
+10                                       Administration                                                                                                                                                 
+20                                       Marketing                                                                                                                                                      
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+110                                      Accounting                                                                                                                                                     
+190                                      Contracting                                                                                                                                                    
+
+28 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT HIRE_DATE , MANAGER_ID FROM EMPLOYEES;
+SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+       *
+ERROR at line 1:
+ORA-01790: expression must have same datatype as corresponding expression 
+
+
+SQL> SELECT TO_CHAR(DEPARTMENT_ID) , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT TO_CHAR(HIRE_DATE) , TO_CHAR(MANAGER_ID) FROM EMPLOYEES;
+
+TO_CHAR(DEPARTMENT_ID)                   DEPARTMENT_NAME                                                                                                                                                
+---------------------------------------- ----------------------------------------                                                                                                                       
+10                                       Administration                                                                                                                                                 
+20                                       Marketing                                                                                                                                                      
+50                                       Shiping                                                                                                                                                        
+60                                       IT                                                                                                                                                             
+80                                       Sales                                                                                                                                                          
+90                                       Executive                                                                                                                                                      
+110                                      Accounting                                                                                                                                                     
+190                                      Contracting                                                                                                                                                    
+17-JUL-87                                                                                                                                                                                               
+21-SEP-89                                100                                                                                                                                                            
+13-JAN-93                                100                                                                                                                                                            
+03-JAN-90                                102                                                                                                                                                            
+21-MAY-91                                103                                                                                                                                                            
+07-FEB-99                                103                                                                                                                                                            
+16-NOV-99                                100                                                                                                                                                            
+17-OCT-95                                124                                                                                                                                                            
+29-JAN-97                                124                                                                                                                                                            
+15-MAR-98                                124                                                                                                                                                            
+09-JUL-98                                124                                                                                                                                                            
+29-JAN-00                                100                                                                                                                                                            
+11-MAY-96                                149                                                                                                                                                            
+24-MAR-98                                149                                                                                                                                                            
+24-MAY-99                                149                                                                                                                                                            
+17-SEP-87                                101                                                                                                                                                            
+17-FEB-96                                100                                                                                                                                                            
+17-AUG-97                                201                                                                                                                                                            
+07-JUN-94                                101                                                                                                                                                            
+07-JUN-94                                205                                                                                                                                                            
+
+28 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL 
+  3  SELECT EMPLOYEE_ID , NULL FROM EMPLOYEES;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                             
+------------- -----------------                                                                                                                                                           
+           10 Administration                                                                                                                                                              
+           20 Marketing                                                                                                                                                                   
+           50 Shiping                                                                                                                                                                                   
+           60 IT                                                                                                                                                                                        
+           80 Sales                                                                                                                                                                                     
+           90 Executive                                                                                                                                                                                 
+          110 Accounting                                                                                                                                                                                
+          190 Contracting                                                                                                                                                                               
+          100                                                                                                                                                                                           
+          101                                                                                                                                                                                           
+          102                                                                                                                                                                                           
+          103                                                                                                                                                                                           
+          104                                                                                                                                                                                           
+          107                                                                                                                                                                                           
+          124                                                                                                                                                                                           
+          141                                                                                                                                                                                           
+          142                                                                                                                                                                                           
+          143                                                                                                                                                                                           
+          144                                                                                                                                                                                           
+          149                                                                                                                                                                                           
+          174                                                                                                                                                                                           
+          176                                                                                                                                                                                           
+          178                                                                                                                                                                                           
+          200                                                                                                                                                                                           
+          201                                                                                                                                                                                           
+          202                                                                                                                                                                                           
+          205                                                                                                                                                                                           
+          206                                                                                                                                                                                           
+
+28 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT EMPLOYEE_ID , 'OM NAMAH SHIVAYA!' FROM EMPLOYEES;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+           10 Administration                                                                                                                                                                            
+           20 Marketing                                                                                                                                                                                 
+           50 Shiping                                                                                                                                                                                   
+           60 IT                                                                                                                                                                                        
+           80 Sales                                                                                                                                                                                     
+           90 Executive                                                                                                                                                                                 
+          110 Accounting                                                                                                                                                                                
+          190 Contracting                                                                                                                                                                               
+          100 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          101 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          102 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          103 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          104 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          107 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          124 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          141 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          142 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          143 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          144 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          149 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          174 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          176 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          178 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          200 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          201 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          202 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          205 OM NAMAH SHIVAYA!                                                                                                                                                                         
+          206 OM NAMAH SHIVAYA!                                                                                                                                                                         
+
+28 rows selected.
+
+SQL> REM COLUMN ALIAS ATTACHED WITH FIRST QUERY OF COMPOUND STATEMENT WILL BE DISPLAYED IN RESULT SET. OTHER COLUMN ALIASES WILL BE SILENTLY IGNORED.
+SQL> 
+SQL> SELECT DEPARTMENT_ID "DID AND EID" , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT EMPLOYEE_ID , FIRST_NAME "DNAME AND ENAME" FROM EMPLOYEES;
+
+DID AND EID DEPARTMENT_NAME                                                                                                                                                                             
+----------- ------------------------------                                                                                                                                                              
+         10 Administration                                                                                                                                                                              
+         20 Marketing                                                                                                                                                                                   
+         50 Shiping                                                                                                                                                                                     
+         60 IT                                                                                                                                                                                          
+         80 Sales                                                                                                                                                                                       
+         90 Executive                                                                                                                                                                                   
+        110 Accounting                                                                                                                                                                                  
+        190 Contracting                                                                                                                                                                                 
+        100 Steven                                                                                                                                                                                      
+        101 Neena                                                                                                                                                                                       
+        102 Lex                                                                                                                                                                                         
+        103 Alexander                                                                                                                                                                                   
+        104 Bruce                                                                                                                                                                                       
+        107 Diana                                                                                                                                                                                       
+        124 Kevin                                                                                                                                                                                       
+        141 Trenna                                                                                                                                                                                      
+        142 Curtis                                                                                                                                                                                      
+        143 Randall                                                                                                                                                                                     
+        144 Peter                                                                                                                                                                                       
+        149 Eleni                                                                                                                                                                                       
+        174 Ellen                                                                                                                                                                                       
+        176 Jonathon                                                                                                                                                                                    
+        178 Kimerely                                                                                                                                                                                    
+        200 Jennifer                                                                                                                                                                                    
+        201 Michael                                                                                                                                                                                     
+        202 Pat                                                                                                                                                                                         
+        205 Shelley                                                                                                                                                                                     
+        206 William                                                                                                                                                                                     
+
+28 rows selected.
+
+SQL> REM ORDER BY , OFFSET AND FETCH ARE USED ONCE PER COMPOUND STATEMENT, IT IS PLACED AFTER LAST STATEMENT OF WHOLE COMPOUND STATEMENT.
+SQL> 
+SQL> REM IF WE USE IT IN ANY OTHER STATEMENT, IT WILL RAISE ERROR.
+SQL> 
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES ORDER BY 2 DESC;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+          206 William                                                                                                                                                                                   
+          141 Trenna                                                                                                                                                                                    
+          100 Steven                                                                                                                                                                                    
+           50 Shiping                                                                                                                                                                                   
+          205 Shelley                                                                                                                                                                                   
+           80 Sales                                                                                                                                                                                     
+          143 Randall                                                                                                                                                                                   
+          144 Peter                                                                                                                                                                                     
+          202 Pat                                                                                                                                                                                       
+          101 Neena                                                                                                                                                                                     
+          201 Michael                                                                                                                                                                                   
+           20 Marketing                                                                                                                                                                                 
+          102 Lex                                                                                                                                                                                       
+          178 Kimerely                                                                                                                                                                                  
+          124 Kevin                                                                                                                                                                                     
+          176 Jonathon                                                                                                                                                                                  
+          200 Jennifer                                                                                                                                                                                  
+           60 IT                                                                                                                                                                                        
+           90 Executive                                                                                                                                                                                 
+          174 Ellen                                                                                                                                                                                     
+          149 Eleni                                                                                                                                                                                     
+          107 Diana                                                                                                                                                                                     
+          142 Curtis                                                                                                                                                                                    
+          190 Contracting                                                                                                                                                                               
+          104 Bruce                                                                                                                                                                                     
+          103 Alexander                                                                                                                                                                                 
+           10 Administration                                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+
+28 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  (SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES ORDER BY 2 DESC);
+(SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES ORDER BY 2 DESC)
+                                                *
+ERROR at line 3:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS
+  2  UNION ALL
+  3  (SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES) ORDER BY 2 DESC;
+
+DEPARTMENT_ID DEPARTMENT_NAME                                                                                                                                                                           
+------------- ------------------------------                                                                                                                                                            
+          206 William                                                                                                                                                                                   
+          141 Trenna                                                                                                                                                                                    
+          100 Steven                                                                                                                                                                                    
+           50 Shiping                                                                                                                                                                                   
+          205 Shelley                                                                                                                                                                                   
+           80 Sales                                                                                                                                                                                     
+          143 Randall                                                                                                                                                                                   
+          144 Peter                                                                                                                                                                                     
+          202 Pat                                                                                                                                                                                       
+          101 Neena                                                                                                                                                                                     
+          201 Michael                                                                                                                                                                                   
+           20 Marketing                                                                                                                                                                                 
+          102 Lex                                                                                                                                                                                       
+          178 Kimerely                                                                                                                                                                                  
+          124 Kevin                                                                                                                                                                                     
+          176 Jonathon                                                                                                                                                                                  
+          200 Jennifer                                                                                                                                                                                  
+           60 IT                                                                                                                                                                                        
+           90 Executive                                                                                                                                                                                 
+          174 Ellen                                                                                                                                                                                     
+          149 Eleni                                                                                                                                                                                     
+          107 Diana                                                                                                                                                                                     
+          142 Curtis                                                                                                                                                                                    
+          190 Contracting                                                                                                                                                                               
+          104 Bruce                                                                                                                                                                                     
+          103 Alexander                                                                                                                                                                                 
+           10 Administration                                                                                                                                                                            
+          110 Accounting                                                                                                                                                                                
+
+28 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS ORDER BY 2 DESC
+  2  UNION ALL
+  3  (SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES);
+UNION ALL
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS ORDER BY 2 DESC
+  2  UNION ALL
+  3  (SELECT EMPLOYEE_ID , FIRST_NAME FROM EMPLOYEES) ORDER BY 2 DESC;
+UNION ALL
+*
+ERROR at line 2:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT * FROM MPSSTAFF;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+ASHWIN                                                                                                                                                                                                  
+SARITA                                                                                                                                                                                                  
+BIMAL                                                                                                                                                                                                   
+
+SQL> SELECT * FROM MPSSUBJECT;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+TOEFL                                                                                                                                                                                                   
+GMAT                                                                                                                                                                                                    
+SAT                                                                                                                                                                                                     
+GRE                                                                                                                                                                                                     
+
+SQL> SELECT * FROM MPSCANTEACH;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GMAT                                                                                                                                                                                         
+ASHWIN     SAT                                                                                                                                                                                          
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     TOEFL                                                                                                                                                                                        
+SARITA     GMAT                                                                                                                                                                                         
+SARITA     SAT                                                                                                                                                                                          
+SARITA     GRE                                                                                                                                                                                          
+BIMAL      TOEFL                                                                                                                                                                                        
+BIMAL      GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+BIMAL      GRE                                                                                                                                                                                          
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     TOEFL      NO                                                                                                                                                                                
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+8 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT , 'NO  ' "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT , 'NO  ' FROM MPSCANTEACH
+  4  UNION
+  5  SELECT STAFF , SUBJECT , 'YES ' FROM MPSCANTEACH;
+
+STAFF      SUBJECT    CAN?                                                                                                                                                                              
+---------- ---------- ----                                                                                                                                                                              
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT * FROM MPSSTAFF;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+ASHWIN                                                                                                                                                                                                  
+SARITA                                                                                                                                                                                                  
+BIMAL                                                                                                                                                                                                   
+
+SQL> SELECT * FROM MPSSUBJECT;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+TOEFL                                                                                                                                                                                                   
+GMAT                                                                                                                                                                                                    
+SAT                                                                                                                                                                                                     
+GRE                                                                                                                                                                                                     
+
+SQL> SELECT * FROM MPSCANTEACH;
+
+STAFF      SUBJECT                                                                                                                                                                                      
+---------- ----------                                                                                                                                                                                   
+ASHWIN     TOEFL                                                                                                                                                                                        
+ASHWIN     GRE                                                                                                                                                                                          
+SARITA     GMAT                                                                                                                                                                                         
+BIMAL      SAT                                                                                                                                                                                          
+
+SQL> REM CROSS JOIN + SET OPERATOR
+SQL> 
+SQL> REM CROSS JOIN + SUB QUERY + CASE FUNCTION
+SQL> 
+SQL> REM SUB QUERY : WHERE , HAVING  EXCEPT (GROUP BY CLAUSE)
+SQL> 
+SQL> SELECT A.NAME STAFF , B.NAME SUBJECT ,'NO' "CAN?" FROM MPSSTAFF A CROSS JOIN MPSSUBJECT B
+  2  MINUS
+  3  SELECT STAFF , SUBJECT, 'NO' FROM MPSCANTEACH
+  4  UNION
+  5  SELECT STAFF , SUBJECT, 'YES' FROM MPSCANTEACH;  
+
+STAFF      SUBJECT    CAN                                                                                                                                                                               
+---------- ---------- ---                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      GRE        NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     GRE        NO                                                                                                                                                                                
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     TOEFL      NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME STAFF , B.NAME SUBJECT ,
+  2      CASE WHEN T.NAME || B.NAME IN (SELECT STAFF||SUBJECT FROM MPSCANTEACH) THEN 'YES'
+  3      ELSE 'NO'
+  4      END "CAN?"
+  5      FROM MPSSTAFF T CROSS JOIN MPSSUBJECT  B;
+
+STAFF      SUBJECT    CAN                                                                                                                                                                               
+---------- ---------- ---                                                                                                                                                                               
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME , P.NAME,
+  2   CASE WHEN (T.NAME,P.NAME,'NO') != ALL(SELECT STAFF,SUBJECT,'NO'   FROM MPSCANTEACH ) THEN 'NO'
+  3    WHEN (T.NAME,P.NAME,'NO') = ANY(SELECT STAFF,SUBJECT,'NO' FROM MPSCANTEACH) THEN 'YES' END
+  4      FROM MPSSTAFF T CROSS JOIN MPSSUBJECT P;
+
+NAME       NAME       CAS                                                                                                                                                                               
+---------- ---------- ---                                                                                                                                                                               
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT STAFF.NAME,SUBJECT.NAME,CASE WHEN (STAFF.NAME,SUBJECT.NAME) IN (SELECT STAFF,SUBJECT FROM MPSCANTEACH) THEN 'YES' ELSE 'NO' END FROM MPSSTAFF STAFF CROSS JOIN MPSSUBJECT SUBJECT;
+
+NAME       NAME       CAS                                                                                                                                                                               
+---------- ---------- ---                                                                                                                                                                               
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME,B.NAME,CASE WHEN (T.NAME,B.NAME) IN(SELECT STAFF,SUBJECT FROM MPSCANTEACH) THEN 'YES' ELSE 'NO' END "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+NAME       NAME       CAN                                                                                                                                                                               
+---------- ---------- ---                                                                                                                                                                               
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT T.NAME, B.NAME, CASE WHEN(T.NAME, B.NAME) IN (SELECT STAFF, SUBJECT FROM MPSCANTEACH)
+  2  THEN 'YES' ELSE 'NO' END "CAN?" FROM MPSSTAFF T CROSS JOIN MPSSUBJECT B;
+
+NAME       NAME       CAN                                                                                                                                                                               
+---------- ---------- ---                                                                                                                                                                               
+ASHWIN     TOEFL      YES                                                                                                                                                                               
+ASHWIN     GMAT       NO                                                                                                                                                                                
+ASHWIN     SAT        NO                                                                                                                                                                                
+ASHWIN     GRE        YES                                                                                                                                                                               
+SARITA     TOEFL      NO                                                                                                                                                                                
+SARITA     GMAT       YES                                                                                                                                                                               
+SARITA     SAT        NO                                                                                                                                                                                
+SARITA     GRE        NO                                                                                                                                                                                
+BIMAL      TOEFL      NO                                                                                                                                                                                
+BIMAL      GMAT       NO                                                                                                                                                                                
+BIMAL      SAT        YES                                                                                                                                                                               
+BIMAL      GRE        NO                                                                                                                                                                                
+
+12 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_HISTORY;
+
+EMPLOYEE_ID START_DAT END_DATE  JOB_ID     DEPARTMENT_ID                                                                                                                                                
+----------- --------- --------- ---------- -------------                                                                                                                                                
+        102 13-JAN-93 24-JUL-98 IT_PROG               60                                                                                                                                                
+        101 21-SEP-89 27-OCT-93 AC_ACCOUNT           110                                                                                                                                                
+        101 28-OCT-93 15-MAR-97 AC_MGR               110                                                                                                                                                
+        201 17-FEB-96 19-DEC-99 MK_REP                20                                                                                                                                                
+        114 24-MAR-98 31-DEC-99 ST_CLERK              50                                                                                                                                                
+        122 01-JAN-99 31-DEC-99 ST_CLERK              50                                                                                                                                                
+        200 17-SEP-87 17-JUN-93 AD_ASST               90                                                                                                                                                
+        176 24-MAR-98 31-DEC-98 SA_REP                80                                                                                                                                                
+        176 01-JAN-99 31-DEC-99 SA_MAN                80                                                                                                                                                
+        200 01-JUL-94 31-DEC-98 AC_ACCOUNT            90                                                                                                                                                
+
+10 rows selected.
+
+SQL> REM DISPLAY EMPLOYEE_ID FOR THOSE WHO HAVE GOT PROMOTION
+SQL> 
+SQL> SELECT EMPLOYEE_ID FROM EMPLOYEES
+  2  INTERSECT
+  3  SELECT EMPLOYEE_ID FROM JOB_HISTORY;
+
+EMPLOYEE_ID                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+        101                                                                                                                                                                                             
+        102                                                                                                                                                                                             
+        176                                                                                                                                                                                             
+        200                                                                                                                                                                                             
+        201                                                                                                                                                                                             
+
+SQL> SELECT FIRST_NAME FROM EMPLOYEES
+  2  WHERE EMPLOYEE_ID IN
+  3  (SELECT EMPLOYEE_ID FROM EMPLOYEES
+  4  INTERSECT
+  5  SELECT EMPLOYEE_ID FROM JOB_HISTORY);
+
+FIRST_NAME                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+Neena                                                                                                                                                                                                   
+Lex                                                                                                                                                                                                     
+Jonathon                                                                                                                                                                                                
+Jennifer                                                                                                                                                                                                
+Michael                                                                                                                                                                                                 
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_HISTORY;
+
+EMPLOYEE_ID START_DAT END_DATE  JOB_ID     DEPARTMENT_ID                                                                                                                                                
+----------- --------- --------- ---------- -------------                                                                                                                                                
+        102 13-JAN-93 24-JUL-98 IT_PROG               60                                                                                                                                                
+        101 21-SEP-89 27-OCT-93 AC_ACCOUNT           110                                                                                                                                                
+        101 28-OCT-93 15-MAR-97 AC_MGR               110                                                                                                                                                
+        201 17-FEB-96 19-DEC-99 MK_REP                20                                                                                                                                                
+        114 24-MAR-98 31-DEC-99 ST_CLERK              50                                                                                                                                                
+        122 01-JAN-99 31-DEC-99 ST_CLERK              50                                                                                                                                                
+        200 17-SEP-87 17-JUN-93 AD_ASST               90                                                                                                                                                
+        176 24-MAR-98 31-DEC-98 SA_REP                80                                                                                                                                                
+        176 01-JAN-99 31-DEC-99 SA_MAN                80                                                                                                                                                
+        200 01-JUL-94 31-DEC-98 AC_ACCOUNT            90                                                                                                                                                
+
+10 rows selected.
+
+SQL> REM DISPLAY EMPLOYEE_ID FOR THOSE WHO HAVE NOT GOT ANY PROMOTION
+SQL> 
+SQL> SELECT FIRST_NAME FROM EMPLOYEES
+  2  WHERE EMPLOYEE_ID NOT IN
+  3  (SELECT EMPLOYEE_ID FROM EMPLOYEES
+  4  INTERSECT
+  5  SELECT EMPLOYEE_ID FROM JOB_HISTORY);
+
+FIRST_NAME                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+Diana                                                                                                                                                                                                   
+Kevin                                                                                                                                                                                                   
+William                                                                                                                                                                                                 
+Randall                                                                                                                                                                                                 
+Bruce                                                                                                                                                                                                   
+Trenna                                                                                                                                                                                                  
+Ellen                                                                                                                                                                                                   
+Curtis                                                                                                                                                                                                  
+Alexander                                                                                                                                                                                               
+Kimerely                                                                                                                                                                                                
+Eleni                                                                                                                                                                                                   
+Pat                                                                                                                                                                                                     
+Peter                                                                                                                                                                                                   
+Shelley                                                                                                                                                                                                 
+Steven                                                                                                                                                                                                  
+
+15 rows selected.
+
+  SQL> SELECT FIRST_NAME FROM EMPLOYEES
+    2  WHERE EMPLOYEE_ID IN
+    3  (SELECT EMPLOYEE_ID FROM EMPLOYEES
+    4  MINUS
+    5  SELECT EMPLOYEE_ID FROM JOB_HISTORY);
+
+FIRST_NAME                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+Steven                                                                                                                                                                                                  
+Alexander                                                                                                                                                                                               
+Bruce                                                                                                                                                                                                   
+Diana                                                                                                                                                                                                   
+Kevin                                                                                                                                                                                                   
+Trenna                                                                                                                                                                                                  
+Curtis                                                                                                                                                                                                  
+Randall                                                                                                                                                                                                 
+Peter                                                                                                                                                                                                   
+Eleni                                                                                                                                                                                                   
+Ellen                                                                                                                                                                                                   
+Kimerely                                                                                                                                                                                                
+Pat                                                                                                                                                                                                     
+Shelley                                                                                                                                                                                                 
+William                                                                                                                                                                                                 
+
+15 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_HISTORY;
+
+EMPLOYEE_ID START_DAT END_DATE  JOB_ID     DEPARTMENT_ID                                                                                                                                                
+----------- --------- --------- ---------- -------------                                                                                                                                                
+        102 13-JAN-93 24-JUL-98 IT_PROG               60                                                                                                                                                
+        101 21-SEP-89 27-OCT-93 AC_ACCOUNT           110                                                                                                                                                
+        101 28-OCT-93 15-MAR-97 AC_MGR               110                                                                                                                                                
+        201 17-FEB-96 19-DEC-99 MK_REP                20                                                                                                                                                
+        114 24-MAR-98 31-DEC-99 ST_CLERK              50                                                                                                                                                
+        122 01-JAN-99 31-DEC-99 ST_CLERK              50                                                                                                                                                
+        200 17-SEP-87 17-JUN-93 AD_ASST               90                                                                                                                                                
+        176 24-MAR-98 31-DEC-98 SA_REP                80                                                                                                                                                
+        176 01-JAN-99 31-DEC-99 SA_MAN                80                                                                                                                                                
+        200 01-JUL-94 31-DEC-98 AC_ACCOUNT            90                                                                                                                                                
+
+10 rows selected.
+
+SQL> SELECT EMPLOYEE_ID FROM EMPLOYEES
+  2  MINUS
+  3  SELECT EMPLOYEE_
+  
+SQL> 
+SQL> SELECT EMPLOYEE_ID FROM JOB_HISTORTY
+  2  
+SQL> SELECT EMPLOYEE_ID FROM JOB_HISTORY
+  2  MINUS
+  3  SELECT EMPLOYEE_ID FROM EMPLOYEES;
+
+EMPLOYEE_ID                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+        114                                                                                                                                                                                             
+        122                                                                                                                                                                                             
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_GRADES;
+
+GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                              
+--- ---------- -----------                                                                                                                                                                              
+A         1000        2999                                                                                                                                                                              
+B         3000        5999                                                                                                                                                                              
+C         6000        9999                                                                                                                                                                              
+D        10000       14999                                                                                                                                                                              
+E        15000       24999                                                                                                                                                                              
+F        25000       40000                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES ORDER BY SALARY;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_GRADES;
+
+GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                              
+--- ---------- -----------                                                                                                                                                                              
+A         1000        2999                                                                                                                                                                              
+B         3000        5999                                                                                                                                                                              
+C         6000        9999                                                                                                                                                                              
+D        10000       14999                                                                                                                                                                              
+E        15000       24999                                                                                                                                                                              
+F        25000       40000                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES ORDER BY DEPARTMENT_ID , SALARY;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_GRADES;
+
+GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                              
+--- ---------- -----------                                                                                                                                                                              
+A         1000        2999                                                                                                                                                                              
+B         3000        5999                                                                                                                                                                              
+C         6000        9999                                                                                                                                                                              
+D        10000       14999                                                                                                                                                                              
+E        15000       24999                                                                                                                                                                              
+F        25000       40000                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES ORDER BY JOB_ID , SALARY;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM JOB_GRADES;
+
+GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                              
+--- ---------- -----------                                                                                                                                                                              
+A         1000        2999                                                                                                                                                                              
+B         3000        5999                                                                                                                                                                              
+C         6000        9999                                                                                                                                                                              
+D        10000       14999                                                                                                                                                                              
+E        15000       24999                                                                                                                                                                              
+F        25000       40000                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES ORDER BY HIRE_DATE , SALARY;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE HIRE_YEAR IN WHICH EMPLOYEE GETS SALARY IN GRADE 'A' AND 'C'
+SQL> 
+SQL> REM DISPLAY THOSE HIRE_YEAR IN WHICH EMPLOYEE GETS SALARY IN GRADE_LEVEL 'A' AND 'C'
+SQL> 
+SQL> SPOOL OFF

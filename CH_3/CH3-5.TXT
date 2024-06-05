@@ -1,0 +1,440 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM DATE FUNCTIONS + DATE ARITHMATIC
+SQL> 
+SQL> REM LIST OF DATE FUNCTIONS : SYSDATE CURRENT_DATE    ADD_MONTHS MONTHS_BETWEEN     LAST_DAY NEXT_DAY    TRUNC ROUND
+SQL> 
+SQL> REM SYSDATE : WILL RETURN SERVER'S DATE AND TIME INFO.
+SQL> 
+SQL> REM CURRENT_DATE : WILL RETURN CLIENT/LOCAL/CURRENT/USER MACHINE'S DATE AND TIME INFO.
+SQL> 
+SQL> SELECT SYSDATE , CURRENT_DATE FROM DUAL;
+
+SYSDATE   CURRENT_D                                                             
+--------- ---------                                                             
+17-SEP-22 17-SEP-22                                                             
+
+SQL> ALTER SESSION SET NLS_dATE_FORMAT = 'DD-MON-RRRR HH:MI.SS AM';
+
+Session altered.
+
+SQL> SELECT SYSDATE , CURRENT_DATE FROM DUAL;
+
+SYSDATE                 CURRENT_DATE                                            
+----------------------- -----------------------                                 
+17-SEP-2022 06:34.43 PM 17-SEP-2022 06:34.43 PM                                 
+ 
+SQL> SELECT SYSDATE , CURRENT_DATE FROM DUAL;
+
+SYSDATE                 CURRENT_DATE                                            
+----------------------- -----------------------                                 
+17-SEP-2022 06:43.57 PM 17-SEP-2022 06:43.57 PM                                 
+
+SQL> REM DATE IS STORED IN 7 PARTS/INTERVALS/COMPONENTS
+SQL> 
+SQL> REM CENTURY  YEAR  MONTH  DATE/DAY  HOUR(24)  MINUTE   SECOND
+SQL> 
+SQL> REM 20       22    09     17        18        43       57
+SQL> 
+SQL> 
+SQL> 
+SQL> REM DATE ARITHMATIC : 1 DATE +/- INTERVAL = DATE
+SQL> 
+SQL> REM DATE ARITHMATIC : 2 DATE - DATE = DAYS
+SQL> 
+SQL> 
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE + 3 , SYSDATE - 2 FROM DUAL;
+
+SYSDATE                 SYSDATE+3               SYSDATE-2                       
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 06:48.30 PM 20-SEP-2022 06:48.30 PM 15-SEP-2022 06:48.30 PM         
+
+SQL> SELECT SYSDATE , SYSDATE + 3.5 , SYSDATE - 2 FROM DUAL;
+
+SYSDATE                 SYSDATE+3.5             SYSDATE-2                       
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 06:49.36 PM 21-SEP-2022 06:49.36 AM 15-SEP-2022 06:49.36 PM         
+
+SQL> REM 1 DAY = 24 HOURS
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE + (3/24) , SYSDATE - (2/24) FROM DUAL;
+
+SYSDATE                 SYSDATE+(3/24)          SYSDATE-(2/24)                  
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 06:51.06 PM 17-SEP-2022 09:51.06 PM 17-SEP-2022 04:51.06 PM         
+
+SQL> SELECT SYSDATE , SYSDATE + 3 + (2/24) , SYSDATE - 2 - (4/24) FROM DUAL;
+
+SYSDATE                 SYSDATE+3+(2/24)        SYSDATE-2-(4/24)                
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 06:51.59 PM 20-SEP-2022 08:51.59 PM 15-SEP-2022 02:51.59 PM         
+
+SQL> SELECT SYSDATE , SYSDATE + 3 + (2/24) , SYSDATE - (2 + (4/24)) FROM DUAL;
+
+SYSDATE                 SYSDATE+3+(2/24)        SYSDATE-(2+(4/24))              
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 06:53.46 PM 20-SEP-2022 08:53.46 PM 15-SEP-2022 02:53.46 PM         
+
+SQL> 
+SQL> REM 1 DAY = 24 * 60 = 1440 MINUTES
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE + (2/(24*60)) , SYSDATE - (4/1440) FROM DUAL;
+
+SYSDATE                 SYSDATE+(2/(24*60))     SYSDATE-(4/1440)                
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 06:56.24 PM 17-SEP-2022 06:58.24 PM 17-SEP-2022 06:52.24 PM         
+
+SQL> REM ADD 5 DAYS , 6 HOURS AND 10 MINUTES TO CURRENT_DATE
+SQL> 
+SQL> SELECT CURRENT_DATE , CURRENT_DATE + 5 + (6/24) + (10/1440) FROM DUAL;
+
+CURRENT_DATE            CURRENT_DATE+5+(6/24)+(                                 
+----------------------- -----------------------                                 
+17-SEP-2022 06:59.25 PM 23-SEP-2022 01:09.25 AM                                 
+
+SQL> REM ADD 3 DAYS , SUBTRACT 5 HOURS AND ADD 10 MINUTES TO SYSDATE
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE + 3 - (5/24) + (10/1440) FROM DUAL;
+
+SYSDATE                 SYSDATE+3-(5/24)+(10/14                                 
+----------------------- -----------------------                                 
+17-SEP-2022 07:01.39 PM 20-SEP-2022 02:11.39 PM                                 
+
+SQL> REM 1 DAY = 24 * 60 * 60 = 86400 SECONDS
+SQL> 
+SQL> SELECT SYSDATE , SYSDATE + (6/(24*60*60)) , SYSDATE - (10/86400) FROM DUAL;
+
+SYSDATE                 SYSDATE+(6/(24*60*60))  SYSDATE-(10/86400)              
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 07:02.26 PM 17-SEP-2022 07:02.32 PM 17-SEP-2022 07:02.16 PM         
+
+SQL> SELECT SYSDATE , SYSDATE + (24/4) FROM DUAL;
+
+SYSDATE                 SYSDATE+(24/4)                                          
+----------------------- -----------------------                                 
+17-SEP-2022 07:02.58 PM 23-SEP-2022 07:02.58 PM                                 
+
+SQL> REM CENTURY  YEAR  MONTH  DATE/DAY  HOUR(24)  MINUTE   SECOND
+SQL> 
+SQL> REM 20       22    09     17        18        43       57
+SQL> 
+SQL> REM 1 MONTHS : ?? (28/29/30/31)
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,2) , ADD_MONTHS(SYSDATE,-3) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,2)   ADD_MONTHS(SYSDATE,-3)          
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 07:04.50 PM 17-NOV-2022 07:04.50 PM 17-JUN-2022 07:04.50 PM         
+
+SQL> REM 1 YEAR = 12 MONTHS
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12) , ADD_MONTHS(SYSDATE,-12) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12)  ADD_MONTHS(SYSDATE,-12)         
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 07:05.47 PM 17-SEP-2023 07:05.47 PM 17-SEP-2021 07:05.47 PM         
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12*2) , ADD_MONTHS(SYSDATE,-12*3) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12*2 ADD_MONTHS(SYSDATE,-12*         
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 07:06.06 PM 17-SEP-2024 07:06.06 PM 17-SEP-2019 07:06.06 PM         
+
+SQL> REM 1 CENTURY = 100 YEARS = 12 * 100 = 1200 MONTHS
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12*100) , ADD_MONTHS(SYSDATE,-12*100) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12*1 ADD_MONTHS(SYSDATE,-12*         
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 07:06.50 PM 17-SEP-2122 07:06.50 PM 17-SEP-1922 07:06.50 PM         
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,12*100*5) , ADD_MONTHS(SYSDATE,-12*100*7) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,12*1 ADD_MONTHS(SYSDATE,-12*         
+----------------------- ----------------------- -----------------------         
+17-SEP-2022 07:07.13 PM 17-SEP-2522 07:07.13 PM 17-SEP-1322 07:07.13 PM-         
+
+SQL> REM SYSDATE , ADD 5 YEARS , SUBTRACT 4 MONTHS
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,(12*5)+4) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,(12*                                 
+----------------------- -----------------------                                 
+17-SEP-2022 07:11.30 PM 17-JAN-2028 07:11.30 PM                                 
+
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,(12*5)-4) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,(12*                                 
+----------------------- -----------------------                                 
+17-SEP-2022 07:11.36 PM 17-MAY-2027 07:11.36 PM                                 
+
+SQL> REM ADD 15 YEARS AND SUBTRACT 15 MINUTES
+SQL> 
+SQL> SELECT SYSDATE , ADD_MONTHS(SYSDATE,(15*12))-(15/1440) FROM DUAL;
+
+SYSDATE                 ADD_MONTHS(SYSDATE,(15*                                 
+----------------------- -----------------------                                 
+17-SEP-2022 07:14.35 PM 17-SEP-2037 06:59.35 PM                                 
+
+SQL> REM DATE - DATE = NO. OF DAYS BETWEEN TWO DATES
+SQL> 
+SQL> REM IF FIRST DATE IS LATEST THE RESULT WILL BE POSITIVE, OTHERWISE NEGATIVE.
+SQL> 
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , SYSDATE - HIRE_DATE DAYS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               DAYS_WORKED          
+---------- ----------------------- ----------------------- -----------          
+Steven     17-SEP-2022 07:16.02 PM 17-JUL-1987 12:00.00 AM  12846.8028          
+Neena      17-SEP-2022 07:16.02 PM 21-SEP-1989 12:00.00 AM  12049.8028          
+Lex        17-SEP-2022 07:16.02 PM 13-JAN-1993 12:00.00 AM  10839.8028          
+Alexander  17-SEP-2022 07:16.02 PM 03-JAN-1990 12:00.00 AM  11945.8028          
+Bruce      17-SEP-2022 07:16.02 PM 21-MAY-1991 12:00.00 AM  11442.8028          
+Diana      17-SEP-2022 07:16.02 PM 07-FEB-1999 12:00.00 AM   8623.8028          
+Kevin      17-SEP-2022 07:16.02 PM 16-NOV-1999 12:00.00 AM   8341.8028          
+Trenna     17-SEP-2022 07:16.02 PM 17-OCT-1995 12:00.00 AM   9832.8028          
+Curtis     17-SEP-2022 07:16.02 PM 29-JAN-1997 12:00.00 AM   9362.8028          
+Randall    17-SEP-2022 07:16.02 PM 15-MAR-1998 12:00.00 AM   8952.8028          
+Peter      17-SEP-2022 07:16.02 PM 09-JUL-1998 12:00.00 AM   8836.8028          
+
+FIRST_NAME SYSDATE                 HIRE_DATE               DAYS_WORKED          
+---------- ----------------------- ----------------------- -----------          
+Eleni      17-SEP-2022 07:16.02 PM 29-JAN-2000 12:00.00 AM   8267.8028          
+Ellen      17-SEP-2022 07:16.02 PM 11-MAY-1996 12:00.00 AM   9625.8028          
+Jonathon   17-SEP-2022 07:16.02 PM 24-MAR-1998 12:00.00 AM   8943.8028          
+Kimerely   17-SEP-2022 07:16.02 PM 24-MAY-1999 12:00.00 AM   8517.8028          
+Jennifer   17-SEP-2022 07:16.02 PM 17-SEP-1987 12:00.00 AM  12784.8028          
+Michael    17-SEP-2022 07:16.02 PM 17-FEB-1996 12:00.00 AM   9709.8028          
+Pat        17-SEP-2022 07:16.02 PM 17-AUG-1997 12:00.00 AM   9162.8028          
+Shelley    17-SEP-2022 07:16.02 PM 07-JUN-1994 12:00.00 AM  10329.8028          
+William    17-SEP-2022 07:16.02 PM 07-JUN-1994 12:00.00 AM  10329.8028          
+
+20 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> R
+  1* SELECT FIRST_NAME , SYSDATE , HIRE_DATE , SYSDATE - HIRE_DATE DAYS_WORKED FROM EMPLOYEES
+
+FIRST_NAME SYSDATE                 HIRE_DATE               DAYS_WORKED                                                                                                                                  
+---------- ----------------------- ----------------------- -----------                                                                                                                                  
+Steven     17-SEP-2022 07:16.14 PM 17-JUL-1987 12:00.00 AM  12846.8029                                                                                                                                  
+Neena      17-SEP-2022 07:16.14 PM 21-SEP-1989 12:00.00 AM  12049.8029                                                                                                                                  
+Lex        17-SEP-2022 07:16.14 PM 13-JAN-1993 12:00.00 AM  10839.8029                                                                                                                                  
+Alexander  17-SEP-2022 07:16.14 PM 03-JAN-1990 12:00.00 AM  11945.8029                                                                                                                                  
+Bruce      17-SEP-2022 07:16.14 PM 21-MAY-1991 12:00.00 AM  11442.8029                                                                                                                                  
+Diana      17-SEP-2022 07:16.14 PM 07-FEB-1999 12:00.00 AM  8623.80294                                                                                                                                  
+Kevin      17-SEP-2022 07:16.14 PM 16-NOV-1999 12:00.00 AM  8341.80294                                                                                                                                  
+Trenna     17-SEP-2022 07:16.14 PM 17-OCT-1995 12:00.00 AM  9832.80294                                                                                                                                  
+Curtis     17-SEP-2022 07:16.14 PM 29-JAN-1997 12:00.00 AM  9362.80294                                                                                                                                  
+Randall    17-SEP-2022 07:16.14 PM 15-MAR-1998 12:00.00 AM  8952.80294                                                                                                                                  
+Peter      17-SEP-2022 07:16.14 PM 09-JUL-1998 12:00.00 AM  8836.80294                                                                                                                                  
+Eleni      17-SEP-2022 07:16.14 PM 29-JAN-2000 12:00.00 AM  8267.80294                                                                                                                                  
+Ellen      17-SEP-2022 07:16.14 PM 11-MAY-1996 12:00.00 AM  9625.80294                                                                                                                                  
+Jonathon   17-SEP-2022 07:16.14 PM 24-MAR-1998 12:00.00 AM  8943.80294                                                                                                                                  
+Kimerely   17-SEP-2022 07:16.14 PM 24-MAY-1999 12:00.00 AM  8517.80294                                                                                                                                  
+Jennifer   17-SEP-2022 07:16.14 PM 17-SEP-1987 12:00.00 AM  12784.8029                                                                                                                                  
+Michael    17-SEP-2022 07:16.14 PM 17-FEB-1996 12:00.00 AM  9709.80294                                                                                                                                  
+Pat        17-SEP-2022 07:16.14 PM 17-AUG-1997 12:00.00 AM  9162.80294                                                                                                                                  
+Shelley    17-SEP-2022 07:16.14 PM 07-JUN-1994 12:00.00 AM  10329.8029                                                                                                                                  
+William    17-SEP-2022 07:16.14 PM 07-JUN-1994 12:00.00 AM  10329.8029                                                                                                                                  
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , TRUNC(SYSDATE - HIRE_DATE) COMPLETED_DAYS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               COMPLETED_DAYS_WORKED                                                                                                                        
+---------- ----------------------- ----------------------- ---------------------                                                                                                                        
+Steven     17-SEP-2022 07:17.48 PM 17-JUL-1987 12:00.00 AM                 12846                                                                                                                        
+Neena      17-SEP-2022 07:17.48 PM 21-SEP-1989 12:00.00 AM                 12049                                                                                                                        
+Lex        17-SEP-2022 07:17.48 PM 13-JAN-1993 12:00.00 AM                 10839                                                                                                                        
+Alexander  17-SEP-2022 07:17.48 PM 03-JAN-1990 12:00.00 AM                 11945                                                                                                                        
+Bruce      17-SEP-2022 07:17.48 PM 21-MAY-1991 12:00.00 AM                 11442                                                                                                                        
+Diana      17-SEP-2022 07:17.48 PM 07-FEB-1999 12:00.00 AM                  8623                                                                                                                        
+Kevin      17-SEP-2022 07:17.48 PM 16-NOV-1999 12:00.00 AM                  8341                                                                                                                        
+Trenna     17-SEP-2022 07:17.48 PM 17-OCT-1995 12:00.00 AM                  9832                                                                                                                        
+Curtis     17-SEP-2022 07:17.48 PM 29-JAN-1997 12:00.00 AM                  9362                                                                                                                        
+Randall    17-SEP-2022 07:17.48 PM 15-MAR-1998 12:00.00 AM                  8952                                                                                                                        
+Peter      17-SEP-2022 07:17.48 PM 09-JUL-1998 12:00.00 AM                  8836                                                                                                                        
+Eleni      17-SEP-2022 07:17.48 PM 29-JAN-2000 12:00.00 AM                  8267                                                                                                                        
+Ellen      17-SEP-2022 07:17.48 PM 11-MAY-1996 12:00.00 AM                  9625                                                                                                                        
+Jonathon   17-SEP-2022 07:17.48 PM 24-MAR-1998 12:00.00 AM                  8943                                                                                                                        
+Kimerely   17-SEP-2022 07:17.48 PM 24-MAY-1999 12:00.00 AM                  8517                                                                                                                        
+Jennifer   17-SEP-2022 07:17.48 PM 17-SEP-1987 12:00.00 AM                 12784                                                                                                                        
+Michael    17-SEP-2022 07:17.48 PM 17-FEB-1996 12:00.00 AM                  9709                                                                                                                        
+Pat        17-SEP-2022 07:17.48 PM 17-AUG-1997 12:00.00 AM                  9162                                                                                                                        
+Shelley    17-SEP-2022 07:17.48 PM 07-JUN-1994 12:00.00 AM                 10329                                                                                                                        
+William    17-SEP-2022 07:17.48 PM 07-JUN-1994 12:00.00 AM                 10329                                                                                                                        
+
+20 rows selected.
+
+SQL> REM WEEKS_WORKED , COMPLETED WEEKS_WORKED
+SQL> 
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , (SYSDATE - HIRE_DATE)/7 WEEKS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               WEEKS_WORKED                                                                                                                                 
+---------- ----------------------- ----------------------- ------------                                                                                                                                 
+Steven     17-SEP-2022 07:21.43 PM 17-JUL-1987 12:00.00 AM   1835.25811                                                                                                                                 
+Neena      17-SEP-2022 07:21.43 PM 21-SEP-1989 12:00.00 AM   1721.40096                                                                                                                                 
+Lex        17-SEP-2022 07:21.43 PM 13-JAN-1993 12:00.00 AM   1548.54382                                                                                                                                 
+Alexander  17-SEP-2022 07:21.43 PM 03-JAN-1990 12:00.00 AM   1706.54382                                                                                                                                 
+Bruce      17-SEP-2022 07:21.43 PM 21-MAY-1991 12:00.00 AM   1634.68668                                                                                                                                 
+Diana      17-SEP-2022 07:21.43 PM 07-FEB-1999 12:00.00 AM   1231.97239                                                                                                                                 
+Kevin      17-SEP-2022 07:21.43 PM 16-NOV-1999 12:00.00 AM   1191.68668                                                                                                                                 
+Trenna     17-SEP-2022 07:21.43 PM 17-OCT-1995 12:00.00 AM   1404.68668                                                                                                                                 
+Curtis     17-SEP-2022 07:21.43 PM 29-JAN-1997 12:00.00 AM   1337.54382                                                                                                                                 
+Randall    17-SEP-2022 07:21.43 PM 15-MAR-1998 12:00.00 AM   1278.97239                                                                                                                                 
+Peter      17-SEP-2022 07:21.43 PM 09-JUL-1998 12:00.00 AM   1262.40096                                                                                                                                 
+Eleni      17-SEP-2022 07:21.43 PM 29-JAN-2000 12:00.00 AM   1181.11525                                                                                                                                 
+Ellen      17-SEP-2022 07:21.43 PM 11-MAY-1996 12:00.00 AM   1375.11525                                                                                                                                 
+Jonathon   17-SEP-2022 07:21.43 PM 24-MAR-1998 12:00.00 AM   1277.68668                                                                                                                                 
+Kimerely   17-SEP-2022 07:21.43 PM 24-MAY-1999 12:00.00 AM   1216.82954                                                                                                                                 
+Jennifer   17-SEP-2022 07:21.43 PM 17-SEP-1987 12:00.00 AM   1826.40096                                                                                                                                 
+Michael    17-SEP-2022 07:21.43 PM 17-FEB-1996 12:00.00 AM   1387.11525                                                                                                                                 
+Pat        17-SEP-2022 07:21.43 PM 17-AUG-1997 12:00.00 AM   1308.97239                                                                                                                                 
+Shelley    17-SEP-2022 07:21.43 PM 07-JUN-1994 12:00.00 AM   1475.68668                                                                                                                                 
+William    17-SEP-2022 07:21.43 PM 07-JUN-1994 12:00.00 AM   1475.68668                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , TRUNC((SYSDATE - HIRE_DATE)/7) COMPLETED_WEEKS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               COMPLETED_WEEKS_WORKED                                                                                                                       
+---------- ----------------------- ----------------------- ----------------------                                                                                                                       
+Steven     17-SEP-2022 07:21.59 PM 17-JUL-1987 12:00.00 AM                   1835                                                                                                                       
+Neena      17-SEP-2022 07:21.59 PM 21-SEP-1989 12:00.00 AM                   1721                                                                                                                       
+Lex        17-SEP-2022 07:21.59 PM 13-JAN-1993 12:00.00 AM                   1548                                                                                                                       
+Alexander  17-SEP-2022 07:21.59 PM 03-JAN-1990 12:00.00 AM                   1706                                                                                                                       
+Bruce      17-SEP-2022 07:21.59 PM 21-MAY-1991 12:00.00 AM                   1634                                                                                                                       
+Diana      17-SEP-2022 07:21.59 PM 07-FEB-1999 12:00.00 AM                   1231                                                                                                                       
+Kevin      17-SEP-2022 07:21.59 PM 16-NOV-1999 12:00.00 AM                   1191                                                                                                                       
+Trenna     17-SEP-2022 07:21.59 PM 17-OCT-1995 12:00.00 AM                   1404                                                                                                                       
+Curtis     17-SEP-2022 07:21.59 PM 29-JAN-1997 12:00.00 AM                   1337                                                                                                                       
+Randall    17-SEP-2022 07:21.59 PM 15-MAR-1998 12:00.00 AM                   1278                                                                                                                       
+Peter      17-SEP-2022 07:21.59 PM 09-JUL-1998 12:00.00 AM                   1262                                                                                                                       
+Eleni      17-SEP-2022 07:21.59 PM 29-JAN-2000 12:00.00 AM                   1181                                                                                                                       
+Ellen      17-SEP-2022 07:21.59 PM 11-MAY-1996 12:00.00 AM                   1375                                                                                                                       
+Jonathon   17-SEP-2022 07:21.59 PM 24-MAR-1998 12:00.00 AM                   1277                                                                                                                       
+Kimerely   17-SEP-2022 07:21.59 PM 24-MAY-1999 12:00.00 AM                   1216                                                                                                                       
+Jennifer   17-SEP-2022 07:21.59 PM 17-SEP-1987 12:00.00 AM                   1826                                                                                                                       
+Michael    17-SEP-2022 07:21.59 PM 17-FEB-1996 12:00.00 AM                   1387                                                                                                                       
+Pat        17-SEP-2022 07:21.59 PM 17-AUG-1997 12:00.00 AM                   1308                                                                                                                       
+Shelley    17-SEP-2022 07:21.59 PM 07-JUN-1994 12:00.00 AM                   1475                                                                                                                       
+William    17-SEP-2022 07:21.59 PM 07-JUN-1994 12:00.00 AM                   1475                                                                                                                       
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , MONTHS_BETWEEN(SYSDATE,HIRE_DATE) MONTHS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               MONTHS_WORKED                                                                                                                                
+---------- ----------------------- ----------------------- -------------                                                                                                                                
+Steven     17-SEP-2022 07:23.49 PM 17-JUL-1987 12:00.00 AM           422                                                                                                                                
+Neena      17-SEP-2022 07:23.49 PM 21-SEP-1989 12:00.00 AM    395.897039                                                                                                                                
+Lex        17-SEP-2022 07:23.49 PM 13-JAN-1993 12:00.00 AM    356.155103                                                                                                                                
+Alexander  17-SEP-2022 07:23.49 PM 03-JAN-1990 12:00.00 AM    392.477684                                                                                                                                
+Bruce      17-SEP-2022 07:23.49 PM 21-MAY-1991 12:00.00 AM    375.897039                                                                                                                                
+Diana      17-SEP-2022 07:23.49 PM 07-FEB-1999 12:00.00 AM    283.348652                                                                                                                                
+Kevin      17-SEP-2022 07:23.49 PM 16-NOV-1999 12:00.00 AM    274.058329                                                                                                                                
+Trenna     17-SEP-2022 07:23.49 PM 17-OCT-1995 12:00.00 AM           323                                                                                                                                
+Curtis     17-SEP-2022 07:23.49 PM 29-JAN-1997 12:00.00 AM    307.638974                                                                                                                                
+Randall    17-SEP-2022 07:23.49 PM 15-MAR-1998 12:00.00 AM    294.090587                                                                                                                                
+Peter      17-SEP-2022 07:23.49 PM 09-JUL-1998 12:00.00 AM    290.284136                                                                                                                                
+Eleni      17-SEP-2022 07:23.49 PM 29-JAN-2000 12:00.00 AM    271.638974                                                                                                                                
+Ellen      17-SEP-2022 07:23.49 PM 11-MAY-1996 12:00.00 AM     316.21962                                                                                                                                
+Jonathon   17-SEP-2022 07:23.49 PM 24-MAR-1998 12:00.00 AM    293.800265                                                                                                                                
+Kimerely   17-SEP-2022 07:23.49 PM 24-MAY-1999 12:00.00 AM    279.800265                                                                                                                                
+Jennifer   17-SEP-2022 07:23.49 PM 17-SEP-1987 12:00.00 AM           420                                                                                                                                
+Michael    17-SEP-2022 07:23.49 PM 17-FEB-1996 12:00.00 AM           319                                                                                                                                
+Pat        17-SEP-2022 07:23.49 PM 17-AUG-1997 12:00.00 AM           301                                                                                                                                
+Shelley    17-SEP-2022 07:23.49 PM 07-JUN-1994 12:00.00 AM    339.348652                                                                                                                                
+William    17-SEP-2022 07:23.49 PM 07-JUN-1994 12:00.00 AM    339.348652                                                                                                                                
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)) COMPLETED_MONTHS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               COMPLETED_MONTHS_WORKED                                                                                                                      
+---------- ----------------------- ----------------------- -----------------------                                                                                                                      
+Steven     17-SEP-2022 07:25.07 PM 17-JUL-1987 12:00.00 AM                     422                                                                                                                      
+Neena      17-SEP-2022 07:25.07 PM 21-SEP-1989 12:00.00 AM                     395                                                                                                                      
+Lex        17-SEP-2022 07:25.07 PM 13-JAN-1993 12:00.00 AM                     356                                                                                                                      
+Alexander  17-SEP-2022 07:25.07 PM 03-JAN-1990 12:00.00 AM                     392                                                                                                                      
+Bruce      17-SEP-2022 07:25.07 PM 21-MAY-1991 12:00.00 AM                     375                                                                                                                      
+Diana      17-SEP-2022 07:25.07 PM 07-FEB-1999 12:00.00 AM                     283                                                                                                                      
+Kevin      17-SEP-2022 07:25.07 PM 16-NOV-1999 12:00.00 AM                     274                                                                                                                      
+Trenna     17-SEP-2022 07:25.07 PM 17-OCT-1995 12:00.00 AM                     323                                                                                                                      
+Curtis     17-SEP-2022 07:25.07 PM 29-JAN-1997 12:00.00 AM                     307                                                                                                                      
+Randall    17-SEP-2022 07:25.07 PM 15-MAR-1998 12:00.00 AM                     294                                                                                                                      
+Peter      17-SEP-2022 07:25.07 PM 09-JUL-1998 12:00.00 AM                     290                                                                                                                      
+Eleni      17-SEP-2022 07:25.07 PM 29-JAN-2000 12:00.00 AM                     271                                                                                                                      
+Ellen      17-SEP-2022 07:25.07 PM 11-MAY-1996 12:00.00 AM                     316                                                                                                                      
+Jonathon   17-SEP-2022 07:25.07 PM 24-MAR-1998 12:00.00 AM                     293                                                                                                                      
+Kimerely   17-SEP-2022 07:25.07 PM 24-MAY-1999 12:00.00 AM                     279                                                                                                                      
+Jennifer   17-SEP-2022 07:25.07 PM 17-SEP-1987 12:00.00 AM                     420                                                                                                                      
+Michael    17-SEP-2022 07:25.07 PM 17-FEB-1996 12:00.00 AM                     319                                                                                                                      
+Pat        17-SEP-2022 07:25.07 PM 17-AUG-1997 12:00.00 AM                     301                                                                                                                      
+Shelley    17-SEP-2022 07:25.07 PM 07-JUN-1994 12:00.00 AM                     339                                                                                                                      
+William    17-SEP-2022 07:25.07 PM 07-JUN-1994 12:00.00 AM                     339                                                                                                                      
+
+20 rows selected.
+
+SQL> REM YEARS_WORKED , COMPLETED_YEARS_WORKED
+SQL> 
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12 YEARS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               YEARS_WORKED                                                                                                                                 
+---------- ----------------------- ----------------------- ------------                                                                                                                                 
+Steven     17-SEP-2022 07:29.03 PM 17-JUL-1987 12:00.00 AM   35.1666667                                                                                                                                 
+Neena      17-SEP-2022 07:29.03 PM 21-SEP-1989 12:00.00 AM   32.9914297                                                                                                                                 
+Lex        17-SEP-2022 07:29.03 PM 13-JAN-1993 12:00.00 AM   29.6796017                                                                                                                                 
+Alexander  17-SEP-2022 07:29.03 PM 03-JAN-1990 12:00.00 AM   32.7064834                                                                                                                                 
+Bruce      17-SEP-2022 07:29.03 PM 21-MAY-1991 12:00.00 AM    31.324763                                                                                                                                 
+Diana      17-SEP-2022 07:29.03 PM 07-FEB-1999 12:00.00 AM   23.6123974                                                                                                                                 
+Kevin      17-SEP-2022 07:29.03 PM 16-NOV-1999 12:00.00 AM   22.8382039                                                                                                                                 
+Trenna     17-SEP-2022 07:29.03 PM 17-OCT-1995 12:00.00 AM   26.9166667                                                                                                                                 
+Curtis     17-SEP-2022 07:29.03 PM 29-JAN-1997 12:00.00 AM    25.636591                                                                                                                                 
+Randall    17-SEP-2022 07:29.03 PM 15-MAR-1998 12:00.00 AM   24.5075587                                                                                                                                 
+Peter      17-SEP-2022 07:29.03 PM 09-JUL-1998 12:00.00 AM   24.1903544                                                                                                                                 
+Eleni      17-SEP-2022 07:29.03 PM 29-JAN-2000 12:00.00 AM    22.636591                                                                                                                                 
+Ellen      17-SEP-2022 07:29.03 PM 11-MAY-1996 12:00.00 AM   26.3516447                                                                                                                                 
+Jonathon   17-SEP-2022 07:29.03 PM 24-MAR-1998 12:00.00 AM   24.4833652                                                                                                                                 
+Kimerely   17-SEP-2022 07:29.03 PM 24-MAY-1999 12:00.00 AM   23.3166985                                                                                                                                 
+Jennifer   17-SEP-2022 07:29.03 PM 17-SEP-1987 12:00.00 AM           35                                                                                                                                 
+Michael    17-SEP-2022 07:29.03 PM 17-FEB-1996 12:00.00 AM   26.5833333                                                                                                                                 
+Pat        17-SEP-2022 07:29.03 PM 17-AUG-1997 12:00.00 AM   25.0833333                                                                                                                                 
+Shelley    17-SEP-2022 07:29.03 PM 07-JUN-1994 12:00.00 AM   28.2790641                                                                                                                                 
+William    17-SEP-2022 07:29.03 PM 07-JUN-1994 12:00.00 AM   28.2790641                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SYSDATE , HIRE_DATE , FLOOR(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12) COMPLETED_YEARS_WORKED FROM EMPLOYEES;
+
+FIRST_NAME SYSDATE                 HIRE_DATE               COMPLETED_YEARS_WORKED                                                                                                                       
+---------- ----------------------- ----------------------- ----------------------                                                                                                                       
+Steven     17-SEP-2022 07:29.33 PM 17-JUL-1987 12:00.00 AM                     35                                                                                                                       
+Neena      17-SEP-2022 07:29.33 PM 21-SEP-1989 12:00.00 AM                     32                                                                                                                       
+Lex        17-SEP-2022 07:29.33 PM 13-JAN-1993 12:00.00 AM                     29                                                                                                                       
+Alexander  17-SEP-2022 07:29.33 PM 03-JAN-1990 12:00.00 AM                     32                                                                                                                       
+Bruce      17-SEP-2022 07:29.33 PM 21-MAY-1991 12:00.00 AM                     31                                                                                                                       
+Diana      17-SEP-2022 07:29.33 PM 07-FEB-1999 12:00.00 AM                     23                                                                                                                       
+Kevin      17-SEP-2022 07:29.33 PM 16-NOV-1999 12:00.00 AM                     22                                                                                                                       
+Trenna     17-SEP-2022 07:29.33 PM 17-OCT-1995 12:00.00 AM                     26                                                                                                                       
+Curtis     17-SEP-2022 07:29.33 PM 29-JAN-1997 12:00.00 AM                     25                                                                                                                       
+Randall    17-SEP-2022 07:29.33 PM 15-MAR-1998 12:00.00 AM                     24                                                                                                                       
+Peter      17-SEP-2022 07:29.33 PM 09-JUL-1998 12:00.00 AM                     24                                                                                                                       
+Eleni      17-SEP-2022 07:29.33 PM 29-JAN-2000 12:00.00 AM                     22                                                                                                                       
+Ellen      17-SEP-2022 07:29.33 PM 11-MAY-1996 12:00.00 AM                     26                                                                                                                       
+Jonathon   17-SEP-2022 07:29.33 PM 24-MAR-1998 12:00.00 AM                     24                                                                                                                       
+Kimerely   17-SEP-2022 07:29.33 PM 24-MAY-1999 12:00.00 AM                     23                                                                                                                       
+Jennifer   17-SEP-2022 07:29.33 PM 17-SEP-1987 12:00.00 AM                     35                                                                                                                       
+Michael    17-SEP-2022 07:29.33 PM 17-FEB-1996 12:00.00 AM                     26                                                                                                                       
+Pat        17-SEP-2022 07:29.33 PM 17-AUG-1997 12:00.00 AM                     25                                                                                                                       
+Shelley    17-SEP-2022 07:29.33 PM 07-JUN-1994 12:00.00 AM                     28                                                                                                                       
+William    17-SEP-2022 07:29.33 PM 07-JUN-1994 12:00.00 AM                     28                                                                                                                       
+
+20 rows selected.
+
+SQL> REM SYSDATE , CURRENT_DATE , ADD_MONTHS , MONTHS_BETWEEN
+SQL> 
+SQL> SPOOL OFF

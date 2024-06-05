@@ -1,0 +1,171 @@
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY ,
+  2  CASE WHEN (LENGTH(FIRST_NAME)-LENGTH(TRANSLATE(FIRST_NAME , '#aeiouAEIOU' , '#')))=1 THEN SALARY*1.1
+  3       WHEN (LENGTH(FIRST_NAME)-LENGTH(TRANSLATE(FIRST_NAME , '#aeiouAEIOU' , '#')))=2 THEN SALARY*1.2
+  4       WHEN (LENGTH(FIRST_NAME)-LENGTH(TRANSLATE(FIRST_NAME , '#aeiouAEIOU' , '#')))=3 THEN SALARY*1.3 ELSE SALARY*1.4 END NEW_SALARY FROM EMPLOYEES;
+
+FIRST_NAME     SALARY NEW_SALARY                                                
+---------- ---------- ----------                                                
+Steven          24000      28800                                                
+Neena           17000      22100                                                
+Lex             17000      18700                                                
+Alexander        9000      12600                                                
+Bruce            6000       7200                                                
+Diana            4200       5460                                                
+Kevin            5800       6960                                                
+Trenna           3500       4200                                                
+Curtis           3100       3720                                                
+Randall          2600       3120                                                
+Peter            2500       3000                                                
+
+FIRST_NAME     SALARY NEW_SALARY                                                
+---------- ---------- ----------                                                
+Eleni           10500      13650                                                
+Ellen           11000      13200                                                
+Jonathon         8600      11180                                                
+Kimerely         7000       9100                                                
+Jennifer         4400       5720                                                
+Michael         13000      16900                                                
+Pat              6000       6600                                                
+Shelley         12000      14400                                                
+William          8300      10790                                                
+
+20 rows selected.
+
+SQL> SET LINES 200 PAGES 24
+SQL> 
+SQL> R
+  1  SELECT FIRST_NAME , SALARY ,
+  2  CASE WHEN (LENGTH(FIRST_NAME)-LENGTH(TRANSLATE(FIRST_NAME , '#aeiouAEIOU' , '#')))=1 THEN SALARY*1.1
+  3       WHEN (LENGTH(FIRST_NAME)-LENGTH(TRANSLATE(FIRST_NAME , '#aeiouAEIOU' , '#')))=2 THEN SALARY*1.2
+  4*      WHEN (LENGTH(FIRST_NAME)-LENGTH(TRANSLATE(FIRST_NAME , '#aeiouAEIOU' , '#')))=3 THEN SALARY*1.3 ELSE SALARY*1.4 END NEW_SALARY FROM EMPLOYEES
+
+FIRST_NAME     SALARY NEW_SALARY                                                                                                                                                                        
+---------- ---------- ----------                                                                                                                                                                        
+Steven          24000      28800                                                                                                                                                                        
+Neena           17000      22100                                                                                                                                                                        
+Lex             17000      18700                                                                                                                                                                        
+Alexander        9000      12600                                                                                                                                                                        
+Bruce            6000       7200                                                                                                                                                                        
+Diana            4200       5460                                                                                                                                                                        
+Kevin            5800       6960                                                                                                                                                                        
+Trenna           3500       4200                                                                                                                                                                        
+Curtis           3100       3720                                                                                                                                                                        
+Randall          2600       3120                                                                                                                                                                        
+Peter            2500       3000                                                                                                                                                                        
+Eleni           10500      13650                                                                                                                                                                        
+Ellen           11000      13200                                                                                                                                                                        
+Jonathon         8600      11180                                                                                                                                                                        
+Kimerely         7000       9100                                                                                                                                                                        
+Jennifer         4400       5720                                                                                                                                                                        
+Michael         13000      16900                                                                                                                                                                        
+Pat              6000       6600                                                                                                                                                                        
+Shelley         12000      14400                                                                                                                                                                        
+William          8300      10790                                                                                                                                                                        
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY ,
+  2  CASE  LENGTH(TRANSLATE(LOWER(FIRST_NAME),'#qwrtypsdfghjklzxcvbnm','#')) WHEN 1 THEN SALARY * 1.1
+  3                                                                          WHEN 2 THEN SALARY * 1.2
+  4                                                                          WHEN 3 THEN SALARY * 1.3 ELSE SALARY * 1.4 END NEW_SALARY
+  5  FROM EMPLOYEES;
+
+FIRST_NAME     SALARY NEW_SALARY                                                                                                                                                                        
+---------- ---------- ----------                                                                                                                                                                        
+Steven          24000      28800                                                                                                                                                                        
+Neena           17000      22100                                                                                                                                                                        
+Lex             17000      18700                                                                                                                                                                        
+Alexander        9000      12600                                                                                                                                                                        
+Bruce            6000       7200                                                                                                                                                                        
+Diana            4200       5460                                                                                                                                                                        
+Kevin            5800       6960                                                                                                                                                                        
+Trenna           3500       4200                                                                                                                                                                        
+Curtis           3100       3720                                                                                                                                                                        
+Randall          2600       3120                                                                                                                                                                        
+Peter            2500       3000                                                                                                                                                                        
+Eleni           10500      13650                                                                                                                                                                        
+Ellen           11000      13200                                                                                                                                                                        
+Jonathon         8600      11180                                                                                                                                                                        
+Kimerely         7000       9100                                                                                                                                                                        
+Jennifer         4400       5720                                                                                                                                                                        
+Michael         13000      16900                                                                                                                                                                        
+Pat              6000       6600                                                                                                                                                                        
+Shelley         12000      14400                                                                                                                                                                        
+William          8300      10790                                                                                                                                                                        
+
+20 rows selected.
+
+SQL> SELECT TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),SALARY,
+  2  CASE WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*') =SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,1) THEN SALARY*1.1
+  3     WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*')=SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,2) THEN SALARY*1.2
+  4     WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*')=SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,3) THEN SALARY*1.3
+  5     ELSE SALARY*1.4  END
+  6  
+SQL> FROM EMPLOYEES;
+SP2-0734: unknown command beginning "FROM EMPLO..." - rest of line ignored.
+SQL> SELECT TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),SALARY,
+  2  CASE WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*') =SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,1) THEN SALARY*1.1
+  3     WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*')=SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,2) THEN SALARY*1.2
+  4     WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*')=SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,3) THEN SALARY*1.3
+  5     ELSE SALARY*1.4  END NEW_SALARY
+  6  FROM EMPLOYEES;
+
+TRANSLATE(LOWER(FIRST_NAME),'*PYTRWQSDFG     SALARY NEW_SALARY                                                                                                                                          
+---------------------------------------- ---------- ----------                                                                                                                                          
+ee                                            24000      28800                                                                                                                                          
+eea                                           17000      22100                                                                                                                                          
+e                                             17000      18700                                                                                                                                          
+aeae                                           9000      12600                                                                                                                                          
+ue                                             6000       7200                                                                                                                                          
+iaa                                            4200       5460                                                                                                                                          
+ei                                             5800       6960                                                                                                                                          
+ea                                             3500       4200                                                                                                                                          
+ui                                             3100       3720                                                                                                                                          
+aa                                             2600       3120                                                                                                                                          
+ee                                             2500       3000                                                                                                                                          
+eei                                           10500      13650                                                                                                                                          
+ee                                            11000      13200                                                                                                                                          
+oao                                            8600      11180                                                                                                                                          
+iee                                            7000       9100                                                                                                                                          
+eie                                            4400       5720                                                                                                                                          
+iae                                           13000      16900                                                                                                                                          
+a                                              6000       6600                                                                                                                                          
+ee                                            12000      14400                                                                                                                                          
+iia                                            8300      10790                                                                                                                                          
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),SALARY,
+  2  CASE WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*') =SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,1) THEN SALARY*1.1
+  3     WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*')=SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,2) THEN SALARY*1.2
+  4     WHEN TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*')=SUBSTR( TRANSLATE(LOWER(FIRST_NAME),'*pytrwqsdfghjklmnbvcxz','*'),1,3) THEN SALARY*1.3
+  5     ELSE SALARY*1.4  END NEW_SALARY
+  6  FROM EMPLOYEES;
+
+FIRST_NAME TRANSLATE(LOWER(FIRST_NAME),'*PYTRWQSDFG     SALARY NEW_SALARY                                                                                                                               
+---------- ---------------------------------------- ---------- ----------                                                                                                                               
+Steven     ee                                            24000      28800                                                                                                                               
+Neena      eea                                           17000      22100                                                                                                                               
+Lex        e                                             17000      18700                                                                                                                               
+Alexander  aeae                                           9000      12600                                                                                                                               
+Bruce      ue                                             6000       7200                                                                                                                               
+Diana      iaa                                            4200       5460                                                                                                                               
+Kevin      ei                                             5800       6960                                                                                                                               
+Trenna     ea                                             3500       4200                                                                                                                               
+Curtis     ui                                             3100       3720                                                                                                                               
+Randall    aa                                             2600       3120                                                                                                                               
+Peter      ee                                             2500       3000                                                                                                                               
+Eleni      eei                                           10500      13650                                                                                                                               
+Ellen      ee                                            11000      13200                                                                                                                               
+Jonathon   oao                                            8600      11180                                                                                                                               
+Kimerely   iee                                            7000       9100                                                                                                                               
+Jennifer   eie                                            4400       5720                                                                                                                               
+Michael    iae                                           13000      16900                                                                                                                               
+Pat        a                                              6000       6600                                                                                                                               
+Shelley    ee                                            12000      14400                                                                                                                               
+William    iia                                            8300      10790                                                                                                                               
+
+20 rows selected.
+
+SQL> SPOOL OFF

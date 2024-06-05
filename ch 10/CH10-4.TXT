@@ -1,0 +1,541 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM CONSTRAINT NAME MUST BE UNIQUE IN WHOLE DATABASE.
+SQL> 
+SQL> CREATE TABLE T1(NO NUMBER PRIMARY KEY,NM VARCHAR(10));
+CREATE TABLE T1(NO NUMBER PRIMARY KEY,NM VARCHAR(10))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE T1;
+
+Table dropped.
+
+SQL> CREATE TABLE T1(NO NUMBER PRIMARY KEY,NM VARCHAR(10));
+
+Table created.
+
+SQL> INSERT INTO T1 VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO T1 VALUES (1,'GANESH');
+INSERT INTO T1 VALUES (1,'GANESH')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SYS_C0053390) violated 
+
+
+SQL> REM ORACLE SUPPORTS TWO TYPES OF CONSTRAINT NAMES : 1 SYSTEM GENERATED 2 USER DEFINED
+SQL> 
+SQL> REM SYSTEM GENERATED : SYS_Cnnnnnnn
+SQL> 
+SQL> INSERT INTO T1 VALUES (NULL,'GANESH');
+INSERT INTO T1 VALUES (NULL,'GANESH')
+                       *
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."T1"."NO") 
+
+
+SQL> REM USER_CONSTRAINTS , USER_CONS_COLUMNS : SYSTEM GENERATED VIEWS
+SQL> 
+SQL> COL TABLE_NAME FORMAT A20
+SQL> 
+SQL> COL COLUMN_NAME FORMAT A20
+SQL> COL CONSTRAINT_NAME FORMAT A20
+SQL> COL R_CONSTRAINT_NAME FORMAT A20
+SQL> COL SEARCH_CONDITION FORMAT A20
+SQL> 
+SQL> SELECT TABLE_NAME , COLUMN_NAME, CONSTRAINT_TYPE , CONSTRAINT_NAME , R_CONSTRAINT_NAME , SEARCH_CONDITION FROM USER_CONSTRAINTS NATURAL JOIN USER_CONS_COLUMNS WHERE TABLE_NAME = 'T1';
+
+TABLE_NAME           COLUMN_NAME          C CONSTRAINT_NAME      R_CONSTRAINT_NAME    SEARCH_CONDITION                                                                                                  
+-------------------- -------------------- - -------------------- -------------------- --------------------                                                                                              
+T1                   NO                   P SYS_C0053390                                                                                                                                                
+
+SQL> REM HOW TO DEVELOP UNIQUE CONSTRAINT NAME IN WHOLE DATABASE?
+SQL> 
+SQL> REM USERNAME_TABLENAME_COLUMNNAME_CONSTRAINTTYPE#NUMBER
+SQL> 
+SQL> REM SCOTT_T1_NO_PK
+SQL> 
+SQL> REM SCOTT_T1_NO_CH#1
+SQL> 
+SQL> REM SCOTT_T1_NO_CH#2
+SQL> 
+SQL> REM HR_T1_NO_PK
+SQL> 
+SQL> REM SCOTT_T2_NO_PK
+SQL> 
+SQL> REM SCOTT_T2_NM_UK
+SQL> 
+SQL> REM SCOTT_T2_NM_RK#1
+SQL> 
+SQL> REM SCOTT_T2_NM_RK#2
+SQL> 
+SQL> DROP TABLE T1;
+
+Table dropped.
+
+SQL> CREATE TABLE T1(NO NUMBER CONSTRAINT SCOTT_T1_NO_PK PRIMARY KEY,NM VARCHAR(10));
+
+Table created.
+
+SQL> INSERT INTO T1 VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> INSERT INTO T1 VALUES (1,'GANESH');
+INSERT INTO T1 VALUES (1,'GANESH')
+*
+ERROR at line 1:
+ORA-00001: unique constraint (SCOTT.SCOTT_T1_NO_PK) violated 
+
+
+SQL> SELECT COUNT(JOB_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+COUNT(JOB_ID) MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                         
+------------- ---------------- ----------------                                                                                                                                                         
+            8             3500       19333.3333                                                                                                                                                         
+
+SQL> SELECT COUNT(MANAGER_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT COUNT(MANAGER_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID
+             *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT COUNT(DEPARTMENT_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+COUNT(DEPARTMENT_ID) MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                  
+-------------------- ---------------- ----------------                                                                                                                                                  
+                   7             3500       19333.3333                                                                                                                                                  
+
+SQL> SELECT COUNT(*) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+  COUNT(*) MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                            
+---------- ---------------- ----------------                                                                                                                                                            
+         8             3500       19333.3333                                                                                                                                                            
+
+SQL> SELECT DEPARTMENT_ID , JOB_ID FROM EMPLOYEES ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID                                                                                                                                                                                    
+------------- ----------                                                                                                                                                                                
+           10 AD_ASST                                                                                                                                                                                   
+           20 MK_MAN                                                                                                                                                                                    
+           20 MK_REP                                                                                                                                                                                    
+           50 ST_CLERK                                                                                                                                                                                  
+           50 ST_MAN                                                                                                                                                                                    
+           50 St_ClERk                                                                                                                                                                                  
+           50 St_Clerk                                                                                                                                                                                  
+           50 st_clerk                                                                                                                                                                                  
+           60 IT_PROG                                                                                                                                                                                   
+           60 IT_PROG                                                                                                                                                                                   
+           60 IT_PROG                                                                                                                                                                                   
+           80 SA_MAN                                                                                                                                                                                    
+           80 SA_REP                                                                                                                                                                                    
+           80 SA_REP                                                                                                                                                                                    
+           90 AD_PRES                                                                                                                                                                                   
+           90 AD_VP                                                                                                                                                                                     
+           90 AD_VP                                                                                                                                                                                     
+          110 AC_ACCOUNT                                                                                                                                                                                
+          110 AC_MGR                                                                                                                                                                                    
+              SA_REP                                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT DISTINCT DEPARTMENT_ID , JOB_ID FROM EMPLOYEES ORDER BY 1,2;
+
+DEPARTMENT_ID JOB_ID                                                                                                                                                                                    
+------------- ----------                                                                                                                                                                                
+           10 AD_ASST                                                                                                                                                                                   
+           20 MK_MAN                                                                                                                                                                                    
+           20 MK_REP                                                                                                                                                                                    
+           50 ST_CLERK                                                                                                                                                                                  
+           50 ST_MAN                                                                                                                                                                                    
+           50 St_ClERk                                                                                                                                                                                  
+           50 St_Clerk                                                                                                                                                                                  
+           50 st_clerk                                                                                                                                                                                  
+           60 IT_PROG                                                                                                                                                                                   
+           80 SA_MAN                                                                                                                                                                                    
+           80 SA_REP                                                                                                                                                                                    
+           90 AD_PRES                                                                                                                                                                                   
+           90 AD_VP                                                                                                                                                                                     
+          110 AC_ACCOUNT                                                                                                                                                                                
+          110 AC_MGR                                                                                                                                                                                    
+              SA_REP                                                                                                                                                                                    
+
+16 rows selected.
+
+SQL> SELECT DISTINCT DEPARTMENT_ID , MANAGER_ID FROM EMPLOYEES ORDER BY 1,2;
+
+DEPARTMENT_ID MANAGER_ID                                                                                                                                                                                
+------------- ----------                                                                                                                                                                                
+           10        101                                                                                                                                                                                
+           20        100                                                                                                                                                                                
+           20        201                                                                                                                                                                                
+           50        100                                                                                                                                                                                
+           50        124                                                                                                                                                                                
+           60        102                                                                                                                                                                                
+           60        103                                                                                                                                                                                
+           80        100                                                                                                                                                                                
+           80        149                                                                                                                                                                                
+           90        100                                                                                                                                                                                
+           90                                                                                                                                                                                           
+          110        101                                                                                                                                                                                
+          110        205                                                                                                                                                                                
+                     149                                                                                                                                                                                
+
+14 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , COUNT(*) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID   COUNT(*)                                                                                                                                                                                
+------------- ----------                                                                                                                                                                                
+           10          1                                                                                                                                                                                
+           20          2                                                                                                                                                                                
+           50          5                                                                                                                                                                                
+           60          3                                                                                                                                                                                
+           80          3                                                                                                                                                                                
+           90          3                                                                                                                                                                                
+          110          2                                                                                                                                                                                
+                       1                                                                                                                                                                                
+
+8 rows selected.
+
+SQL> SELECT COUNT(*) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+  COUNT(*)                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         2                                                                                                                                                                                              
+         5                                                                                                                                                                                              
+         3                                                                                                                                                                                              
+         3                                                                                                                                                                                              
+         3                                                                                                                                                                                              
+         2                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+
+8 rows selected.
+
+SQL> REM 15 DISPLAY DAY WISE (MON,TUE...) AVERAGE SALARY, SORT ROWS ON DAY NUMBER OF WEEK.
+SQL> 
+SQL>      SELECT TO_CHAR(HIRE_DATE,'DAY'),AVG(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'DAY'),TO_CHAR(HIRE_DATE,'D') ORDER BY 2;
+
+TO_CHAR(HIRE_DATE,'DAY')             AVG(SALARY)                                                                                                                                                        
+------------------------------------ -----------                                                                                                                                                        
+SUNDAY                                4266.66667                                                                                                                                                        
+MONDAY                                      7000                                                                                                                                                        
+TUESDAY                               7366.66667                                                                                                                                                        
+THURSDAY                              7966.66667                                                                                                                                                        
+WEDNESDAY                                   9700                                                                                                                                                        
+SATURDAY                                   11500                                                                                                                                                        
+FRIDAY                                     24000                                                                                                                                                        
+
+7 rows selected.
+
+SQL> REM DISPLAY HIRE MONTH WISE, HIGHEST SALARY , LOWEST SALARY , DIFFERENCE OF HIGHEST AND LOWEST SALARY. DISPLAY ONLY THOSE WHERE DIFFERENCE IS HIGHER THAN 4000.
+SQL> 
+SQL> REM 14 SOLVE ABOVE QUESTION IN WHICH JOB_ID MUST BE DISPLAYED AS HEADING AND COUNT MUST BE DISPLAYED BELOW EACH JOB_ID
+SQL> 
+SQL> DROP TABLE RESULT;
+
+Table dropped.
+
+SQL> DROP TABLE SCHOOL;
+
+Table dropped.
+
+SQL> CREATE TABLE SCHOOL(STD NUMBER(2),DIV CHAR,RNO NUMBER(2),NM VARCHAR(10), PRIMARY KEY (STD,DIV,RNO));
+
+Table created.
+
+SQL> CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,REFERENCES SCHOOL(STD,DIV,RNO));
+CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,REFERENCES SCHOOL(STD,DIV,RNO))
+                                                                                     *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,FOREIGN KEY (STD,DIV,ROLLNO) REFERENCES SCHOOL(STD,DIV,RNO));
+
+Table created.
+
+SQL> DROP TABLE RESULT;
+
+Table dropped.
+
+SQL> CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,FOREIGN KEY (ROLLNO,DIV,STD) REFERENCES SCHOOL(STD,DIV,RNO));
+
+Table created.
+
+SQL> DROP TABLE RESULT;
+
+Table dropped.
+
+SQL> CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,FOREIGN KEY (STD,DIV,ROLLNO) REFERENCES SCHOOL(DIV,STD,RNO));
+CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,FOREIGN KEY (STD,DIV,ROLLNO) REFERENCES SCHOOL(DIV,STD,RNO))
+                                                                                 *
+ERROR at line 1:
+ORA-02267: column type incompatible with referenced column type 
+
+
+SQL> CREATE TABLE RESULT(STD NUMBER(2),DIV CHAR,ROLLNO NUMBER(2),PA CHAR,FOREIGN KEY (STD,DIV,ROLLNO) REFERENCES SCHOOL(STD,DIV,RNO));
+
+Table created.
+
+SQL> SELECT TABLE_NAME , COLUMN_NAME, CONSTRAINT_TYPE , CONSTRAINT_NAME , R_CONSTRAINT_NAME , SEARCH_CONDITION FROM USER_CONSTRAINTS NATURAL JOIN USER_CONS_COLUMNS WHERE TABLE_NAME = ANY ('SCHOOL','RESULT');
+
+TABLE_NAME           COLUMN_NAME          C CONSTRAINT_NAME      R_CONSTRAINT_NAME    SEARCH_CONDITION                                                                                                  
+-------------------- -------------------- - -------------------- -------------------- --------------------                                                                                              
+SCHOOL               STD                  P SYS_C0053404                                                                                                                                                
+SCHOOL               DIV                  P SYS_C0053404                                                                                                                                                
+SCHOOL               RNO                  P SYS_C0053404                                                                                                                                                
+RESULT               STD                  R SYS_C0053411         SYS_C0053404                                                                                                                           
+RESULT               DIV                  R SYS_C0053411         SYS_C0053404                                                                                                                           
+RESULT               ROLLNO               R SYS_C0053411         SYS_C0053404                                                                                                                           
+
+6 rows selected.
+
+SQL> REM DISPLAY LAST_NAME , SALARY , DEPARTMENT_ID , DEPT WISE AVERAGE SALARY , MANAGER_ID , MANAGER WISE NO. OF EMPLOYEES
+SQL> 
+SQL> SELECT LAST_NAME , SALARY , E.DEPARTMENT_ID , DEPT_AVG_SALARY , E.MANAGER_ID , MGR_COUNT
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT DEPARTMENT_ID , AVG(SALARY) DEPT_AVG_SALARY FROM EMPLOYEES GROUP BY DEPARTMENT_ID) T1 ON E.DEPARTMENT_ID = T1.DEPARTMENT_ID
+  4  JOIN (SELECT MANAGER_ID , COUNT(*) MGR_COUNT FROM EMPLOYEES GROUP BY MANAGER_ID) T2 ON E.MANAGER_ID = T2.MANAGER_ID;
+
+LAST_NAME           SALARY DEPARTMENT_ID DEPT_AVG_SALARY MANAGER_ID  MGR_COUNT                                                                                                                          
+--------------- ---------- ------------- --------------- ---------- ----------                                                                                                                          
+Kochhar              17000            90      19333.3333        100          5                                                                                                                          
+De Haan              17000            90      19333.3333        100          5                                                                                                                          
+Mourgos               5800            50            3500        100          5                                                                                                                          
+Zlotkey              10500            80      10033.3333        100          5                                                                                                                          
+Hartstein            13000            20            9500        100          5                                                                                                                          
+Abel                 11000            80      10033.3333        149          3                                                                                                                          
+Taylor                8600            80      10033.3333        149          3                                                                                                                          
+Gietz                 8300           110           10150        205          1                                                                                                                          
+Hunold                9000            60            6400        102          1                                                                                                                          
+Fay                   6000            20            9500        201          1                                                                                                                          
+Whalen                4400            10            4400        101          2                                                                                                                          
+Higgins              12000           110           10150        101          2                                                                                                                          
+Rajs                  3500            50            3500        124          4                                                                                                                          
+Davies                3100            50            3500        124          4                                                                                                                          
+Matos                 2600            50            3500        124          4                                                                                                                          
+Vargas                2500            50            3500        124          4                                                                                                                          
+Ernst                 6000            60            6400        103          2                                                                                                                          
+Lorentz               4200            60            6400        103          2                                                                                                                          
+
+18 rows selected.
+
+SQL> REM DISPLAY OTHER THAN THOSE WHO GETS SALARY IN GRADE LEVEL B AND D
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY NOT BETWEEN (SELECT LOWEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'B') AND (SELECT HIGHEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'B')
+  4  AND   SALARY NOT BETWEEN (SELECT LOWEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'D') AND (SELECT HIGHEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'D');
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Alexander             9000                                                                                                                                                                              
+Bruce                 6000                                                                                                                                                                              
+Randall               2600                                                                                                                                                                              
+Peter                 2500                                                                                                                                                                              
+Jonathon              8600                                                                                                                                                                              
+Kimerely              7000                                                                                                                                                                              
+Pat                   6000                                                                                                                                                                              
+William               8300                                                                                                                                                                              
+
+11 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY NOT BETWEEN (SELECT LOWEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'B') AND (SELECT HIGHEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'B')
+  4  AND   SALARY NOT BETWEEN (SELECT LOWEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'D') AND (SELECT HIGHEST_SAL FROM JOB_GRADES WHERE GRADE_LEVEL = 'D')
+  5  ORDER BY 2;
+
+FIRST_NAME          SALARY                                                                                                                                                                              
+--------------- ----------                                                                                                                                                                              
+Peter                 2500                                                                                                                                                                              
+Randall               2600                                                                                                                                                                              
+Bruce                 6000                                                                                                                                                                              
+Pat                   6000                                                                                                                                                                              
+Kimerely              7000                                                                                                                                                                              
+William               8300                                                                                                                                                                              
+Jonathon              8600                                                                                                                                                                              
+Alexander             9000                                                                                                                                                                              
+Lex                  17000                                                                                                                                                                              
+Neena                17000                                                                                                                                                                              
+Steven               24000                                                                                                                                                                              
+
+11 rows selected.
+
+SQL> SELECT * FROM JOB_GRADES;
+
+GRA LOWEST_SAL HIGHEST_SAL                                                                                                                                                                              
+--- ---------- -----------                                                                                                                                                                              
+A         1000        2999                                                                                                                                                                              
+B         3000        5999                                                                                                                                                                              
+C         6000        9999                                                                                                                                                                              
+D        10000       14999                                                                                                                                                                              
+E        15000       24999                                                                                                                                                                              
+F        25000       40000                                                                                                                                                                              
+
+6 rows selected.
+
+SQL> SELECT E.FIRST_NAME , E.JOB_ID , C.FIRST_NAME , C.JOB_ID FROM EMPLOYEES E
+  2  JOIN EMPLOYEES C ON (E.JOB_ID = C.JOB_ID)
+  3  WHERE E.EMPLOYEE_ID != C.EMPLOYEE_ID;
+
+FIRST_NAME      JOB_ID     FIRST_NAME      JOB_ID                                                                                                                                                       
+--------------- ---------- --------------- ----------                                                                                                                                                   
+Neena           AD_VP      Lex             AD_VP                                                                                                                                                        
+Lex             AD_VP      Neena           AD_VP                                                                                                                                                        
+Alexander       IT_PROG    Bruce           IT_PROG                                                                                                                                                      
+Alexander       IT_PROG    Diana           IT_PROG                                                                                                                                                      
+Bruce           IT_PROG    Alexander       IT_PROG                                                                                                                                                      
+Bruce           IT_PROG    Diana           IT_PROG                                                                                                                                                      
+Diana           IT_PROG    Alexander       IT_PROG                                                                                                                                                      
+Diana           IT_PROG    Bruce           IT_PROG                                                                                                                                                      
+Ellen           SA_REP     Kimerely        SA_REP                                                                                                                                                       
+Ellen           SA_REP     Jonathon        SA_REP                                                                                                                                                       
+Jonathon        SA_REP     Ellen           SA_REP                                                                                                                                                       
+Jonathon        SA_REP     Kimerely        SA_REP                                                                                                                                                       
+Kimerely        SA_REP     Ellen           SA_REP                                                                                                                                                       
+Kimerely        SA_REP     Jonathon        SA_REP                                                                                                                                                       
+
+14 rows selected.
+
+SQL> SELECT E.FIRST_NAME , E.JOB_ID , C.FIRST_NAME , C.JOB_ID FROM EMPLOYEES E
+  2  JOIN EMPLOYEES C ON (E.JOB_ID = C.JOB_ID)
+  3  WHERE E.EMPLOYEE_ID < C.EMPLOYEE_ID;
+
+FIRST_NAME      JOB_ID     FIRST_NAME      JOB_ID                                                                                                                                                       
+--------------- ---------- --------------- ----------                                                                                                                                                   
+Neena           AD_VP      Lex             AD_VP                                                                                                                                                        
+Alexander       IT_PROG    Bruce           IT_PROG                                                                                                                                                      
+Alexander       IT_PROG    Diana           IT_PROG                                                                                                                                                      
+Bruce           IT_PROG    Diana           IT_PROG                                                                                                                                                      
+Ellen           SA_REP     Kimerely        SA_REP                                                                                                                                                       
+Ellen           SA_REP     Jonathon        SA_REP                                                                                                                                                       
+Jonathon        SA_REP     Kimerely        SA_REP                                                                                                                                                       
+
+7 rows selected.
+
+SQL> SELECT E.FIRST_NAME , E.JOB_ID , C.FIRST_NAME , C.JOB_ID FROM EMPLOYEES E
+  2  JOIN EMPLOYEES C ON (E.JOB_ID = C.JOB_ID)
+  3  WHERE E.EMPLOYEE_ID > C.EMPLOYEE_ID;
+
+FIRST_NAME      JOB_ID     FIRST_NAME      JOB_ID                                                                                                                                                       
+--------------- ---------- --------------- ----------                                                                                                                                                   
+Lex             AD_VP      Neena           AD_VP                                                                                                                                                        
+Bruce           IT_PROG    Alexander       IT_PROG                                                                                                                                                      
+Diana           IT_PROG    Alexander       IT_PROG                                                                                                                                                      
+Diana           IT_PROG    Bruce           IT_PROG                                                                                                                                                      
+Jonathon        SA_REP     Ellen           SA_REP                                                                                                                                                       
+Kimerely        SA_REP     Ellen           SA_REP                                                                                                                                                       
+Kimerely        SA_REP     Jonathon        SA_REP                                                                                                                                                       
+
+7 rows selected.
+
+SQL> REM COMPANY DECLARES INCREMENTS TWO TIMES PER YEAR ON FIRST DATE OF 1st AND 3rd QUARTER AS PER ACCOUNTING YEAR. FIND SECOND INCREMENT DATE FOR EACH EMPLOYEE.
+SQL> 
+SQL> SELECT FIRST_NAME , HIRE_DATE ,
+  2  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (2,3) THEN ADD_MONTHS(TO_CHAR(HIRE_DATE,'YYYY'),9) ELSE
+  3  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (1) THEN ADD_MONTHS(TO_CHAR(HIRE_DATE,'YYYY'),3) ELSE ADD_MONTHS(TO_CHAR(HIRE_DATE,'YYYY'),3) END END
+  4  
+SQL> SELECT FIRST_NAME , HIRE_DATE ,
+  2  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (2,3) THEN ADD_MONTHS(TRUNC(HIRE_DATE,'YYYY'),9) ELSE
+  3  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (1) THEN ADD_MONTHS(TRUNC(HIRE_DATE,'YYYY'),3) ELSE ADD_MONTHS(ROUND(HIRE_DATE,'YYYY'),3) END END FID
+  4  FROM EMPLOYEES;
+
+FIRST_NAME      HIRE_DATE FID                                                                                                                                                                           
+--------------- --------- ---------                                                                                                                                                                     
+Steven          17-JUL-87 01-OCT-87                                                                                                                                                                     
+Neena           21-SEP-89 01-OCT-89                                                                                                                                                                     
+Lex             13-JAN-93 01-APR-93                                                                                                                                                                     
+Alexander       03-JAN-90 01-APR-90                                                                                                                                                                     
+Bruce           21-MAY-91 01-OCT-91                                                                                                                                                                     
+Diana           07-FEB-99 01-APR-99                                                                                                                                                                     
+Kevin           16-NOV-99 01-APR-00                                                                                                                                                                     
+Trenna          17-OCT-95 01-APR-96                                                                                                                                                                     
+Curtis          29-JAN-97 01-APR-97                                                                                                                                                                     
+Randall         15-MAR-98 01-APR-98                                                                                                                                                                     
+Peter           09-JUL-98 01-OCT-98                                                                                                                                                                     
+Eleni           29-JAN-00 01-APR-00                                                                                                                                                                     
+Ellen           11-MAY-96 01-OCT-96                                                                                                                                                                     
+Jonathon        24-MAR-98 01-APR-98                                                                                                                                                                     
+Kimerely        24-MAY-99 01-OCT-99                                                                                                                                                                     
+Jennifer        17-SEP-87 01-OCT-87                                                                                                                                                                     
+Michael         17-FEB-96 01-APR-96                                                                                                                                                                     
+Pat             17-AUG-97 01-OCT-97                                                                                                                                                                     
+Shelley         07-JUN-94 01-OCT-94                                                                                                                                                                     
+William         07-JUN-94 01-OCT-94                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE ,
+  2  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (2,3) THEN ADD_MONTHS(TRUNC(HIRE_DATE,'YYYY'),15) ELSE
+  3  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (1) THEN ADD_MONTHS(TRUNC(HIRE_DATE,'YYYY'),9) ELSE ADD_MONTHS(ROUND(HIRE_DATE,'YYYY'),9) END END FID
+  4  FROM EMPLOYEES;
+
+FIRST_NAME      HIRE_DATE FID                                                                                                                                                                           
+--------------- --------- ---------                                                                                                                                                                     
+Steven          17-JUL-87 01-APR-88                                                                                                                                                                     
+Neena           21-SEP-89 01-APR-90                                                                                                                                                                     
+Lex             13-JAN-93 01-OCT-93                                                                                                                                                                     
+Alexander       03-JAN-90 01-OCT-90                                                                                                                                                                     
+Bruce           21-MAY-91 01-APR-92                                                                                                                                                                     
+Diana           07-FEB-99 01-OCT-99                                                                                                                                                                     
+Kevin           16-NOV-99 01-OCT-00                                                                                                                                                                     
+Trenna          17-OCT-95 01-OCT-96                                                                                                                                                                     
+Curtis          29-JAN-97 01-OCT-97                                                                                                                                                                     
+Randall         15-MAR-98 01-OCT-98                                                                                                                                                                     
+Peter           09-JUL-98 01-APR-99                                                                                                                                                                     
+Eleni           29-JAN-00 01-OCT-00                                                                                                                                                                     
+Ellen           11-MAY-96 01-APR-97                                                                                                                                                                     
+Jonathon        24-MAR-98 01-OCT-98                                                                                                                                                                     
+Kimerely        24-MAY-99 01-APR-00                                                                                                                                                                     
+Jennifer        17-SEP-87 01-APR-88                                                                                                                                                                     
+Michael         17-FEB-96 01-OCT-96                                                                                                                                                                     
+Pat             17-AUG-97 01-APR-98                                                                                                                                                                     
+Shelley         07-JUN-94 01-APR-95                                                                                                                                                                     
+William         07-JUN-94 01-APR-95                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE ,
+  2  CASE WHEN TO_CHAR(HIRE_DATE,'Q') IN (2,3) THEN ADD_MONTHS(TRUNC(HIRE_DATE,'YYYY'),15)
+  3       WHEN TO_CHAR(HIRE_DATE,'Q') IN (1) THEN ADD_MONTHS(TRUNC(HIRE_DATE,'YYYY'),9) ELSE ADD_MONTHS(ROUND(HIRE_DATE,'YYYY'),9) END FID
+  4  FROM EMPLOYEES;
+
+FIRST_NAME      HIRE_DATE FID                                                                                                                                                                           
+--------------- --------- ---------                                                                                                                                                                     
+Steven          17-JUL-87 01-APR-88                                                                                                                                                                     
+Neena           21-SEP-89 01-APR-90                                                                                                                                                                     
+Lex             13-JAN-93 01-OCT-93                                                                                                                                                                     
+Alexander       03-JAN-90 01-OCT-90                                                                                                                                                                     
+Bruce           21-MAY-91 01-APR-92                                                                                                                                                                     
+Diana           07-FEB-99 01-OCT-99                                                                                                                                                                     
+Kevin           16-NOV-99 01-OCT-00                                                                                                                                                                     
+Trenna          17-OCT-95 01-OCT-96                                                                                                                                                                     
+Curtis          29-JAN-97 01-OCT-97                                                                                                                                                                     
+Randall         15-MAR-98 01-OCT-98                                                                                                                                                                     
+Peter           09-JUL-98 01-APR-99                                                                                                                                                                     
+Eleni           29-JAN-00 01-OCT-00                                                                                                                                                                     
+Ellen           11-MAY-96 01-APR-97                                                                                                                                                                     
+Jonathon        24-MAR-98 01-OCT-98                                                                                                                                                                     
+Kimerely        24-MAY-99 01-APR-00                                                                                                                                                                     
+Jennifer        17-SEP-87 01-APR-88                                                                                                                                                                     
+Michael         17-FEB-96 01-OCT-96                                                                                                                                                                     
+Pat             17-AUG-97 01-APR-98                                                                                                                                                                     
+Shelley         07-JUN-94 01-APR-95                                                                                                                                                                     
+William         07-JUN-94 01-APR-95                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> SPOOL OFF

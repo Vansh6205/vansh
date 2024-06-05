@@ -1,0 +1,771 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM DISPLAY FIRST_NAME , JOB_ID , SALARY , LOWEST_SAL_PAID_FOR_JOB
+SQL> 
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , MIN(SALARY)
+  2  FROM EMPLOYEES
+  3  ;
+SELECT FIRST_NAME , JOB_ID , SALARY , MIN(SALARY)
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , MIN(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY JOB_ID;
+SELECT FIRST_NAME , JOB_ID , SALARY , MIN(SALARY)
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , MIN(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY FIRST_NAME , JOB_ID , SALARY;
+
+FIRST_NAME JOB_ID         SALARY MIN(SALARY)                                                                                                                                                            
+---------- ---------- ---------- -----------                                                                                                                                                            
+Ellen      SA_REP          11000       11000                                                                                                                                                            
+Shelley    AC_MGR          12000       12000                                                                                                                                                            
+William    AC_ACCOUNT       8300        8300                                                                                                                                                            
+Neena      AD_VP           17000       17000                                                                                                                                                            
+Curtis     ST_CLERK         3100        3100                                                                                                                                                            
+Jonathon   SA_REP           8600        8600                                                                                                                                                            
+Steven     AD_PRES         24000       24000                                                                                                                                                            
+Diana      IT_PROG          4200        4200                                                                                                                                                            
+Randall    ST_CLERK         2600        2600                                                                                                                                                            
+Alexander  IT_PROG          9000        9000                                                                                                                                                            
+Bruce      IT_PROG          6000        6000                                                                                                                                                            
+Kimerely   SA_REP           7000        7000                                                                                                                                                            
+Pat        MK_REP           6000        6000                                                                                                                                                            
+Trenna     ST_CLERK         3500        3500                                                                                                                                                            
+Peter      ST_CLERK         2500        2500                                                                                                                                                            
+Kevin      ST_MAN           5800        5800                                                                                                                                                            
+Eleni      SA_MAN          10500       10500                                                                                                                                                            
+Lex        AD_VP           17000       17000                                                                                                                                                            
+Jennifer   AD_ASST          4400        4400                                                                                                                                                            
+Michael    MK_MAN          13000       13000                                                                                                                                                            
+
+20 rows selected.
+
+SQL> SELECT JOB_ID , MIN(SALARY) FROM EMPLOYEES GROUP BY JOB_ID;
+
+JOB_ID     MIN(SALARY)                                                                                                                                                                                  
+---------- -----------                                                                                                                                                                                  
+IT_PROG           4200                                                                                                                                                                                  
+AC_MGR           12000                                                                                                                                                                                  
+AC_ACCOUNT        8300                                                                                                                                                                                  
+ST_MAN            5800                                                                                                                                                                                  
+AD_ASST           4400                                                                                                                                                                                  
+AD_VP            17000                                                                                                                                                                                  
+SA_MAN           10500                                                                                                                                                                                  
+MK_MAN           13000                                                                                                                                                                                  
+AD_PRES          24000                                                                                                                                                                                  
+SA_REP            7000                                                                                                                                                                                  
+MK_REP            6000                                                                                                                                                                                  
+ST_CLERK          2500                                                                                                                                                                                  
+
+12 rows selected.
+
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , MINSAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT JOB_ID , MIN(SALARY) MINSAL FROM EMPLOYEES GROUP BY JOB_ID);
+
+FIRST_NAME JOB_ID         SALARY     MINSAL                                                                                                                                                             
+---------- ---------- ---------- ----------                                                                                                                                                             
+Steven     AD_PRES         24000      24000                                                                                                                                                             
+Neena      AD_VP           17000      17000                                                                                                                                                             
+Lex        AD_VP           17000      17000                                                                                                                                                             
+Alexander  IT_PROG          9000       4200                                                                                                                                                             
+Bruce      IT_PROG          6000       4200                                                                                                                                                             
+Diana      IT_PROG          4200       4200                                                                                                                                                             
+Kevin      ST_MAN           5800       5800                                                                                                                                                             
+Trenna     ST_CLERK         3500       2500                                                                                                                                                             
+Curtis     ST_CLERK         3100       2500                                                                                                                                                             
+Randall    ST_CLERK         2600       2500                                                                                                                                                             
+Peter      ST_CLERK         2500       2500                                                                                                                                                             
+Eleni      SA_MAN          10500      10500                                                                                                                                                             
+Ellen      SA_REP          11000       7000                                                                                                                                                             
+Jonathon   SA_REP           8600       7000                                                                                                                                                             
+Kimerely   SA_REP           7000       7000                                                                                                                                                             
+Jennifer   AD_ASST          4400       4400                                                                                                                                                             
+Michael    MK_MAN          13000      13000                                                                                                                                                             
+Pat        MK_REP           6000       6000                                                                                                                                                             
+Shelley    AC_MGR          12000      12000                                                                                                                                                             
+William    AC_ACCOUNT       8300       8300                                                                                                                                                             
+
+20 rows selected.
+
+SQL> REM LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MAX_SAL
+SQL> 
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) DEPT_MAX_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+LAST_NAME  DEPARTMENT_ID     SALARY DEPT_MAX_SAL                                                                                                                                                        
+---------- ------------- ---------- ------------                                                                                                                                                        
+King                  90      24000        24000                                                                                                                                                        
+Kochhar               90      17000        24000                                                                                                                                                        
+De Haan               90      17000        24000                                                                                                                                                        
+Hunold                60       9000         9000                                                                                                                                                        
+Ernst                 60       6000         9000                                                                                                                                                        
+Lorentz               60       4200         9000                                                                                                                                                        
+Mourgos               50       5800         5800                                                                                                                                                        
+Rajs                  50       3500         5800                                                                                                                                                        
+Davies                50       3100         5800                                                                                                                                                        
+Matos                 50       2600         5800                                                                                                                                                        
+Vargas                50       2500         5800                                                                                                                                                        
+Zlotkey               80      10500        11000                                                                                                                                                        
+Abel                  80      11000        11000                                                                                                                                                        
+Taylor                80       8600        11000                                                                                                                                                        
+Whalen                10       4400         4400                                                                                                                                                        
+Hartstein             20      13000        13000                                                                                                                                                        
+Fay                   20       6000        13000                                                                                                                                                        
+Higgins              110      12000        12000                                                                                                                                                        
+Gietz                110       8300        12000                                                                                                                                                        
+
+19 rows selected.
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , MAX(SALARY)
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+SELECT LAST_NAME , DEPARTMENT_ID , SALARY , MAX(SALARY)
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , "MAX(SALARY)"
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+LAST_NAME  DEPARTMENT_ID     SALARY MAX(SALARY)                                                                                                                                                         
+---------- ------------- ---------- -----------                                                                                                                                                         
+King                  90      24000       24000                                                                                                                                                         
+Kochhar               90      17000       24000                                                                                                                                                         
+De Haan               90      17000       24000                                                                                                                                                         
+Hunold                60       9000        9000                                                                                                                                                         
+Ernst                 60       6000        9000                                                                                                                                                         
+Lorentz               60       4200        9000                                                                                                                                                         
+Mourgos               50       5800        5800                                                                                                                                                         
+Rajs                  50       3500        5800                                                                                                                                                         
+Davies                50       3100        5800                                                                                                                                                         
+Matos                 50       2600        5800                                                                                                                                                         
+Vargas                50       2500        5800                                                                                                                                                         
+Zlotkey               80      10500       11000                                                                                                                                                         
+Abel                  80      11000       11000                                                                                                                                                         
+Taylor                80       8600       11000                                                                                                                                                         
+Whalen                10       4400        4400                                                                                                                                                         
+Hartstein             20      13000       13000                                                                                                                                                         
+Fay                   20       6000       13000                                                                                                                                                         
+Higgins              110      12000       12000                                                                                                                                                         
+Gietz                110       8300       12000                                                                                                                                                         
+
+19 rows selected.
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , "MAX(salary)"
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+SELECT LAST_NAME , DEPARTMENT_ID , SALARY , "MAX(salary)"
+                                            *
+ERROR at line 1:
+ORA-00904: "MAX(salary)": invalid identifier 
+
+
+SQL> SELECT FIRST_NAME name FROM EMPLOYEES;
+
+NAME                                                                                                                                                                                                    
+----------                                                                                                                                                                                              
+Steven                                                                                                                                                                                                  
+Neena                                                                                                                                                                                                   
+Lex                                                                                                                                                                                                     
+Alexander                                                                                                                                                                                               
+Bruce                                                                                                                                                                                                   
+Diana                                                                                                                                                                                                   
+Kevin                                                                                                                                                                                                   
+Trenna                                                                                                                                                                                                  
+Curtis                                                                                                                                                                                                  
+Randall                                                                                                                                                                                                 
+Peter                                                                                                                                                                                                   
+Eleni                                                                                                                                                                                                   
+Ellen                                                                                                                                                                                                   
+Jonathon                                                                                                                                                                                                
+Kimerely                                                                                                                                                                                                
+Jennifer                                                                                                                                                                                                
+Michael                                                                                                                                                                                                 
+Pat                                                                                                                                                                                                     
+Shelley                                                                                                                                                                                                 
+William                                                                                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , "MAX(Salary)"
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+SELECT LAST_NAME , DEPARTMENT_ID , SALARY , "MAX(Salary)"
+                                            *
+ERROR at line 1:
+ORA-00904: "MAX(Salary)": invalid identifier 
+
+
+SQL> select city from employees;
+select city from employees
+       *
+ERROR at line 1:
+ORA-00904: "CITY": invalid identifier 
+
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) DEPT_max_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+LAST_NAME  DEPARTMENT_ID     SALARY DEPT_MAX_SAL                                                                                                                                                        
+---------- ------------- ---------- ------------                                                                                                                                                        
+King                  90      24000        24000                                                                                                                                                        
+Kochhar               90      17000        24000                                                                                                                                                        
+De Haan               90      17000        24000                                                                                                                                                        
+Hunold                60       9000         9000                                                                                                                                                        
+Ernst                 60       6000         9000                                                                                                                                                        
+Lorentz               60       4200         9000                                                                                                                                                        
+Mourgos               50       5800         5800                                                                                                                                                        
+Rajs                  50       3500         5800                                                                                                                                                        
+Davies                50       3100         5800                                                                                                                                                        
+Matos                 50       2600         5800                                                                                                                                                        
+Vargas                50       2500         5800                                                                                                                                                        
+Zlotkey               80      10500        11000                                                                                                                                                        
+Abel                  80      11000        11000                                                                                                                                                        
+Taylor                80       8600        11000                                                                                                                                                        
+Whalen                10       4400         4400                                                                                                                                                        
+Hartstein             20      13000        13000                                                                                                                                                        
+Fay                   20       6000        13000                                                                                                                                                        
+Higgins              110      12000        12000                                                                                                                                                        
+Gietz                110       8300        12000                                                                                                                                                        
+
+19 rows selected.
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) "DEPT_max_SAL" FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+SELECT LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MAX_SAL
+                                            *
+ERROR at line 1:
+ORA-00904: "DEPT_MAX_SAL": invalid identifier 
+
+
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , "DEPT_max_SAL"
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) "DEPT_max_SAL" FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+LAST_NAME  DEPARTMENT_ID     SALARY DEPT_max_SAL                                                                                                                                                        
+---------- ------------- ---------- ------------                                                                                                                                                        
+King                  90      24000        24000                                                                                                                                                        
+Kochhar               90      17000        24000                                                                                                                                                        
+De Haan               90      17000        24000                                                                                                                                                        
+Hunold                60       9000         9000                                                                                                                                                        
+Ernst                 60       6000         9000                                                                                                                                                        
+Lorentz               60       4200         9000                                                                                                                                                        
+Mourgos               50       5800         5800                                                                                                                                                        
+Rajs                  50       3500         5800                                                                                                                                                        
+Davies                50       3100         5800                                                                                                                                                        
+Matos                 50       2600         5800                                                                                                                                                        
+Vargas                50       2500         5800                                                                                                                                                        
+Zlotkey               80      10500        11000                                                                                                                                                        
+Abel                  80      11000        11000                                                                                                                                                        
+Taylor                80       8600        11000                                                                                                                                                        
+Whalen                10       4400         4400                                                                                                                                                        
+Hartstein             20      13000        13000                                                                                                                                                        
+Fay                   20       6000        13000                                                                                                                                                        
+Higgins              110      12000        12000                                                                                                                                                        
+Gietz                110       8300        12000                                                                                                                                                        
+
+19 rows selected.
+
+SQL> REM FIRST_NAME , DEPARTMENT_ID , SALARY , DEPT_TOTAL_SALARY
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , SALARY , DEPT_TOTAL_SALARY
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , SUM(SALARY) DEPT_TOTAL_SALARY FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME DEPARTMENT_ID     SALARY DEPT_TOTAL_SALARY                                                                                                                                                   
+---------- ------------- ---------- -----------------                                                                                                                                                   
+Steven                90      24000             58000                                                                                                                                                   
+Neena                 90      17000             58000                                                                                                                                                   
+Lex                   90      17000             58000                                                                                                                                                   
+Alexander             60       9000             19200                                                                                                                                                   
+Bruce                 60       6000             19200                                                                                                                                                   
+Diana                 60       4200             19200                                                                                                                                                   
+Kevin                 50       5800             17500                                                                                                                                                   
+Trenna                50       3500             17500                                                                                                                                                   
+Curtis                50       3100             17500                                                                                                                                                   
+Randall               50       2600             17500                                                                                                                                                   
+Peter                 50       2500             17500                                                                                                                                                   
+Eleni                 80      10500             30100                                                                                                                                                   
+Ellen                 80      11000             30100                                                                                                                                                   
+Jonathon              80       8600             30100                                                                                                                                                   
+Jennifer              10       4400              4400                                                                                                                                                   
+Michael               20      13000             19000                                                                                                                                                   
+Pat                   20       6000             19000                                                                                                                                                   
+Shelley              110      12000             20300                                                                                                                                                   
+William              110       8300             20300                                                                                                                                                   
+
+19 rows selected.
+
+SQL> SELECT FIRST_NAME,DEPARTMENT_ID , SALARY, DEPT_TOTAL_SALARY FROM EMPLOYEES NATURAL JOIN (SELECT DEPARTMENT_ID,SUM(SALARY)DEPT_TOTAL_SALARY FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME DEPARTMENT_ID     SALARY DEPT_TOTAL_SALARY                                                                                                                                                   
+---------- ------------- ---------- -----------------                                                                                                                                                   
+Steven                90      24000             58000                                                                                                                                                   
+Neena                 90      17000             58000                                                                                                                                                   
+Lex                   90      17000             58000                                                                                                                                                   
+Alexander             60       9000             19200                                                                                                                                                   
+Bruce                 60       6000             19200                                                                                                                                                   
+Diana                 60       4200             19200                                                                                                                                                   
+Kevin                 50       5800             17500                                                                                                                                                   
+Trenna                50       3500             17500                                                                                                                                                   
+Curtis                50       3100             17500                                                                                                                                                   
+Randall               50       2600             17500                                                                                                                                                   
+Peter                 50       2500             17500                                                                                                                                                   
+Eleni                 80      10500             30100                                                                                                                                                   
+Ellen                 80      11000             30100                                                                                                                                                   
+Jonathon              80       8600             30100                                                                                                                                                   
+Jennifer              10       4400              4400                                                                                                                                                   
+Michael               20      13000             19000                                                                                                                                                   
+Pat                   20       6000             19000                                                                                                                                                   
+Shelley              110      12000             20300                                                                                                                                                   
+William              110       8300             20300                                                                                                                                                   
+
+19 rows selected.
+
+SQL> REM DISPLAY LAST_NAME , JOB_ID , SALARY , MAX_SAL_JOB
+SQL> 
+SQL> REM DISPLAY LAST_NAME , JOB_ID , SALARY , MAX_SAL_JOB , DIFFERENCE
+SQL> 
+SQL> SELECT LAST_NAME , JOB_ID , SALARY , MAX_SAL_JOB , MAX_SAL_JOB - SALARY DIFFERENCE
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT JOB_ID , MAX(SALARY) MAX_SAL_JOB FROM EMPLOYEES GROUP GROUP BY JOB_ID);
+NATURAL JOIN (SELECT JOB_ID , MAX(SALARY) MAX_SAL_JOB FROM EMPLOYEES GROUP GROUP BY JOB_ID)
+                                                                           *
+ERROR at line 3:
+ORA-00924: missing BY keyword 
+
+
+SQL> SELECT LAST_NAME , JOB_ID , SALARY , MAX_SAL_JOB , MAX_SAL_JOB - SALARY DIFFERENCE
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT JOB_ID , MAX(SALARY) MAX_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID);
+
+LAST_NAME  JOB_ID         SALARY MAX_SAL_JOB DIFFERENCE                                                                                                                                                 
+---------- ---------- ---------- ----------- ----------                                                                                                                                                 
+King       AD_PRES         24000       24000          0                                                                                                                                                 
+Kochhar    AD_VP           17000       17000          0                                                                                                                                                 
+De Haan    AD_VP           17000       17000          0                                                                                                                                                 
+Hunold     IT_PROG          9000        9000          0                                                                                                                                                 
+Ernst      IT_PROG          6000        9000       3000                                                                                                                                                 
+Lorentz    IT_PROG          4200        9000       4800                                                                                                                                                 
+Mourgos    ST_MAN           5800        5800          0                                                                                                                                                 
+Rajs       ST_CLERK         3500        3500          0                                                                                                                                                 
+Davies     ST_CLERK         3100        3500        400                                                                                                                                                 
+Matos      ST_CLERK         2600        3500        900                                                                                                                                                 
+Vargas     ST_CLERK         2500        3500       1000                                                                                                                                                 
+Zlotkey    SA_MAN          10500       10500          0                                                                                                                                                 
+Abel       SA_REP          11000       11000          0                                                                                                                                                 
+Taylor     SA_REP           8600       11000       2400                                                                                                                                                 
+Grant      SA_REP           7000       11000       4000                                                                                                                                                 
+Whalen     AD_ASST          4400        4400          0                                                                                                                                                 
+Hartstein  MK_MAN          13000       13000          0                                                                                                                                                 
+Fay        MK_REP           6000        6000          0                                                                                                                                                 
+Higgins    AC_MGR          12000       12000          0                                                                                                                                                 
+Gietz      AC_ACCOUNT       8300        8300          0                                                                                                                                                 
+
+20 rows selected.
+
+SQL> REM FIRST_NAME , SALARY , DEPARTMENT_ID , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY , DEPARTMENT_ID , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , MIN(SALARY) DEPT_MIN_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID)
+  4  NATURAL JOIN (SELECT JOB_ID , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY JOB_ID);
+
+FIRST_NAME     SALARY DEPARTMENT_ID DEPT_MIN_SAL JOB_ID     JOB_MAX_SAL                                                                                                                                 
+---------- ---------- ------------- ------------ ---------- -----------                                                                                                                                 
+Alexander        9000            60         4200 IT_PROG           9000                                                                                                                                 
+Bruce            6000            60         4200 IT_PROG           9000                                                                                                                                 
+Diana            4200            60         4200 IT_PROG           9000                                                                                                                                 
+Shelley         12000           110         8300 AC_MGR           12000                                                                                                                                 
+William          8300           110         8300 AC_ACCOUNT        8300                                                                                                                                 
+Kevin            5800            50         2500 ST_MAN            5800                                                                                                                                 
+Jennifer         4400            10         4400 AD_ASST           4400                                                                                                                                 
+Neena           17000            90        17000 AD_VP            17000                                                                                                                                 
+Lex             17000            90        17000 AD_VP            17000                                                                                                                                 
+Eleni           10500            80         8600 SA_MAN           10500                                                                                                                                 
+Michael         13000            20         6000 MK_MAN           13000                                                                                                                                 
+Steven          24000            90        17000 AD_PRES          24000                                                                                                                                 
+Ellen           11000            80         8600 SA_REP           11000                                                                                                                                 
+Jonathon         8600            80         8600 SA_REP           11000                                                                                                                                 
+Pat              6000            20         6000 MK_REP            6000                                                                                                                                 
+Trenna           3500            50         2500 ST_CLERK          3500                                                                                                                                 
+Curtis           3100            50         2500 ST_CLERK          3500                                                                                                                                 
+Randall          2600            50         2500 ST_CLERK          3500                                                                                                                                 
+Peter            2500            50         2500 ST_CLERK          3500                                                                                                                                 
+
+19 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , DEPARTMENT_ID , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT DEPARTMENT_ID , JOB_ID , MIN(SALARY) DEPT_MIN_SAL , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID, JOB_ID);
+
+FIRST_NAME     SALARY DEPARTMENT_ID DEPT_MIN_SAL JOB_ID     JOB_MAX_SAL                                                                                                                                 
+---------- ---------- ------------- ------------ ---------- -----------                                                                                                                                 
+William          8300           110         8300 AC_ACCOUNT        8300                                                                                                                                 
+Neena           17000            90        17000 AD_VP            17000                                                                                                                                 
+Lex             17000            90        17000 AD_VP            17000                                                                                                                                 
+Trenna           3500            50         2500 ST_CLERK          3500                                                                                                                                 
+Curtis           3100            50         2500 ST_CLERK          3500                                                                                                                                 
+Randall          2600            50         2500 ST_CLERK          3500                                                                                                                                 
+Peter            2500            50         2500 ST_CLERK          3500                                                                                                                                 
+Ellen           11000            80         8600 SA_REP           11000                                                                                                                                 
+Jonathon         8600            80         8600 SA_REP           11000                                                                                                                                 
+Kevin            5800            50         5800 ST_MAN            5800                                                                                                                                 
+Eleni           10500            80        10500 SA_MAN           10500                                                                                                                                 
+Shelley         12000           110        12000 AC_MGR           12000                                                                                                                                 
+Steven          24000            90        24000 AD_PRES          24000                                                                                                                                 
+Alexander        9000            60         4200 IT_PROG           9000                                                                                                                                 
+Bruce            6000            60         4200 IT_PROG           9000                                                                                                                                 
+Diana            4200            60         4200 IT_PROG           9000                                                                                                                                 
+Michael         13000            20        13000 MK_MAN           13000                                                                                                                                 
+Jennifer         4400            10         4400 AD_ASST           4400                                                                                                                                 
+Pat              6000            20         6000 MK_REP            6000                                                                                                                                 
+
+19 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , DEPARTMENT_ID , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  
+SQL> SELECT FIRST_NAME , SALARY , MANAGER_ID , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT MANAGER_ID , MIN(SALARY) DEPT_MIN_SAL FROM EMPLOYEES GROUP BY MANAGER_ID)
+  4  NATURAL JOIN (SELECT JOB_ID , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY JOB_ID);
+
+FIRST_NAME     SALARY MANAGER_ID DEPT_MIN_SAL JOB_ID     JOB_MAX_SAL                                                                                                                                    
+---------- ---------- ---------- ------------ ---------- -----------                                                                                                                                    
+Alexander        9000        102         9000 IT_PROG           9000                                                                                                                                    
+Bruce            6000        103         4200 IT_PROG           9000                                                                                                                                    
+Diana            4200        103         4200 IT_PROG           9000                                                                                                                                    
+Shelley         12000        101         4400 AC_MGR           12000                                                                                                                                    
+William          8300        205         8300 AC_ACCOUNT        8300                                                                                                                                    
+Kevin            5800        100         5800 ST_MAN            5800                                                                                                                                    
+Jennifer         4400        101         4400 AD_ASST           4400                                                                                                                                    
+Neena           17000        100         5800 AD_VP            17000                                                                                                                                    
+Lex             17000        100         5800 AD_VP            17000                                                                                                                                    
+Eleni           10500        100         5800 SA_MAN           10500                                                                                                                                    
+Michael         13000        100         5800 MK_MAN           13000                                                                                                                                    
+Ellen           11000        149         7000 SA_REP           11000                                                                                                                                    
+Jonathon         8600        149         7000 SA_REP           11000                                                                                                                                    
+Kimerely         7000        149         7000 SA_REP           11000                                                                                                                                    
+Pat              6000        201         6000 MK_REP            6000                                                                                                                                    
+Trenna           3500        124         2500 ST_CLERK          3500                                                                                                                                    
+Curtis           3100        124         2500 ST_CLERK          3500                                                                                                                                    
+Randall          2600        124         2500 ST_CLERK          3500                                                                                                                                    
+Peter            2500        124         2500 ST_CLERK          3500                                                                                                                                    
+
+19 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , MANAGER_ID , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT MANAGER_ID , JOB_ID , MIN(SALARY) DEPT_MIN_SAL , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY MANAGER_ID, JOB_ID);
+
+FIRST_NAME     SALARY MANAGER_ID DEPT_MIN_SAL JOB_ID     JOB_MAX_SAL                                                                                                                                    
+---------- ---------- ---------- ------------ ---------- -----------                                                                                                                                    
+Pat              6000        201         6000 MK_REP            6000                                                                                                                                    
+Trenna           3500        124         2500 ST_CLERK          3500                                                                                                                                    
+Curtis           3100        124         2500 ST_CLERK          3500                                                                                                                                    
+Randall          2600        124         2500 ST_CLERK          3500                                                                                                                                    
+Peter            2500        124         2500 ST_CLERK          3500                                                                                                                                    
+Eleni           10500        100        10500 SA_MAN           10500                                                                                                                                    
+Shelley         12000        101        12000 AC_MGR           12000                                                                                                                                    
+William          8300        205         8300 AC_ACCOUNT        8300                                                                                                                                    
+Neena           17000        100        17000 AD_VP            17000                                                                                                                                    
+Lex             17000        100        17000 AD_VP            17000                                                                                                                                    
+Alexander        9000        102         9000 IT_PROG           9000                                                                                                                                    
+Ellen           11000        149         7000 SA_REP           11000                                                                                                                                    
+Jonathon         8600        149         7000 SA_REP           11000                                                                                                                                    
+Kimerely         7000        149         7000 SA_REP           11000                                                                                                                                    
+Michael         13000        100        13000 MK_MAN           13000                                                                                                                                    
+Bruce            6000        103         4200 IT_PROG           6000                                                                                                                                    
+Diana            4200        103         4200 IT_PROG           6000                                                                                                                                    
+Kevin            5800        100         5800 ST_MAN            5800                                                                                                                                    
+Jennifer         4400        101         4400 AD_ASST           4400                                                                                                                                    
+
+19 rows selected.
+
+SQL> REM FIRST_NAME , SALARY , DEPARTMENT_NAME , DEPT_MAX_SAL
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY , DEPARTMENT_NAME , DEPT_MAX_SAL
+  2  FROM EMPLOYEES
+  3  JOIN DEPARTMENTS USING (DEPARTMENT_ID)
+  4  JOIN (SELECT DEPARTMENT_ID , MAX(SALARY) DEPT_MAX_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID) USING (DEPARTMENT_ID);
+
+FIRST_NAME     SALARY DEPARTMENT_NAME                DEPT_MAX_SAL                                                                                                                                       
+---------- ---------- ------------------------------ ------------                                                                                                                                       
+Steven          24000 Executive                             24000                                                                                                                                       
+Neena           17000 Executive                             24000                                                                                                                                       
+Lex             17000 Executive                             24000                                                                                                                                       
+Alexander        9000 IT                                     9000                                                                                                                                       
+Bruce            6000 IT                                     9000                                                                                                                                       
+Diana            4200 IT                                     9000                                                                                                                                       
+Kevin            5800 Shiping                                5800                                                                                                                                       
+Trenna           3500 Shiping                                5800                                                                                                                                       
+Curtis           3100 Shiping                                5800                                                                                                                                       
+Randall          2600 Shiping                                5800                                                                                                                                       
+Peter            2500 Shiping                                5800                                                                                                                                       
+Eleni           10500 Sales                                 11000                                                                                                                                       
+Ellen           11000 Sales                                 11000                                                                                                                                       
+Jonathon         8600 Sales                                 11000                                                                                                                                       
+Jennifer         4400 Administration                         4400                                                                                                                                       
+Michael         13000 Marketing                             13000                                                                                                                                       
+Pat              6000 Marketing                             13000                                                                                                                                       
+Shelley         12000 Accounting                            12000                                                                                                                                       
+William          8300 Accounting                            12000                                                                                                                                       
+
+19 rows selected.
+
+SQL> REM FIRST_NAME , JOB_ID , SALARY , AVG_SAL_JOB
+SQL> SELECT FIRST_NAME, JOB_ID, SALARY, AVG_SAL_JOB FROM EMPLOYEES NATURAL JOIN (SELECT JOB_ID, AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID);
+SQL> REM 1 NJ  2 IJ USING  3 IJ ON
+SQL> 
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , AVG_SAL_JOB
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT JOB_ID , AVG(SALARY) FROM EMPLOYEES GROUP BY JOB_ID);
+SELECT FIRST_NAME , JOB_ID , SALARY , AVG_SAL_JOB
+                                      *
+ERROR at line 1:
+ORA-00904: "AVG_SAL_JOB": invalid identifier 
+
+
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , AVG_SAL_JOB
+  2  FROM EMPLOYEES
+  3  NATURAL JOIN (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID);
+
+FIRST_NAME JOB_ID         SALARY AVG_SAL_JOB                                                                                                                                                            
+---------- ---------- ---------- -----------                                                                                                                                                            
+Steven     AD_PRES         24000       24000                                                                                                                                                            
+Neena      AD_VP           17000       17000                                                                                                                                                            
+Lex        AD_VP           17000       17000                                                                                                                                                            
+Alexander  IT_PROG          9000        6400                                                                                                                                                            
+Bruce      IT_PROG          6000        6400                                                                                                                                                            
+Diana      IT_PROG          4200        6400                                                                                                                                                            
+Kevin      ST_MAN           5800        5800                                                                                                                                                            
+Trenna     ST_CLERK         3500        2925                                                                                                                                                            
+Curtis     ST_CLERK         3100        2925                                                                                                                                                            
+Randall    ST_CLERK         2600        2925                                                                                                                                                            
+Peter      ST_CLERK         2500        2925                                                                                                                                                            
+Eleni      SA_MAN          10500       10500                                                                                                                                                            
+Ellen      SA_REP          11000  8866.66667                                                                                                                                                            
+Jonathon   SA_REP           8600  8866.66667                                                                                                                                                            
+Kimerely   SA_REP           7000  8866.66667                                                                                                                                                            
+Jennifer   AD_ASST          4400        4400                                                                                                                                                            
+Michael    MK_MAN          13000       13000                                                                                                                                                            
+Pat        MK_REP           6000        6000                                                                                                                                                            
+Shelley    AC_MGR          12000       12000                                                                                                                                                            
+William    AC_ACCOUNT       8300        8300                                                                                                                                                            
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , AVG_SAL_JOB
+  2  FROM EMPLOYEES
+  3  JOIN (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID) USING (JOB_ID);
+
+FIRST_NAME JOB_ID         SALARY AVG_SAL_JOB                                                                                                                                                            
+---------- ---------- ---------- -----------                                                                                                                                                            
+Steven     AD_PRES         24000       24000                                                                                                                                                            
+Neena      AD_VP           17000       17000                                                                                                                                                            
+Lex        AD_VP           17000       17000                                                                                                                                                            
+Alexander  IT_PROG          9000        6400                                                                                                                                                            
+Bruce      IT_PROG          6000        6400                                                                                                                                                            
+Diana      IT_PROG          4200        6400                                                                                                                                                            
+Kevin      ST_MAN           5800        5800                                                                                                                                                            
+Trenna     ST_CLERK         3500        2925                                                                                                                                                            
+Curtis     ST_CLERK         3100        2925                                                                                                                                                            
+Randall    ST_CLERK         2600        2925                                                                                                                                                            
+Peter      ST_CLERK         2500        2925                                                                                                                                                            
+Eleni      SA_MAN          10500       10500                                                                                                                                                            
+Ellen      SA_REP          11000  8866.66667                                                                                                                                                            
+Jonathon   SA_REP           8600  8866.66667                                                                                                                                                            
+Kimerely   SA_REP           7000  8866.66667                                                                                                                                                            
+Jennifer   AD_ASST          4400        4400                                                                                                                                                            
+Michael    MK_MAN          13000       13000                                                                                                                                                            
+Pat        MK_REP           6000        6000                                                                                                                                                            
+Shelley    AC_MGR          12000       12000                                                                                                                                                            
+William    AC_ACCOUNT       8300        8300                                                                                                                                                            
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY , AVG_SAL_JOB
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID) E2 ON E.JOB_ID = E2.JOB_ID
+  4  
+SQL> 
+SQL> SELECT FIRST_NAME , E1.JOB_ID , SALARY , AVG_SAL_JOB
+  2  FROM EMPLOYEES E1
+  3  JOIN (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID) E2 ON E1.JOB_ID = E2.JOB_ID;
+
+FIRST_NAME JOB_ID         SALARY AVG_SAL_JOB                                                                                                                                                            
+---------- ---------- ---------- -----------                                                                                                                                                            
+Steven     AD_PRES         24000       24000                                                                                                                                                            
+Neena      AD_VP           17000       17000                                                                                                                                                            
+Lex        AD_VP           17000       17000                                                                                                                                                            
+Alexander  IT_PROG          9000        6400                                                                                                                                                            
+Bruce      IT_PROG          6000        6400                                                                                                                                                            
+Diana      IT_PROG          4200        6400                                                                                                                                                            
+Kevin      ST_MAN           5800        5800                                                                                                                                                            
+Trenna     ST_CLERK         3500        2925                                                                                                                                                            
+Curtis     ST_CLERK         3100        2925                                                                                                                                                            
+Randall    ST_CLERK         2600        2925                                                                                                                                                            
+Peter      ST_CLERK         2500        2925                                                                                                                                                            
+Eleni      SA_MAN          10500       10500                                                                                                                                                            
+Ellen      SA_REP          11000  8866.66667                                                                                                                                                            
+Jonathon   SA_REP           8600  8866.66667                                                                                                                                                            
+Kimerely   SA_REP           7000  8866.66667                                                                                                                                                            
+Jennifer   AD_ASST          4400        4400                                                                                                                                                            
+Michael    MK_MAN          13000       13000                                                                                                                                                            
+Pat        MK_REP           6000        6000                                                                                                                                                            
+Shelley    AC_MGR          12000       12000                                                                                                                                                            
+William    AC_ACCOUNT       8300        8300                                                                                                                                                            
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME,JOB_ID,SALARY ,AVG_SAL_JOB FROM EMPLOYEES JOIN  (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID) ON EMPLOYEES.JOB_ID=(SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID).JOB_ID;
+SELECT FIRST_NAME,JOB_ID,SALARY ,AVG_SAL_JOB FROM EMPLOYEES JOIN  (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID) ON EMPLOYEES.JOB_ID=(SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES GROUP BY JOB_ID).JOB_ID
+                                                                                                                                                                                                                                       *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT FIRST_NAME,JOB_ID,SALARY ,AVG_SAL_JOB FROM EMPLOYEES JOIN
+  2  (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES
+  3  GROUP BY JOB_ID) ON EMPLOYEES.JOB_ID=
+  4  E.JOB_ID;
+E.JOB_ID
+*
+ERROR at line 4:
+ORA-00904: "E"."JOB_ID": invalid identifier 
+
+
+SQL> 
+SQL> SELECT FIRST_NAME,JOB_ID,SALARY ,AVG_SAL_JOB FROM EMPLOYEES JOIN
+  2  (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES
+  3  GROUP BY JOB_ID) E ON EMPLOYEES.JOB_ID=
+  4  E.JOB_ID;
+SELECT FIRST_NAME,JOB_ID,SALARY ,AVG_SAL_JOB FROM EMPLOYEES JOIN
+                  *
+ERROR at line 1:
+ORA-00918: column ambiguously defined 
+
+
+SQL> SELECT FIRST_NAME, E.JOB_ID,SALARY ,AVG_SAL_JOB FROM EMPLOYEES JOIN
+  2  (SELECT JOB_ID , AVG(SALARY) AVG_SAL_JOB FROM EMPLOYEES
+  3  GROUP BY JOB_ID) E ON EMPLOYEES.JOB_ID=
+  4  E.JOB_ID;
+
+FIRST_NAME JOB_ID         SALARY AVG_SAL_JOB                                                                                                                                                            
+---------- ---------- ---------- -----------                                                                                                                                                            
+Steven     AD_PRES         24000       24000                                                                                                                                                            
+Neena      AD_VP           17000       17000                                                                                                                                                            
+Lex        AD_VP           17000       17000                                                                                                                                                            
+Alexander  IT_PROG          9000        6400                                                                                                                                                            
+Bruce      IT_PROG          6000        6400                                                                                                                                                            
+Diana      IT_PROG          4200        6400                                                                                                                                                            
+Kevin      ST_MAN           5800        5800                                                                                                                                                            
+Trenna     ST_CLERK         3500        2925                                                                                                                                                            
+Curtis     ST_CLERK         3100        2925                                                                                                                                                            
+Randall    ST_CLERK         2600        2925                                                                                                                                                            
+Peter      ST_CLERK         2500        2925                                                                                                                                                            
+Eleni      SA_MAN          10500       10500                                                                                                                                                            
+Ellen      SA_REP          11000  8866.66667                                                                                                                                                            
+Jonathon   SA_REP           8600  8866.66667                                                                                                                                                            
+Kimerely   SA_REP           7000  8866.66667                                                                                                                                                            
+Jennifer   AD_ASST          4400        4400                                                                                                                                                            
+Michael    MK_MAN          13000       13000                                                                                                                                                            
+Pat        MK_REP           6000        6000                                                                                                                                                            
+Shelley    AC_MGR          12000       12000                                                                                                                                                            
+William    AC_ACCOUNT       8300        8300                                                                                                                                                            
+
+20 rows selected.
+
+SQL> REM LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+SQL> 
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  JOIN (SELECT DEPARTMENT_ID , MIN(SALARY) DEPT_MIN_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID)
+  4  
+SQL> 
+SQL> SELECT LAST_NAME , DEPARTMENT_ID , SALARY , DEPT_MIN_SAL , JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES
+  3  JOIN (SELECT DEPARTMENT_ID , MIN(SALARY) DEPT_MIN_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID) USING (DEPARTMENT_ID)
+  4  JOIN (SELECT JOB_ID , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY JOB_ID) USING (JOB_ID);
+
+LAST_NAME  DEPARTMENT_ID     SALARY DEPT_MIN_SAL JOB_ID     JOB_MAX_SAL                                                                                                                                 
+---------- ------------- ---------- ------------ ---------- -----------                                                                                                                                 
+Hunold                60       9000         4200 IT_PROG           9000                                                                                                                                 
+Ernst                 60       6000         4200 IT_PROG           9000                                                                                                                                 
+Lorentz               60       4200         4200 IT_PROG           9000                                                                                                                                 
+Higgins              110      12000         8300 AC_MGR           12000                                                                                                                                 
+Gietz                110       8300         8300 AC_ACCOUNT        8300                                                                                                                                 
+Mourgos               50       5800         2500 ST_MAN            5800                                                                                                                                 
+Whalen                10       4400         4400 AD_ASST           4400                                                                                                                                 
+Kochhar               90      17000        17000 AD_VP            17000                                                                                                                                 
+De Haan               90      17000        17000 AD_VP            17000                                                                                                                                 
+Zlotkey               80      10500         8600 SA_MAN           10500                                                                                                                                 
+Hartstein             20      13000         6000 MK_MAN           13000                                                                                                                                 
+King                  90      24000        17000 AD_PRES          24000                                                                                                                                 
+Abel                  80      11000         8600 SA_REP           11000                                                                                                                                 
+Taylor                80       8600         8600 SA_REP           11000                                                                                                                                 
+Fay                   20       6000         6000 MK_REP            6000                                                                                                                                 
+Rajs                  50       3500         2500 ST_CLERK          3500                                                                                                                                 
+Davies                50       3100         2500 ST_CLERK          3500                                                                                                                                 
+Matos                 50       2600         2500 ST_CLERK          3500                                                                                                                                 
+Vargas                50       2500         2500 ST_CLERK          3500                                                                                                                                 
+
+19 rows selected.
+
+SQL> SELECT LAST_NAME , E.DEPARTMENT_ID , SALARY , DEPT_MIN_SAL , E.JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT DEPARTMENT_ID , MIN(SALARY) DEPT_MIN_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID) E1 ON E.DEPARTMENT_ID = E1.DEPARTMENT_ID
+  4  JOIN (SELECT JOB_ID , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY JOB_ID) E2 ON EJOB_ID = E2.JOB_ID;
+JOIN (SELECT JOB_ID , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY JOB_ID) E2 ON EJOB_ID = E2.JOB_ID
+                                                                                    *
+ERROR at line 4:
+ORA-00904: "EJOB_ID": invalid identifier 
+
+
+SQL> SELECT LAST_NAME , E.DEPARTMENT_ID , SALARY , DEPT_MIN_SAL , E.JOB_ID , JOB_MAX_SAL
+  2  FROM EMPLOYEES E
+  3  JOIN (SELECT DEPARTMENT_ID , MIN(SALARY) DEPT_MIN_SAL FROM EMPLOYEES GROUP BY DEPARTMENT_ID) E1 ON E.DEPARTMENT_ID = E1.DEPARTMENT_ID
+  4  JOIN (SELECT JOB_ID , MAX(SALARY) JOB_MAX_SAL FROM EMPLOYEES GROUP BY JOB_ID) E2 ON E.JOB_ID = E2.JOB_ID;
+
+LAST_NAME  DEPARTMENT_ID     SALARY DEPT_MIN_SAL JOB_ID     JOB_MAX_SAL                                                                                                                                 
+---------- ------------- ---------- ------------ ---------- -----------                                                                                                                                 
+Hunold                60       9000         4200 IT_PROG           9000                                                                                                                                 
+Ernst                 60       6000         4200 IT_PROG           9000                                                                                                                                 
+Lorentz               60       4200         4200 IT_PROG           9000                                                                                                                                 
+Higgins              110      12000         8300 AC_MGR           12000                                                                                                                                 
+Gietz                110       8300         8300 AC_ACCOUNT        8300                                                                                                                                 
+Mourgos               50       5800         2500 ST_MAN            5800                                                                                                                                 
+Whalen                10       4400         4400 AD_ASST           4400                                                                                                                                 
+Kochhar               90      17000        17000 AD_VP            17000                                                                                                                                 
+De Haan               90      17000        17000 AD_VP            17000                                                                                                                                 
+Zlotkey               80      10500         8600 SA_MAN           10500                                                                                                                                 
+Hartstein             20      13000         6000 MK_MAN           13000                                                                                                                                 
+King                  90      24000        17000 AD_PRES          24000                                                                                                                                 
+Abel                  80      11000         8600 SA_REP           11000                                                                                                                                 
+Taylor                80       8600         8600 SA_REP           11000                                                                                                                                 
+Fay                   20       6000         6000 MK_REP            6000                                                                                                                                 
+Rajs                  50       3500         2500 ST_CLERK          3500                                                                                                                                 
+Davies                50       3100         2500 ST_CLERK          3500                                                                                                                                 
+Matos                 50       2600         2500 ST_CLERK          3500                                                                                                                                 
+Vargas                50       2500         2500 ST_CLERK          3500                                                                                                                                 
+
+19 rows selected.
+
+SQL> SPOOL OFF

@@ -1,0 +1,863 @@
+SQL> 
+SQL> REM CHAP : 1- 8 : SELECT ...
+SQL> 
+SQL> REM DML STATEMENTS
+SQL> 
+SQL> REM TCL STATEMENTS
+SQL> 
+SQL> REM TRUNCATE TABLE
+SQL> 
+SQL> REM DROP TABLE
+SQL> 
+SQL> REM PURGE TABLE
+SQL> 
+SQL> REM SELECT ... VERSIONS QUERY
+SQL> 
+SQL> REM SHOW RECYCLEBIN
+SQL> 
+SQL> REM ALTER TABLE ... ENABLE/DISABLE ROW MOVEMENT
+SQL> 
+SQL> REM FLASHBACK TABLE ... TO TIMESTAMP
+SQL> 
+SQL> REM FLASHBACK TABLE ... TO BEFORE DROP
+SQL> 
+SQL> REM CONCEPTS : READ CONSISTANCE , CONCURRENCY , LOCKING , DEAD LOCK SITUATION
+SQL> 
+SQL> 
+SQL> 
+SQL> REM SQL 5 SUB LANGUAGES
+SQL> 
+SQL> REM 1 DRL/DQL : DATA RETRIEVAL/QUERY LANGUAGE : SELECT
+SQL> 
+SQL> REM 2 DML : DATA MANIPULATION LANGUAGE : INSERT UPDATE DELETE      MERGE
+SQL> 
+SQL> REM 3 TCL : TRANSACTION CONTROL LANGUAGE : COMMIT ROLLBACK SAVEPOINT
+SQL> 
+SQL> REM 4 DDL : DATA DEFINITION LANGUAGE : CREATE ALTER DROP TRUNCATE PURGE FLASHBACK         RENAME COMMENT
+SQL> 
+SQL> REM 5 DCL : DATA CONTROL LANGUAGE : GRANT REVOKE
+SQL> 
+SQL> 
+SQL> REM MANIPULATION : ANY TYPE OF CHANGES
+SQL> 
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> DESC EMPLOYEES
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(10)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(10)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> REM DML : INSERT UPDATE DELETE
+SQL> 
+SQL> REM INSERT : TO ADD NEW ROWS TO THE TABLE
+SQL> 
+SQL> REM UPDATE : TO MODIFY/UPDATE/CHANGE/EDIT EXISTING ROW DATA
+SQL> 
+SQL> REM DELETE : TO REMOVE/DELETE ROWS FROM TABLE
+SQL> 
+SQL> 
+SQL> REM ANY CHANGES DONE USING ABOVE DML STATEMENTS, ARE LIMITED TO RAM/MEMORY BY DEFAULT.
+SQL> 
+SQL> REM TRANSACTION : BUNCH/GROUP OF DML STATEMENTS EXECUTED ON SINGLE/MULTIPLE TABLES WITHIN SINGLE SESSION.
+SQL> 
+SQL> REM SESSION : THE TIME PERIOD BETWEEN LOGIN AND LOG OUT IS CALLED SESSION.
+SQL> 
+SQL> 
+SQL> REM TRANSACTION STARTS WITH ANY DML STAEMENTS (INSERT/UPDATE/DELETE)
+SQL> 
+SQL> REM TRANSACTION ENDS WITH TCL STATEMENT (COMMIT/ROLLBACK)
+SQL> 
+SQL> 
+SQL> REM TCL : TRANSACTION CONTROL LANGUAGE :
+SQL> 
+SQL> REM COMMIT : TO SAVE OPEN STATE CHANGES OF CURRENT TRANSACTION IN DATABASE/TABLE/STORAGE DEVICE.
+SQL> 
+SQL> REM ROLLBACK : TO UNDO OPEN STATE CHANGES OF CURRENT TRANSACTION FROM RAM/MEMORY/SGA (SYSTEM GLOBAL AREA)
+SQL> 
+SQL> REM SAVEPOINT : TO BREAK TRANSACTION INTO PARTS, SO AFTERWARDS USING SAVEPOINT NAME WITH ROLLBACK COMMAND, WE CAN PARTIALY UNDO THE TRANSACTION.
+SQL> 
+SQL> 
+SQL> REM ROLLBACK WORKS ON LIFO METHOD (LAST IS FIRST OUT)
+SQL> 
+SQL> 
+SQL> CREATE TABLE T1(NO NUMBER,NM VARCHAR(10));
+CREATE TABLE T1(NO NUMBER,NM VARCHAR(10))
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE T1;
+
+Table dropped.
+
+SQL> CREATE TABLE T1(NO NUMBER,NM VARCHAR(10));
+
+Table created.
+
+SQL> REM BELOW COMMAND EXECUTION WILL START NEW TRANSACTION.
+SQL> 
+SQL> INSERT INTO T1 VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> REM MEMORY : 1 ROW(S) , TABLE : 0 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+
+SQL> INSERT INTO T1 VALUES (2,'RIDDHI');
+
+1 row created.
+
+SQL> REM MEMORY : 2 ROW(S) , TABLE : 0 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> REM ABOVE COMMAND HAS UNDO THE WHOLE TRANSACTION.
+SQL> 
+SQL> REM MEMORY : 0 ROW(S) , TABLE : 0 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+no rows selected
+
+SQL> REM BELOW COMMAND EXECUTION WILL START NEW TRANSACTION.
+SQL> 
+SQL> INSERT INTO T1 VALUES (1,'GANESH');
+
+1 row created.
+
+SQL> REM MEMORY : 1 ROW(S) , TABLE : 0 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+
+SQL> INSERT INTO T1 VALUES (2,'RIDDHI');
+
+1 row created.
+
+SQL> REM MEMORY : 2 ROW(S) , TABLE : 0 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> REM ABOVE COMMAND HAS MADE THE CHANGES PERMANENT IN TABLE.
+SQL> 
+SQL> REM MEMORY : 0 ROW(S) , TABLE : 2 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+
+SQL> REM MEMORY : 0 ROW(S) , TABLE : 2 ROW(S)
+SQL> 
+SQL> REM BELOW COMMAND EXECUTION WILL START NEW TRANSACTION.
+SQL> 
+SQL> INSERT INTO T1 VALUES (3,'SIDDHI');
+
+1 row created.
+
+SQL> REM MEMORY : 1 ROW(S) , TABLE : 2 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+         3 SIDDHI                                                                                                                                                                                       
+
+SQL> INSERT INTO T1 VALUES (4,'SHUBH');
+
+1 row created.
+
+SQL> REM MEMORY : 2 ROW(S) , TABLE : 2 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+         3 SIDDHI                                                                                                                                                                                       
+         4 SHUBH                                                                                                                                                                                        
+
+SQL> SAVEPOINT A;
+
+Savepoint created.
+
+SQL> REM ABOVE COMMAND HAS CREATED/GENERATED SAVEPOINT NAMED 'A', WHICH WE CAN USE FOR PARTIAL ROLLBACK/UNDO.
+SQL> 
+SQL> INSERT INTO T1 VALUES (5,'LABH');
+
+1 row created.
+
+SQL> REM MEMORY : 3 ROW(S) , TABLE : 2 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+         3 SIDDHI                                                                                                                                                                                       
+         4 SHUBH                                                                                                                                                                                        
+         5 LABH                                                                                                                                                                                         
+
+SQL> REM AT THIS TIME WE HAVE 3 CHOICES : 1 COMMIT 2 ROLLBACK 3 ROLLBACK TO A; + COMMIT;
+SQL> 
+SQL> ROLLBACK TO A;
+
+Rollback complete.
+
+SQL> REM MEMORY : 2 ROW(S) , TABLE : 2 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+         3 SIDDHI                                                                                                                                                                                       
+         4 SHUBH                                                                                                                                                                                        
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> REM ABOVE COMMAND WILL REMOVE SAVEPOINT AND WILL MAKE 2 INSERT CHANGES PERMANENT IN DATABASE/TABLE.
+SQL> 
+SQL> REM MEMORY : 0 ROW(S) , TABLE : 4 ROW(S)
+SQL> 
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+         3 SIDDHI                                                                                                                                                                                       
+         4 SHUBH                                                                                                                                                                                        
+
+SQL> ROLLBACK TO A;
+ROLLBACK TO A
+*
+ERROR at line 1:
+ORA-01086: savepoint 'A' never established in this session or is invalid 
+
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM T1;
+
+        NO NM                                                                                                                                                                                           
+---------- ----------                                                                                                                                                                                   
+         1 GANESH                                                                                                                                                                                       
+         2 RIDDHI                                                                                                                                                                                       
+         3 SIDDHI                                                                                                                                                                                       
+         4 SHUBH                                                                                                                                                                                        
+
+SQL> CREATE TABLE EMP(EID NUMBER(3),ENM VARCHAR(10),BDT DATE);
+CREATE TABLE EMP(EID NUMBER(3),ENM VARCHAR(10),BDT DATE)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE EMP;
+
+Table dropped.
+
+SQL> CREATE TABLE EMP(EID NUMBER(3),ENM VARCHAR(10),BDT DATE);
+
+Table created.
+
+SQL> DESC EMP
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EID                                                                                                                        NUMBER(3)
+ ENM                                                                                                                        VARCHAR2(10)
+ BDT                                                                                                                        DATE
+
+SQL> REM INSERT HAS TWO SYNTAXES : 1 INSERT ... VALUES 2 INSERT ... SUB QUERY
+SQL> 
+SQL> REM INSERT ... VALUES SYNTAX : INSERT INTO table_name (column list) VALUES (value list);
+SQL> 
+SQL> INSERT INTO EMP VALUES (1,'GANESH','4-APR-04');
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (1,'GANESH',NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (1,'',NULL);
+
+1 row created.
+
+SQL> SELECT * FROM EMP;
+
+       EID ENM        BDT                                                                                                                                                                               
+---------- ---------- ---------                                                                                                                                                                         
+         1 GANESH     04-APR-04                                                                                                                                                                         
+         1 GANESH                                                                                                                                                                                       
+         1                                                                                                                                                                                              
+
+SQL> INSERT INTO EMP VALUES (1,NULL);
+INSERT INTO EMP VALUES (1,NULL)
+            *
+ERROR at line 1:
+ORA-00947: not enough values 
+
+
+SQL> INSERT INTO EMP VALUES (1,,NULL);
+INSERT INTO EMP VALUES (1,,NULL)
+                          *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> INSERT INTO EMP VALUES (1,DEFAULT,NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP VALUES (1,DEFAULT,NULL);
+
+1 row created.
+
+SQL> INSERT INTO EMP (BDT,EID) VALUES (ADD_MONTHS(SYSDATE,-4),6);
+
+1 row created.
+
+SQL> SELECT * FROM EMP;
+
+       EID ENM        BDT                                                                                                                                                                               
+---------- ---------- ---------                                                                                                                                                                         
+         1 GANESH     04-APR-04                                                                                                                                                                         
+         1 GANESH                                                                                                                                                                                       
+         1                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         6            03-NOV-22                                                                                                                                                                         
+
+6 rows selected.
+
+SQL> REM VALUES : LITERAL , NULL , '' , DEFAULT , FUNCTION , FORMULA , PSEUDOCOLUMN , SUBSTITUION VARIABLE , SCALAR SUBQUERY
+SQL> 
+SQL> INSERT INTO EMP VALUES (5*6, '&NM' , (SELECT HIRE_DATE FROM EMPLOYEES WHERE FIRST_NAME = 'Steven'));
+Enter value for nm: devanshi
+old   1: INSERT INTO EMP VALUES (5*6, '&NM' , (SELECT HIRE_DATE FROM EMPLOYEES WHERE FIRST_NAME = 'Steven'))
+new   1: INSERT INTO EMP VALUES (5*6, 'devanshi' , (SELECT HIRE_DATE FROM EMPLOYEES WHERE FIRST_NAME = 'Steven'))
+
+1 row created.
+
+SQL> select * from emp;
+
+       EID ENM        BDT                                                                                                                                                                               
+---------- ---------- ---------                                                                                                                                                                         
+         1 GANESH     04-APR-04                                                                                                                                                                         
+         1 GANESH                                                                                                                                                                                       
+         1                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         1                                                                                                                                                                                              
+         6            03-NOV-22                                                                                                                                                                         
+        30 devanshi   17-JUL-87                                                                                                                                                                         
+
+7 rows selected.
+
+SQL> INSERT INTO EMP VALUES (ROWNUM*10,
+  2  
+SQL> INSERT INTO EMP VALUES (ROWNUM*10,'SADF',CURRENT_DATE+5);
+INSERT INTO EMP VALUES (ROWNUM*10,'SADF',CURRENT_DATE+5)
+                        *
+ERROR at line 1:
+ORA-00976: Specified pseudocolumn or operator not allowed here. 
+
+
+SQL> SELECT * FROM DEPARTMENTS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+
+8 rows selected.
+
+SQL> DROP TABLE D1;
+
+Table dropped.
+
+SQL> CREATE TABLE D1 AS SELECT DEPARTMENT_ID DID , DEPARTMENT_NAME DNM , MANAGER_ID , LOCATION_ID FROM DEPARTMENTS WHERE 1 = 2;
+
+Table created.
+
+SQL> DESC DEPARTMENTS
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ DEPARTMENT_ID                                                                                                     NOT NULL NUMBER(4)
+ DEPARTMENT_NAME                                                                                                   NOT NULL VARCHAR2(30)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ LOCATION_ID                                                                                                                NUMBER(4)
+
+SQL> DESC D1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ DID                                                                                                                        NUMBER(4)
+ DNM                                                                                                               NOT NULL VARCHAR2(30)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ LOCATION_ID                                                                                                                NUMBER(4)
+
+SQL> SELECT * FROM DEPARTMENTS;
+
+DEPARTMENT_ID DEPARTMENT_NAME                MANAGER_ID LOCATION_ID                                                                                                                                     
+------------- ------------------------------ ---------- -----------                                                                                                                                     
+           10 Administration                        200        1700                                                                                                                                     
+           20 Marketing                             201        1800                                                                                                                                     
+           50 Shiping                               124        1500                                                                                                                                     
+           60 IT                                    103        1400                                                                                                                                     
+           80 Sales                                 149        2500                                                                                                                                     
+           90 Executive                             100        1700                                                                                                                                     
+          110 Accounting                            205        1700                                                                                                                                     
+          190 Contracting                                      1700                                                                                                                                     
+
+8 rows selected.
+
+SQL> SELECT * FROM D1;
+
+no rows selected
+
+SQL> REM INSERT ... VALUES SYNTAX CAN INSERT SINGLE ROW PER SINGLE STATEMENT EXECUTION.
+SQL> 
+SQL> REM INSERT ... SUB QUERY : CAN INSERT ZERO , 1 , MULTIPLE OR ALL ROWS OF SOURCE TABLE (TABLE USED IN SUB QUERY)
+SQL> 
+SQL> 
+SQL> INSERT INTO D1 SELECT * FROM DEPARMTENTS WHERE DEPARTMENT_ID = 420;
+INSERT INTO D1 SELECT * FROM DEPARMTENTS WHERE DEPARTMENT_ID = 420
+                             *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID = 420;
+
+0 rows created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID = 110;
+
+1 row created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS WHERE DEPARTMENT_ID < 50;
+
+2 rows created.
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS;
+
+8 rows created.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+       110 Accounting                            205        1700                                                                                                                                        
+        10 Administration                        200        1700                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        10 Administration                        200        1700                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+       110 Accounting                            205        1700                                                                                                                                        
+       190 Contracting                                      1700                                                                                                                                        
+
+11 rows selected.
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> SELECT * FROM D1;
+
+no rows selected
+
+SQL> INSERT INTO D1 (DID,DNM) SELECT * FROM DEPARTMENTS;
+INSERT INTO D1 (DID,DNM) SELECT * FROM DEPARTMENTS
+            *
+ERROR at line 1:
+ORA-00913: too many values 
+
+
+SQL> INSERT INTO D1 (DID,DNM) SELECT DEPARTMENT_NAME , DEPARTMENT_ID FROM DEPARTMENTS;
+INSERT INTO D1 (DID,DNM) SELECT DEPARTMENT_NAME , DEPARTMENT_ID FROM DEPARTMENTS
+                                *
+ERROR at line 1:
+ORA-01722: invalid number 
+
+
+SQL> INSERT INTO D1 (DID,DNM) SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS;
+
+8 rows created.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                                                                                                                                                                               
+        20 Marketing                                                                                                                                                                                    
+        50 Shiping                                                                                                                                                                                      
+        60 IT                                                                                                                                                                                           
+        80 Sales                                                                                                                                                                                        
+        90 Executive                                                                                                                                                                                    
+       110 Accounting                                                                                                                                                                                   
+       190 Contracting                                                                                                                                                                                  
+
+8 rows selected.
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> DESC D1
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ DID                                                                                                                        NUMBER(4)
+ DNM                                                                                                               NOT NULL VARCHAR2(30)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ LOCATION_ID                                                                                                                NUMBER(4)
+
+SQL> INSERT INTO D1 (DID , MANAGER_ID) SELECT DEPARTMENT_ID , MANAGER_ID FROM DEPARTMENTS;
+INSERT INTO D1 (DID , MANAGER_ID) SELECT DEPARTMENT_ID , MANAGER_ID FROM DEPARTMENTS
+*
+ERROR at line 1:
+ORA-01400: cannot insert NULL into ("SCOTT"."D1"."DNM") 
+
+
+SQL> INSERT INTO D1 (DID,DNM) SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS WHERE DEPARMTENT_ID IN (10,110,90);
+INSERT INTO D1 (DID,DNM) SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS WHERE DEPARMTENT_ID IN (10,110,90)
+                                                                                       *
+ERROR at line 1:
+ORA-00904: "DEPARMTENT_ID": invalid identifier 
+
+
+SQL> INSERT INTO D1 (DID,DNM) SELECT DEPARTMENT_ID , DEPARTMENT_NAME FROM DEPARTMENTS WHERE DEPARTMENT_ID IN (10,110,90);
+
+3 rows created.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                                                                                                                                                                               
+        90 Executive                                                                                                                                                                                    
+       110 Accounting                                                                                                                                                                                   
+
+SQL> REM DELETE : TO DELETE/REMOVE EXISTING ROWS OF TABLE.
+SQL> 
+SQL> REM DELETE AND UPDATE BOTH WORKS ON ALL ROWS OF TABLE BY DEFAULT.
+SQL> 
+SQL> 
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> 
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                                                                                                                                                                               
+        90 Executive                                                                                                                                                                                    
+       110 Accounting                                                                                                                                                                                   
+
+SQL> INSERT INTO D1 SELECT * FROM DEPARTMENTS;
+
+8 rows created.
+
+SQL> COMMIT;
+
+Commit complete.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                                                                                                                                                                               
+        90 Executive                                                                                                                                                                                    
+       110 Accounting                                                                                                                                                                                   
+        10 Administration                        200        1700                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+       110 Accounting                            205        1700                                                                                                                                        
+       190 Contracting                                      1700                                                                                                                                        
+
+11 rows selected.
+
+SQL> DELETE D1;
+
+11 rows deleted.
+
+SQL> SELECT * FROM D1;
+
+no rows selected
+
+SQL> ROLLBACK;
+
+Rollback complete.
+
+SQL> 
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                                                                                                                                                                               
+        90 Executive                                                                                                                                                                                    
+       110 Accounting                                                                                                                                                                                   
+        10 Administration                        200        1700                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+       110 Accounting                            205        1700                                                                                                                                        
+       190 Contracting                                      1700                                                                                                                                        
+
+11 rows selected.
+
+SQL> DELETE D1 WHERE MANAGER_ID IS NULL;
+
+4 rows deleted.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                        200        1700                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+       110 Accounting                            205        1700                                                                                                                                        
+
+7 rows selected.
+
+SQL> REM DELETE ROWS WHICH CONTAINS 'o' IN DEPARTMENT_NAME SPELLING.
+SQL> 
+SQL> DELETE D1 WHERE DNM LIKE '%o%';
+
+2 rows deleted.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> DELETE D1 WHERE DID IN (SELECT DEPARTMENT_ID FROM EMPLOYEES WHERE FIRST_NAME ='Pat');
+
+1 row deleted.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+
+SQL> rollback;
+
+Rollback complete.
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> SELECT * FROM D1;
+
+       DID DNM                            MANAGER_ID LOCATION_ID                                                                                                                                        
+---------- ------------------------------ ---------- -----------                                                                                                                                        
+        10 Administration                                                                                                                                                                               
+        90 Executive                                                                                                                                                                                    
+       110 Accounting                                                                                                                                                                                   
+        10 Administration                        200        1700                                                                                                                                        
+        20 Marketing                             201        1800                                                                                                                                        
+        50 Shiping                               124        1500                                                                                                                                        
+        60 IT                                    103        1400                                                                                                                                        
+        80 Sales                                 149        2500                                                                                                                                        
+        90 Executive                             100        1700                                                                                                                                        
+       110 Accounting                            205        1700                                                                                                                                        
+       190 Contracting                                      1700                                                                                                                                        
+
+11 rows selected.
+
+SQL> REM TCL : COMMIT ROLLBACK SAVEPOINT
+SQL> 
+SQL> REM DML : INSERT DELETE
+SQL> 
+SQL> SPOOL OFF

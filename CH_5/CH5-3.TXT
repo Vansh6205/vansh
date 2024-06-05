@@ -1,0 +1,300 @@
+SQL> 
+SQL> REM SUMMARY FUNCTIONS , GROUP BY , HAVING , NESTED SUMMARY ITEM
+SQL> 
+SQL> REM PCM : PIVOTE REPORT / CROSS TAB REPORT / MATRIX REPORT
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       8775                                                                                                                                                                                             
+
+SQL> REM DISPLAY AVERAGE SALARY PAID TO DEPARTMENT 20
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID = 20;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       9500                                                                                                                                                                                             
+
+SQL> 
+SQL> REM DISPLAY AVERAGE SALARY PAID TO DEPARTMENT 60
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID IN 60;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       6400                                                                                                                                                                                             
+
+SQL> 
+SQL> 
+SQL> REM DISPLAY AVERAGE SALARY PAID TO DEPARTMENT 110
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID LIKE 110;
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+      10150                                                                                                                                                                                             
+
+SQL> REM DISPLAY AVERAGE SALARY PAID TO DEPARTMENT 20 , 60 AND 110
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID IN (20,60,110);
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+ 8357.14286                                                                                                                                                                                             
+
+SQL> SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID IN (20,60,110) GROUP BY DEPARTMENT_ID ORDER BY 1;
+
+DEPARTMENT_ID AVG(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+           20        9500                                                                                                                                                                               
+           60        6400                                                                                                                                                                               
+          110       10150                                                                                                                                                                               
+
+SQL> SELECT DEPARTMENT_ID , AVG(SALARY) FROM EMPLOYEES HAVING DEPARTMENT_ID IN (20,60,110) GROUP BY DEPARTMENT_ID ORDER BY 1;
+
+DEPARTMENT_ID AVG(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+           20        9500                                                                                                                                                                               
+           60        6400                                                                                                                                                                               
+          110       10150                                                                                                                                                                               
+
+SQL> REM DEPT_20_AVG_SAL    DEPT_60_AVG_SAL    DEPT_110_AVG_SAL
+SQL> 
+SQL> REM           9500               6400              10150
+SQL> 
+SQL> 
+SQL> SELECT AVG(DECODE(DEPARTMENT_ID,20,SALARY)) DEPT_20_AVG_SAL,
+  2         AVG(DECODE(DEPARTMENT_ID,60,SALARY)) DEPT_60_AVG_SAL,
+  3         AVG(DECODE(DEPARTMENT_ID,110,SALARY)) DEPT_110_AVG_SAL
+  4  FROM EMPLOYEES;
+
+DEPT_20_AVG_SAL DEPT_60_AVG_SAL DEPT_110_AVG_SAL                                                                                                                                                        
+--------------- --------------- ----------------                                                                                                                                                        
+           9500            6400            10150                                                                                                                                                        
+
+SQL> SELECT AVG(CASE DEPARTMENT_ID WHEN 20 THEN SALARY END) DEPT_20_AVG_SAL,
+  2         AVG(CASE DEPARTMENT_ID WHEN 60 THEN SALARY END) DEPT_60_AVG_SAL,
+  3         AVG(CASE DEPARTMENT_ID WHEN 110 THEN SALARY END) DEPT_110_AVG_SAL
+  4  FROM EMPLOYEES;
+
+DEPT_20_AVG_SAL DEPT_60_AVG_SAL DEPT_110_AVG_SAL                                                                                                                                                        
+--------------- --------------- ----------------                                                                                                                                                        
+           9500            6400            10150                                                                                                                                                        
+
+SQL> SELECT AVG(CASE WHEN DEPARTMENT_ID = 20 THEN SALARY END) DEPT_20_AVG_SAL,
+  2         AVG(CASE WHEN DEPARTMENT_ID = 60 THEN SALARY END) DEPT_60_AVG_SAL,
+  3         AVG(CASE WHEN DEPARTMENT_ID = 110 THEN SALARY END) DEPT_110_AVG_SAL
+  4  FROM EMPLOYEES;
+
+DEPT_20_AVG_SAL DEPT_60_AVG_SAL DEPT_110_AVG_SAL                                                                                                                                                        
+--------------- --------------- ----------------                                                                                                                                                        
+           9500            6400            10150                                                                                                                                                        
+
+SQL> REM MGR_100_MIN_SAL   MGR_124_AVG_SAL    MGR_149_MAX_SAL
+SQL> 
+SQL> REM 1 DECODE 2 CASE I 3 CASE II
+SQL> 
+SQL> select min(decode(manager_id,100,salary)) MGR_100_MIN_SAL,
+  2            avg(case manager_id when 124 then salary end)MGA_124_AVG_SAL,
+  3            max(case when manager_id=149 then salary end)MGR_149_MAX_SAL
+  4  from employees;
+
+MGR_100_MIN_SAL MGA_124_AVG_SAL MGR_149_MAX_SAL                                                                                                                                                         
+--------------- --------------- ---------------                                                                                                                                                         
+           5800            2925           11000                                                                                                                                                         
+
+SQL> REM IT_PROG_MIN_SAL   SA_REP_AVG_SAL   ST_CLERK_MAX_SAL   AD_VP_SUM_SAL
+SQL> 
+SQL> SELECT MIN(DECODE DEPARTMENT_ID,'IT_PROG',SALARY),
+  2         AVG(CASE WHEN DEPARTMENT_ID = 'SA_REP' THEN SALARY END),
+  3         MAX(CASE WHEN DEPARTMENT_ID = 'ST_CLERK' THEN SALARY END),
+  4         SUM(CASE WHEN DEPARTMENT_ID = 'AD_VP' THEN SALARY END)
+  5         FROM EMPLOYEES;
+SELECT MIN(DECODE DEPARTMENT_ID,'IT_PROG',SALARY),
+                  *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT MIN(DECODE(DEPARTMENT_ID,'IT_PROG',SALARY)) IT_PROG_MIN_SAL,
+  2         AVG(CASE WHEN DEPARTMENT_ID = 'SA_REP' THEN SALARY END),
+  3         MAX(CASE WHEN DEPARTMENT_ID = 'ST_CLERK' THEN SALARY END),
+  4         SUM(CASE WHEN DEPARTMENT_ID = 'AD_VP' THEN SALARY END)
+  5         FROM EMPLOYEES;
+       AVG(CASE WHEN DEPARTMENT_ID = 'SA_REP' THEN SALARY END),
+                                     *
+ERROR at line 2:
+ORA-01722: invalid number 
+
+
+SQL> SELECT MIN(DECODE(JOB_ID,'IT_PROG',SALARY)),
+  2         AVG(CASE WHEN JOB_ID = 'SA_REP' THEN SALARY END),
+  3         MAX(CASE WHEN JOB_ID = 'ST_CLERK' THEN SALARY END),
+  4         SUM(CASE WHEN JOB_ID = 'AD_VP' THEN SALARY END)
+  5         FROM EMPLOYEES;
+
+MIN(DECODE(JOB_ID,'IT_PROG',SALARY)) AVG(CASEWHENJOB_ID='SA_REP'THENSALARYEND) MAX(CASEWHENJOB_ID='ST_CLERK'THENSALARYEND) SUM(CASEWHENJOB_ID='AD_VP'THENSALARYEND)                                     
+------------------------------------ ----------------------------------------- ------------------------------------------- ----------------------------------------                                     
+                                4200                                8866.66667                                        3500                                    34000                                     
+
+SQL> SELECT FIRST_NAME,LAST_NAME,JOB_ID, MIN(DECODE(JOB_ID,'IT_PROG',SALARY)) IT_PROG_MIN_SAL,AVG(DECODE(JOB_ID,'SA_REP',SALARY)) SA_REP_AVG_SAL,SUM(DECODE(JOB_ID,'AD_VP',SALARY)) AD_VP_SUM_SAL FROM EMPLOYEES;
+SELECT FIRST_NAME,LAST_NAME,JOB_ID, MIN(DECODE(JOB_ID,'IT_PROG',SALARY)) IT_PROG_MIN_SAL,AVG(DECODE(JOB_ID,'SA_REP',SALARY)) SA_REP_AVG_SAL,SUM(DECODE(JOB_ID,'AD_VP',SALARY)) AD_VP_SUM_SAL FROM EMPLOYEES
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT MIN(DECODE(JOB_ID,'IT_PROG',SALARY)) IT_PROG_MIN_SAL,AVG(DECODE(JOB_ID,'SA_REP',SALARY)) SA_REP_AVG_SAL,SUM(DECODE(JOB_ID,'AD_VP',SALARY)) AD_VP_SUM_SAL FROM EMPLOYEES;
+
+IT_PROG_MIN_SAL SA_REP_AVG_SAL AD_VP_SUM_SAL                                                                                                                                                            
+--------------- -------------- -------------                                                                                                                                                            
+           4200     8866.66667         34000                                                                                                                                                            
+
+SQL> 
+SQL> REM DEPT_90_MIN_SAL   IT_PROG_AVG_SAL   MGR_149_MAX_SAL
+SQL> 
+SQL> REM DECODE            CASE I            CASE II
+SQL> 
+SQL> SELECT MIN(DECODE(DEPARTMENT_ID,'90',SALARY)) DEPT_90_MIN_SALARY,
+  2         AVG(CASE JOB_ID WHEN 'IT_PROG' THEN SALARY END) IT_PROG_AVG_SALARY,
+  3         MAX(CASE WHEN MANAGER_ID = 149 THEN SALARY END) MGR_149_MAX_SALARY FROM EMPLOYEES;
+
+DEPT_90_MIN_SALARY IT_PROG_AVG_SALARY MGR_149_MAX_SALARY                                                                                                                                                
+------------------ ------------------ ------------------                                                                                                                                                
+             17000               6400              11000                                                                                                                                                
+
+SQL> REM DEPT_20_CNT    DEPT_60_CNT    DEPT_110_CNT
+SQL> 
+SQL> REM DECODE         CASE I         CASE II
+SQL> 
+SQL> SELECT COUNT(DECODE(DEPARTMENT_ID,20,'*'))DEPT_20_CNT,
+  2  COUNT(CASE DEPARTMENT_ID WHEN 60 THEN '*' END)DEPT_60_CNT,
+  3  COUNT(CASE WHEN DEPARTMENT_ID=110 THEN '*' END)DEPT_110_CNT FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_60_CNT DEPT_110_CNT                                                                                                                                                                    
+----------- ----------- ------------                                                                                                                                                                    
+          2           3            2                                                                                                                                                                    
+
+SQL> SELECT COUNT(DECODE(DEPARTMENT_ID,20,'*'))DEPT_20_CNT,
+  2  COUNT(CASE DEPARTMENT_ID WHEN 60 THEN 6 END)DEPT_60_CNT,
+  3  COUNT(CASE WHEN DEPARTMENT_ID=110 THEN SYSDATE END)DEPT_110_CNT FROM EMPLOYEES;
+
+DEPT_20_CNT DEPT_60_CNT DEPT_110_CNT                                                                                                                                                                    
+----------- ----------- ------------                                                                                                                                                                    
+          2           3            2                                                                                                                                                                    
+
+SQL> SELECT COUNT(DECODE(DEPARTMENT_ID,20,'*'))DEPT_20_CNT,
+  2  COUNT(CASE DEPARTMENT_ID WHEN 60 THEN '*' END)DEPT_60_CNT,
+  3  COUNT(CASE WHEN DEPARTMENT_ID=110 THEN COUNT(*) END)DEPT_110_CNT FROM EMPLOYEES;
+COUNT(CASE WHEN DEPARTMENT_ID=110 THEN COUNT(*) END)DEPT_110_CNT FROM EMPLOYEES
+                                       *
+ERROR at line 3:
+ORA-00978: nested group function without GROUP BY 
+
+
+SQL> SELECT MANAGER_ID , COUNT(DECODE(DEPARTMENT_ID,20,'*'))DEPT_20_CNT,
+  2  COUNT(CASE DEPARTMENT_ID WHEN 60 THEN 6 END)DEPT_60_CNT,
+  3  COUNT(CASE WHEN DEPARTMENT_ID=110 THEN SYSDATE END)DEPT_110_CNT FROM EMPLOYEES
+  4  GROUP BY MANAGER_ID
+  5  ORDER BY 1;
+
+MANAGER_ID DEPT_20_CNT DEPT_60_CNT DEPT_110_CNT                                                                                                                                                         
+---------- ----------- ----------- ------------                                                                                                                                                         
+       100           1           0            0                                                                                                                                                         
+       101           0           0            1                                                                                                                                                         
+       102           0           1            0                                                                                                                                                         
+       103           0           2            0                                                                                                                                                         
+       124           0           0            0                                                                                                                                                         
+       149           0           0            0                                                                                                                                                         
+       201           1           0            0                                                                                                                                                         
+       205           0           0            1                                                                                                                                                         
+                     0           0            0                                                                                                                                                         
+
+9 rows selected.
+
+SQL> REM DISPLAY DEPT_20_CNT , DEPT_50_CNT , DEPT_110_CNT , MANAGER_ID WISE
+SQL> 
+SQL> REM HIRE YEAR WISE : DEPT_20_CNT  DEPT_50_CNT   DEPT_90_CNT   DEPT_110_CNT
+SQL> 
+SQL> SELECT MANAGER_ID , COUNT(DECODE(DEPARTMENT_ID,20,'*')) DEPT_20_CNT
+  ,COUNT(CASE DEPARTMENT_ID WHEN 50 THEN '*' END) DEPT_50_CNT
+  ,COUNT(CASE WHEN DEPARTMENT_ID LIKE 110 THEN '*' END) DEPT_110_CNT FROM EMPLOYEES GROUP BY MANAGER_ID;
+
+MANAGER_ID DEPT_20_CNT DEPT_50_CNT DEPT_110_CNT                                                                                                                                                         
+---------- ----------- ----------- ------------                                                                                                                                                         
+                     0           0            0                                                                                                                                                         
+       100           1           1            0                                                                                                                                                         
+       149           0           0            0                                                                                                                                                         
+       205           0           0            1                                                                                                                                                         
+       102           0           0            0                                                                                                                                                         
+        201           1           0            0                                                                                                                                                         
+       101           0           0            1                                                                                                                                                         
+       124           0           4            0                                                                                                                                                         
+       103           0           0            0                                                                                                                                                         
+
+9 rows selected.
+
+SQL> SELECT MANAGER_ID , COUNT(DECODE(DEPARTMENT_ID,20,'*')) DEPT_20_CNT ,
+  2  COUNT(CASE DEPARTMENT_ID WHEN 50 THEN '*' END) DEPT_50_CNT ,
+  3  COUNT(CASE WHEN DEPARTMENT_ID LIKE 110 THEN '*' END) DEPT_110_CNT
+  4  FROM EMPLOYEES GROUP BY MANAGER_ID;
+
+MANAGER_ID DEPT_20_CNT DEPT_50_CNT DEPT_110_CNT                                                                                                                                                         
+---------- ----------- ----------- ------------                                                                                                                                                         
+                     0           0            0                                                                                                                                                         
+       100           1           1            0                                                                                                                                                         
+       149           0           0            0                                                                                                                                                         
+       205           0           0            1                                                                                                                                                         
+       102           0           0            0                                                                                                                                                         
+       201           1           0            0                                                                                                                                                         
+       101           0           0            1                                                                                                                                                         
+       124           0           4            0                                                                                                                                                         
+       103           0           0            0                                                                                                                                                         
+
+9 rows selected.
+
+SQL> SELECT TO_CHAR(HIRE_DATE,'RRRR'),COUNT(DECODE(DEPARTMENT_ID,20,'*')) DEPT_20_CNT,COUNT(CASE DEPARTMENT_ID WHEN 50 THEN '*' END) DEPT_50_CNT,COUNT(CASE WHEN DEPARTMENT_ID=90 THEN '*' END) DEPT_90_CNT,COUNT(DECODE(DEPARTMENT_ID,110,'*')) DEPT_110_CNT FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'RRRR');
+
+TO_C DEPT_20_CNT DEPT_50_CNT DEPT_90_CNT DEPT_110_CNT                                                                                                                                                   
+---- ----------- ----------- ----------- ------------                                                                                                                                                   
+1987           0           0           1            0                                                                                                                                                   
+1997           1           1           0            0                                                                                                                                                   
+2000           0           0           0            0                                                                                                                                                   
+1994           0           0           0            2                                                                                                                                                   
+1991           0           0           0            0                                                                                                                                                   
+1995           0           1           0            0                                                                                                                                                   
+1990           0           0           0            0                                                                                                                                                   
+1989           0           0           1            0                                                                                                                                                   
+1993           0           0           1            0                                                                                                                                                   
+1999           0           1           0            0                                                                                                                                                   
+1996           1           0           0            0                                                                                                                                                   
+1998           0           2           0            0                                                                                                                                                   
+
+12 rows selected.
+
+SQL> SELECT TO_CHAR(HIRE_DATE,'RRRR'),COUNT(DECODE(DEPARTMENT_ID,20,'*')) DEPT_20_CNT,
+  2  COUNT(CASE DEPARTMENT_ID WHEN 50 THEN '*' END) DEPT_50_CNT,
+  3  COUNT(CASE WHEN DEPARTMENT_ID=90 THEN '*' END) DEPT_90_CNT,
+  4  COUNT(DECODE(DEPARTMENT_ID,110,'*')) DEPT_110_CNT
+  5  FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'RRRR');
+
+TO_C DEPT_20_CNT DEPT_50_CNT DEPT_90_CNT DEPT_110_CNT                                                                                                                                                   
+---- ----------- ----------- ----------- ------------                                                                                                                                                   
+1987           0           0           1            0                                                                                                                                                   
+1997           1           1           0            0                                                                                                                                                   
+2000           0           0           0            0                                                                                                                                                   
+1994           0           0           0            2                                                                                                                                                   
+1991           0           0           0            0                                                                                                                                                   
+1995           0           1           0            0                                                                                                                                                   
+1990           0           0           0            0                                                                                                                                                   
+1989           0           0           1            0                                                                                                                                                   
+1993           0           0           1            0                                                                                                                                                   
+1999           0           1           0            0                                                                                                                                                   
+1996           1           0           0            0                                                                                                                                                   
+1998           0           2           0            0                                                                                                                                                   
+
+12 rows selected.
+
+SQL> SPOOL OFF

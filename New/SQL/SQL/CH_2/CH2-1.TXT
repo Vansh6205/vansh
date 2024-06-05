@@ -1,0 +1,675 @@
+SQL> 
+SQL> REM TOPICS OF CHAPTER 2
+SQL> 
+SQL> REM 1 SORTING
+SQL> 
+SQL> REM 2 TOP n ANALYSIS
+SQL> 
+SQL> REM 3 RESTRICTION/SELECTION
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 SORTING : ARRANGING VALUES IN EITHER ASCENDING ORDER OR DESCENDING ORDER
+SQL> 
+SQL> REM ASENDING ORDER : LOWEST VALUE FIRST , HIGHEST VALUES LAST
+SQL> 
+SQL> REM NUMBER : -99 TO +99
+SQL> 
+SQL> REM DATE : EARLIEST DATE FIRST , LATEST DATE LAST
+SQL> 
+SQL> REM CHARACTER/ALPHABETS : A-Z , a-z
+SQL> 
+SQL> 
+SQL> REM DESCENDING ORDER : HIGHEST VALUE FIRST , LOWEST VALUES LAST
+SQL> 
+SQL> REM NUMBER : +99 TO -99
+SQL> 
+SQL> REM DATE : LATEST DATE FIRST , EARLIEST DATE LAST
+SQL> 
+SQL> REM CHARACTER/ALPHABETS : z-a , Z-A
+SQL> 
+SQL> 
+SQL> 
+SQL> SELECT SALARY FROM EMPLOYEES;
+
+    SALARY                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+     24000                                                                                                                                                                                              
+     17000                                                                                                                                                                                              
+     17000                                                                                                                                                                                              
+      9000                                                                                                                                                                                              
+      6000                                                                                                                                                                                              
+      4200                                                                                                                                                                                              
+      5800                                                                                                                                                                                              
+      3500                                                                                                                                                                                              
+      3100                                                                                                                                                                                              
+      2600                                                                                                                                                                                              
+      2500                                                                                                                                                                                              
+     10500                                                                                                                                                                                              
+     11000                                                                                                                                                                                              
+      8600                                                                                                                                                                                              
+      7000                                                                                                                                                                                              
+      4400                                                                                                                                                                                              
+     13000                                                                                                                                                                                              
+      6000                                                                                                                                                                                              
+     12000                                                                                                                                                                                              
+      8300                                                                                                                                                                                              
+
+20 rows selected.
+
+SQL> REM ASCENDING : FIRST , LAST
+SQL> 
+SQL> SELECT SALARY FROM EMPLOYEES ORDER BY SALARY;
+
+    SALARY                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+      2500                                                                                                                                                                                              
+      2600                                                                                                                                                                                              
+      3100                                                                                                                                                                                              
+      3500                                                                                                                                                                                              
+      4200                                                                                                                                                                                              
+      4400                                                                                                                                                                                              
+      5800                                                                                                                                                                                              
+      6000                                                                                                                                                                                              
+      6000                                                                                                                                                                                              
+      7000                                                                                                                                                                                              
+      8300                                                                                                                                                                                              
+      8600                                                                                                                                                                                              
+      9000                                                                                                                                                                                              
+     10500                                                                                                                                                                                              
+     11000                                                                                                                                                                                              
+     12000                                                                                                                                                                                              
+     13000                                                                                                                                                                                              
+     17000                                                                                                                                                                                              
+     17000                                                                                                                                                                                              
+     24000                                                                                                                                                                                              
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES;
+
+HIRE_DATE                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+07-FEB-99                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+29-JAN-00                                                                                                                                                                                               
+11-MAY-96                                                                                                                                                                                               
+24-MAR-98                                                                                                                                                                                               
+24-MAY-99                                                                                                                                                                                               
+17-SEP-87                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+17-AUG-97                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+
+20 rows selected.
+
+SQL> REM DESCENDING : FIRST , LAST
+SQL> 
+SQL> SELECT HIRE_DATE FROM EMPLOYEES ORDER BY HIRE_DATE DESC;
+
+HIRE_DATE                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+29-JAN-00                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+24-MAY-99                                                                                                                                                                                               
+07-FEB-99                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+24-MAR-98                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+17-AUG-97                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+11-MAY-96                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+17-SEP-87                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME FROM EMPLOYEES;
+
+FIRST_NAME                                                                                                                                                                                              
+---------------                                                                                                                                                                                         
+Steven                                                                                                                                                                                                  
+Neena                                                                                                                                                                                                   
+Lex                                                                                                                                                                                                     
+Alexander                                                                                                                                                                                               
+Bruce                                                                                                                                                                                                   
+Diana                                                                                                                                                                                                   
+Kevin                                                                                                                                                                                                   
+Trenna                                                                                                                                                                                                  
+Curtis                                                                                                                                                                                                  
+Randall                                                                                                                                                                                                 
+Peter                                                                                                                                                                                                   
+Eleni                                                                                                                                                                                                   
+Ellen                                                                                                                                                                                                   
+Jonathon                                                                                                                                                                                                
+Kimerely                                                                                                                                                                                                
+Jennifer                                                                                                                                                                                                
+Michael                                                                                                                                                                                                 
+Pat                                                                                                                                                                                                     
+Shelley                                                                                                                                                                                                 
+William                                                                                                                                                                                                 
+
+20 rows selected.
+
+SQL> REM ASCENDING : FIRST , LAST
+SQL> 
+SQL> SELECT FIRST_NAME FROM EMPLOYEES ORDER BY FIRST_NAME;
+
+FIRST_NAME                                                                                                                                                                                              
+---------------                                                                                                                                                                                         
+Alexander                                                                                                                                                                                               
+Bruce                                                                                                                                                                                                   
+Curtis                                                                                                                                                                                                  
+Diana                                                                                                                                                                                                   
+Eleni                                                                                                                                                                                                   
+Ellen                                                                                                                                                                                                   
+Jennifer                                                                                                                                                                                                
+Jonathon                                                                                                                                                                                                
+Kevin                                                                                                                                                                                                   
+Kimerely                                                                                                                                                                                                
+Lex                                                                                                                                                                                                     
+Michael                                                                                                                                                                                                 
+Neena                                                                                                                                                                                                   
+Pat                                                                                                                                                                                                     
+Peter                                                                                                                                                                                                   
+Randall                                                                                                                                                                                                 
+Shelley                                                                                                                                                                                                 
+Steven                                                                                                                                                                                                  
+Trenna                                                                                                                                                                                                  
+William                                                                                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT LAST_NAME FROM EMPLOYEES;
+
+LAST_NAME                                                                                                                                                                                               
+---------------                                                                                                                                                                                         
+King                                                                                                                                                                                                    
+Kochhar                                                                                                                                                                                                 
+De Haan                                                                                                                                                                                                 
+Hunold                                                                                                                                                                                                  
+Ernst                                                                                                                                                                                                   
+Lorentz                                                                                                                                                                                                 
+Mourgos                                                                                                                                                                                                 
+Rajs                                                                                                                                                                                                    
+Davies                                                                                                                                                                                                  
+Matos                                                                                                                                                                                                   
+Vargas                                                                                                                                                                                                  
+Zlotkey                                                                                                                                                                                                 
+Abel                                                                                                                                                                                                    
+Taylor                                                                                                                                                                                                  
+Grant                                                                                                                                                                                                   
+Whalen                                                                                                                                                                                                  
+Hartstein                                                                                                                                                                                               
+Fay                                                                                                                                                                                                     
+Higgins                                                                                                                                                                                                 
+Gietz                                                                                                                                                                                                   
+
+20 rows selected.
+
+SQL> REM ASCENDING : FIRST , LAST
+SQL> 
+SQL> SELECT LAST_NAME FROM EMPLOYEES ORDER BY LAST_NAME;
+
+LAST_NAME                                                                                                                                                                                               
+---------------                                                                                                                                                                                         
+Abel                                                                                                                                                                                                    
+Davies                                                                                                                                                                                                  
+De Haan                                                                                                                                                                                                 
+Ernst                                                                                                                                                                                                   
+Fay                                                                                                                                                                                                     
+Gietz                                                                                                                                                                                                   
+Grant                                                                                                                                                                                                   
+Hartstein                                                                                                                                                                                               
+Higgins                                                                                                                                                                                                 
+Hunold                                                                                                                                                                                                  
+King                                                                                                                                                                                                    
+Kochhar                                                                                                                                                                                                 
+Lorentz                                                                                                                                                                                                 
+Matos                                                                                                                                                                                                   
+Mourgos                                                                                                                                                                                                 
+Rajs                                                                                                                                                                                                    
+Taylor                                                                                                                                                                                                  
+Vargas                                                                                                                                                                                                  
+Whalen                                                                                                                                                                                                  
+Zlotkey                                                                                                                                                                                                 
+
+20 rows selected.
+
+SQL> REM SELECT SYNTAX : SELECT ... FROM ... WHERE ... ORDER BY ... OFFSET ... FETCH ...;
+SQL> 
+SQL> REM ORDER BY IS USED TO SORT ROWS IN ASCENDING OR DESCENDING ORDER ON SINGLE OR MULTIPLE COLUMNS, KEEPING NULLS AT THE TOP OR BOTTOM.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> REM BY DEFAULT ALL ROWS ARE DISPLAYED IN ROWID ASCENDING ORDER.
+SQL> 
+SQL> SELECT ROWID , FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES;
+
+ROWID              FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                 
+------------------ --------------- ---------- ---------                                                                                                                                                 
+AAAeCSAAHAAAA2XAAA Steven               24000 17-JUL-87                                                                                                                                                 
+AAAeCSAAHAAAA2XAAB Neena                17000 21-SEP-89                                                                                                                                                 
+AAAeCSAAHAAAA2XAAC Lex                  17000 13-JAN-93                                                                                                                                                 
+AAAeCSAAHAAAA2XAAD Alexander             9000 03-JAN-90                                                                                                                                                 
+AAAeCSAAHAAAA2XAAE Bruce                 6000 21-MAY-91                                                                                                                                                 
+AAAeCSAAHAAAA2XAAF Diana                 4200 07-FEB-99                                                                                                                                                 
+AAAeCSAAHAAAA2XAAG Kevin                 5800 16-NOV-99                                                                                                                                                 
+AAAeCSAAHAAAA2XAAH Trenna                3500 17-OCT-95                                                                                                                                                 
+AAAeCSAAHAAAA2XAAI Curtis                3100 29-JAN-97                                                                                                                                                 
+AAAeCSAAHAAAA2XAAJ Randall               2600 15-MAR-98                                                                                                                                                 
+AAAeCSAAHAAAA2XAAK Peter                 2500 09-JUL-98                                                                                                                                                 
+AAAeCSAAHAAAA2XAAL Eleni                10500 29-JAN-00                                                                                                                                                 
+AAAeCSAAHAAAA2XAAM Ellen                11000 11-MAY-96                                                                                                                                                 
+AAAeCSAAHAAAA2XAAN Jonathon              8600 24-MAR-98                                                                                                                                                 
+AAAeCSAAHAAAA2XAAO Kimerely              7000 24-MAY-99                                                                                                                                                 
+AAAeCSAAHAAAA2XAAP Jennifer              4400 17-SEP-87                                                                                                                                                 
+AAAeCSAAHAAAA2XAAQ Michael              13000 17-FEB-96                                                                                                                                                 
+AAAeCSAAHAAAA2XAAR Pat                   6000 17-AUG-97                                                                                                                                                 
+AAAeCSAAHAAAA2XAAS Shelley              12000 07-JUN-94                                                                                                                                                 
+AAAeCSAAHAAAA2XAAT William               8300 07-JUN-94                                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT ROWID , FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY SALARY;
+
+ROWID              FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                 
+------------------ --------------- ---------- ---------                                                                                                                                                 
+AAAeCSAAHAAAA2XAAK Peter                 2500 09-JUL-98                                                                                                                                                 
+AAAeCSAAHAAAA2XAAJ Randall               2600 15-MAR-98                                                                                                                                                 
+AAAeCSAAHAAAA2XAAI Curtis                3100 29-JAN-97                                                                                                                                                 
+AAAeCSAAHAAAA2XAAH Trenna                3500 17-OCT-95                                                                                                                                                 
+AAAeCSAAHAAAA2XAAF Diana                 4200 07-FEB-99                                                                                                                                                 
+AAAeCSAAHAAAA2XAAP Jennifer              4400 17-SEP-87                                                                                                                                                 
+AAAeCSAAHAAAA2XAAG Kevin                 5800 16-NOV-99                                                                                                                                                 
+AAAeCSAAHAAAA2XAAE Bruce                 6000 21-MAY-91                                                                                                                                                 
+AAAeCSAAHAAAA2XAAR Pat                   6000 17-AUG-97                                                                                                                                                 
+AAAeCSAAHAAAA2XAAO Kimerely              7000 24-MAY-99                                                                                                                                                 
+AAAeCSAAHAAAA2XAAT William               8300 07-JUN-94                                                                                                                                                 
+AAAeCSAAHAAAA2XAAN Jonathon              8600 24-MAR-98                                                                                                                                                 
+AAAeCSAAHAAAA2XAAD Alexander             9000 03-JAN-90                                                                                                                                                 
+AAAeCSAAHAAAA2XAAL Eleni                10500 29-JAN-00                                                                                                                                                 
+AAAeCSAAHAAAA2XAAM Ellen                11000 11-MAY-96                                                                                                                                                 
+AAAeCSAAHAAAA2XAAS Shelley              12000 07-JUN-94                                                                                                                                                 
+AAAeCSAAHAAAA2XAAQ Michael              13000 17-FEB-96                                                                                                                                                 
+AAAeCSAAHAAAA2XAAB Neena                17000 21-SEP-89                                                                                                                                                 
+AAAeCSAAHAAAA2XAAC Lex                  17000 13-JAN-93                                                                                                                                                 
+AAAeCSAAHAAAA2XAAA Steven               24000 17-JUL-87                                                                                                                                                 
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY SALARY;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY SALARY ASC;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY SALARY DESC;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY 2;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY 2 ASC;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY , HIRE_DATE FROM EMPLOYEES ORDER BY 2 DESC;
+
+FIRST_NAME          SALARY HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY PAYMENT, HIRE_DATE FROM EMPLOYEES ORDER BY SALARY;
+
+FIRST_NAME         PAYMENT HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY PAYMENT, HIRE_DATE FROM EMPLOYEES ORDER BY 2;
+
+FIRST_NAME         PAYMENT HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY PAYMENT, HIRE_DATE FROM EMPLOYEES ORDER BY PAYMENT;
+
+FIRST_NAME         PAYMENT HIRE_DATE                                                                                                                                                                    
+--------------- ---------- ---------                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> REM HIRE_DATE : JOINDATE
+SQL> 
+SQL> REM DESC : 3 STYLES
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY PAYMENT , HIRE_DATE JOINDATE FROM EMPLOYEES ORDER BY HIRE_DATE DESC;
+
+FIRST_NAME         PAYMENT JOINDATE                                                                                                                                                                     
+--------------- ---------- ---------                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY PAYMENT , HIRE_DATE JOINDATE FROM EMPLOYEES ORDER BY 3 DESC;
+
+FIRST_NAME         PAYMENT JOINDATE                                                                                                                                                                     
+--------------- ---------- ---------                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY PAYMENT , HIRE_DATE JOINDATE FROM EMPLOYEES ORDER BY JOINDATE DESC;
+
+FIRST_NAME         PAYMENT JOINDATE                                                                                                                                                                     
+--------------- ---------- ---------                                                                                                                                                                    
+Eleni                10500 29-JAN-00                                                                                                                                                                    
+Kevin                 5800 16-NOV-99                                                                                                                                                                    
+Kimerely              7000 24-MAY-99                                                                                                                                                                    
+Diana                 4200 07-FEB-99                                                                                                                                                                    
+Peter                 2500 09-JUL-98                                                                                                                                                                    
+Jonathon              8600 24-MAR-98                                                                                                                                                                    
+Randall               2600 15-MAR-98                                                                                                                                                                    
+Pat                   6000 17-AUG-97                                                                                                                                                                    
+Curtis                3100 29-JAN-97                                                                                                                                                                    
+Ellen                11000 11-MAY-96                                                                                                                                                                    
+Michael              13000 17-FEB-96                                                                                                                                                                    
+Trenna                3500 17-OCT-95                                                                                                                                                                    
+Shelley              12000 07-JUN-94                                                                                                                                                                    
+William               8300 07-JUN-94                                                                                                                                                                    
+Lex                  17000 13-JAN-93                                                                                                                                                                    
+Bruce                 6000 21-MAY-91                                                                                                                                                                    
+Alexander             9000 03-JAN-90                                                                                                                                                                    
+Neena                17000 21-SEP-89                                                                                                                                                                    
+Jennifer              4400 17-SEP-87                                                                                                                                                                    
+Steven               24000 17-JUL-87                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> REM MULTIPLE COLUMN SORTING :
+SQL> 
+SQL> 
+SQL> SPOOL OFF

@@ -1,0 +1,385 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM SELECT ... FROM ... WHERE ... GROUP BY / HAVING ... ORDER BY ... OFFSET ... FETCH ...;
+SQL> 
+SQL> REM SYNTAX PRECEDENCE : SELECT ... FROM ... WHERE ... GROUP BY / HAVING ... ORDER BY ... OFFSET ... FETCH ...;
+SQL> 
+SQL> REM EXECUTION PRECEDENCE : FROM ... WHERE ... GROUP BY ... HAVING ... COLUMN ALIAS ... ORDER BY ... OFFSET ... FETCH ... SELECT ...;
+SQL> 
+SQL> REM FROM : TO READ DATA FROM TABLE AND PUT IT INTO MEMORY/RAM.
+SQL> 
+SQL> REM WHERE : TO REMOVE TABLE'S ORIGINAL ROWS WHICH DOESN'T SATISFY CONDITION.
+SQL> 
+SQL> REM GROUP BY : 1 FINDS DISTINCT VALUES OF GROUP BY CLAUSE 2 SEPARATES ROWS BASED ON DISTINCT VALUES 3 GENERATES SUMMARY ROW FOR EACH GROUP
+SQL> 
+SQL> REM HAVING : TO REMOVE SUMMARY ROWS WHICH DOESN'T SATISFY CONDITION.
+SQL> 
+SQL> REM COLUMN ALIAS : WILL ATTACH NEW COLUMN HEADING TO COLUMNS.
+SQL> 
+SQL> REM ORDER BY : WILL SORT ROWS ON SINGLE/MULTIPLE COLUMNS, IN ASC/DESC ORDER KEEPING NULL VALUES AT THE TOP/BOTTOM
+SQL> 
+SQL> REM OFFSET : WILL FIX FIRST ROW OF RESULT SET
+SQL> 
+SQL> REM FETCH : WILL FIX COUNT OF ROWS OF RESULT SET
+SQL> 
+SQL> REM SELECT : WILL DISPLAY ROWS ON SCREEN
+SQL> 
+SQL> REM WHERE SUPPORTS ALL NON-SUMMARY ITEMS, BUT NO SUMMARY ITEM
+SQL> 
+SQL> REM HAVING SUPPORTS ALL SUMMARY ITEMS + THOSE NON-SUMMARY ITEMS WHICH ARE LISTED IN GROUP BY CLAUSE
+SQL> 
+SQL> REM DEPARTMENT_ID WISE , SUM OF SALARY
+SQL> 
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID SUM(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+                     7000                                                                                                                                                                               
+           90       58000                                                                                                                                                                               
+           20       19000                                                                                                                                                                               
+          110       20300                                                                                                                                                                               
+           50       17500                                                                                                                                                                               
+           80       30100                                                                                                                                                                               
+           60       19200                                                                                                                                                                               
+           10        4400                                                                                                                                                                               
+
+8 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE SUM(SALARY) > 20000
+  4  GROUP BY DEPARTMENTID;
+WHERE SUM(SALARY) > 20000
+      *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  HAVING SUM(SALARY) > 20000
+  4  GROUP BY DEPARTMENT_ID;
+
+DEPARTMENT_ID SUM(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+           90       58000                                                                                                                                                                               
+          110       20300                                                                                                                                                                               
+           80       30100                                                                                                                                                                               
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPARTMENT_ID
+  4  HAVING SUM(SALARY) > 20000;
+
+DEPARTMENT_ID SUM(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+           90       58000                                                                                                                                                                               
+          110       20300                                                                                                                                                                               
+           80       30100                                                                                                                                                                               
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPARTMENT_ID
+  4  HAVING DEPARTMENT_ID = ANY (90,110,50);
+
+ DEPARTMENT_ID SUM(SALARY)                                                                                                                                                                               
+ ------------- -----------                                                                                                                                                                               
+            90       58000                                                                                                                                                                               
+           110       20300                                                                                                                                                                               
+            50       17500                                                                                                                                                                               
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPARTMENT_ID
+  4  HAVING JOB_ID = ANY ('IT_PROG','ST_CLERK');
+HAVING JOB_ID = ANY ('IT_PROG','ST_CLERK')
+       *
+ERROR at line 4:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY DEPARTMENT_ID                  
+  4  HAVING MIN(SALARY) < 10000;       
+
+DEPARTMENT_ID SUM(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+                     7000                                                                                                                                                                               
+           20       19000                                                                                                                                                                               
+          110       20300                                                                                                                                                                               
+           50       17500                                                                                                                                                                               
+           80       30100                                                                                                                                                                               
+           60       19200                                                                                                                                                                               
+           10        4400                                                                                                                                                                               
+
+7 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE JOB_ID NOT IN ('IT_PROG','ST_CLERK')
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING MIN(SALARY) < 10000;
+
+DEPARTMENT_ID SUM(SALARY)                                                                                                                                                                               
+------------- -----------                                                                                                                                                                               
+                     7000                                                                                                                                                                               
+           20       19000                                                                                                                                                                               
+          110       20300                                                                                                                                                                               
+           50        5800                                                                                                                                                                               
+           80       30100                                                                                                                                                                               
+           10        4400                                                                                                                                                                               
+
+6 rows selected.
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY) TOTSAL
+  2  FROM EMPLOYEES
+  3  WHERE JOB_ID NOT IN ('IT_PROG','ST_CLERK')
+  4  HAVING MIN(SALARY) < 10000;
+SELECT DEPARTMENT_ID , SUM(SALARY) TOTSAL
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT DEPARTMENT_ID , SUM(SALARY) TOTSAL
+  2  FROM EMPLOYEES
+  3  WHERE JOB_ID NOT IN ('IT_PROG','ST_CLERK')
+  4  HAVING MIN(SALARY) < 10000
+  5  GROUP BY DEPARTMENT_ID
+  6  ORDER BY TOTSAL;
+
+DEPARTMENT_ID     TOTSAL                                                                                                                                                                                
+------------- ----------                                                                                                                                                                                
+           10       4400                                                                                                                                                                               
+           50       5800                                                                                                                                                                
+                    7000                                                                                                                                                                
+           20      19000                                                                                                                                                               
+          110      20300                                                                                                                                                               
+           80      30100                                                                                                                                                                
+
+6 rows selected.
+
+SQL> REM DISPLAY JOB_ID AND AVERAGE SALARY FOR THE JOBS TO WHICH 10000 OR MORE AVERAGE SALARY IS PAID
+SQL> 
+SQL> SELECT JOB_ID , AVG(SALARY)
+  2  FROM EMPLOYEES
+  3  GROUP BY JOB_ID
+  4  HAVING AVG(SALARY) >= 10000;
+
+JOB_ID     AVG(SALARY)                                                                                                                                                                                  
+---------- -----------                                                                                                                                                                                  
+AC_MGR           12000                                                                                                                                                                                  
+AD_VP            17000                                                                                                                                                                                  
+SA_MAN           10500                                                                                                                                                                                  
+MK_MAN           13000                                                                                                                                                                                  
+AD_PRES          24000                                                                                                                                                                                  
+
+SQL> REM DISPLAY MANAGER_ID WISE COUNT OF EMPLOYEES FOR THE MANAGER TO WHICH 2 OR LESS EMPLOYEES REPORT
+SQL> 
+SQL> SELECT MANAGER_ID , COUNT(*) FROM EMPLOYEES GROUP BY MANAGER_ID HAVING COUNT(*) <=2;
+
+MANAGER_ID   COUNT(*)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+                    1                                                                                                                                                                                   
+       205          1                                                                                                                                                                                   
+       102          1                                                                                                                                                                                   
+       201          1                                                                                                                                                                                   
+       101          2                                                                                                                                                                                   
+       103          2                                                                                                                                                                                   
+
+6 rows selected.
+
+SQL> REM DISPLAY HIRE YEAR WISE TOTAL SALARY , DISPLAY ONLY THOSE ROWS FOR WHICH TOTAL SALARY IS HIGHER THAN 12000
+SQL> 
+SQL> SELECT TO_CHAR(HIRE_DATE,'YYYY') , SUM(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'YYYY') HAVING SUM(SALARY) > 12000;
+TO_C SUM(SALARY)                                                                                                                                                                                        
+---- -----------                                                                                                                                                                                        
+1987       28400                                                                                                                                                                                        
+1994       20300                                                                                                                                                                                        
+1989       17000                                                                                                                                                                                        
+1993       17000                                                                                                                                                                                        
+1999       17000                                                                                                                                                                                        
+1996       24000                                                                                                                                                                                        
+1998       13700                                                                                                                                                                                        
+
+7 rows selected.
+
+SQL> REM DEPARTMENT_ID WISE , JOB_ID WISE , TOTAL SALARY. DISPLAY ONLY THOSE WHICH HAS TOTAL SALARY LESS THAN 9000.
+SQL> 
+SQL> SELECT DEPARTMENT_ID , JOB_ID, SUM(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID,JOB_ID HAVING SUM(SALARY)>9000;
+
+DEPARTMENT_ID JOB_ID     SUM(SALARY)                                                                                                                                                                    
+------------- ---------- -----------                                                                                                                                                                    
+           90 AD_VP            34000                                                                                                                                                                    
+           50 ST_CLERK         11700                                                                                                                                                                    
+           80 SA_REP           19600                                                                                                                                                                    
+           80 SA_MAN           10500                                                                                                                                                                    
+          110 AC_MGR           12000                                                                                                                                                                    
+           90 AD_PRES          24000                                                                                                                                                                    
+           60 IT_PROG          19200                                                                                                                                                                    
+           20 MK_MAN           13000                                                                                                                                                                    
+
+8 rows selected.
+
+SQL> REM JOB_ID WISE COUNT OF EMPLOYEES. EXCLUDE THOSE WHO WERE HIRED BEFORE YEAR 94. DISPLAY ONLY THOSE JOBS FOR WHICH 2 OR MORE EMPLOYEES WERE HIRED.
+SQL> 
+SQL> SELECT JOB_ID ,COUNT(*) FROM EMPLOYEES WHERE TO_CHAR(HIRE_DATE,'RRRR')>1994 GROUP BY JOB_ID HAVING COUNT(*)>=2;
+
+JOB_ID       COUNT(*)                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+SA_REP              3                                                                                                                                                                                   
+ST_CLERK            4                                                                                                                                                                                   
+
+SQL> REM NESTED SUMMARY FUNCTIONS :
+SQL> 
+SQL> REM SUMMARY FUNCTION WITHIN ANOTHER SUMMARY FUNCTION
+SQL> 
+SQL> REM WE CAN NEST SUMMARY FUNCTION ONLY UPTO TWO LEVELS
+SQL> 
+SQL> REM IF WE USE NESTED SUMMARY FUNCTION ALL OTHER ITEMS OF SELECT MUST BE NESTED SUMMARY ITEM ONLY
+SQL> 
+SQL> REM WHEN WE USE NESTED SUMMARY ITEM, GROUP BY CLAUSE IS MANDATORY.
+SQL> 
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES;   
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       8775                                                                                                                                                                                             
+
+SQL> SELECT AVG(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID; 
+
+AVG(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       7000                                                                                                                                                                                             
+ 19333.3333                                                                                                                                                                                             
+       9500                                                                                                                                                                                             
+      10150                                                                                                                                                                                             
+       3500                                                                                                                                                                                             
+ 10033.3333                                                                                                                                                                                             
+       6400                                                                                                                                                                                             
+       4400                                                                                                                                                                                             
+
+8 rows selected.
+
+SQL> REM DISPLAY DEPARTMENT WISE HIGHEST AVERAGE SALARY
+SQL> 
+SQL> SELECT MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+MAX(AVG(SALARY))                                                                                                                                                                                        
+----------------                                                                                                                                                                                        
+      19333.3333                                                                                                                                                                                        
+
+SQL> SELECT MIN(MAX(AVG(SALARY))) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT MIN(MAX(AVG(SALARY))) FROM EMPLOYEES GROUP BY DEPARTMENT_ID
+               *
+ERROR at line 1:
+ORA-00935: group function is nested too deeply 
+
+SQL> SELECT MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                                        
+---------------- ----------------                                                                                                                                                                       
+            3500       19333.3333                                                                                                                                                                       
+
+SQL> SELECT AVG(SALARY) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT AVG(SALARY) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID
+           *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+SQL> SELECT COUNT(*) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+  COUNT(*) MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                            
+---------- ---------------- ----------------                                                                                                                                                            
+         8             3500       19333.3333                                                                                                                                                            
+
+SQL> SELECT COUNT(DEPARTMENT_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+COUNT(DEPARTMENT_ID) MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                  
+-------------------- ---------------- ----------------                                                                                                                                                  
+                   7             3500       19333.3333                                                                                                                                                  
+
+SQL> SELECT COUNT(JOB_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+COUNT(JOB_ID) MIN(AVG(SALARY)) MAX(AVG(SALARY))                                                                                                                                                         
+------------- ---------------- ----------------                                                                                                                                                         
+            8             3500       19333.3333                                                                                                                                                         
+
+SQL> SELECT COUNT(MANAGER_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+SELECT COUNT(MANAGER_ID) , MIN(AVG(SALARY)) , MAX(AVG(SALARY)) FROM EMPLOYEES GROUP BY DEPARTMENT_ID
+             *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT MAX(AVG(SALARY)) FROM EMPLOYEES;
+SELECT MAX(AVG(SALARY)) FROM EMPLOYEES
+           *
+ERROR at line 1:
+ORA-00978: nested group function without GROUP BY 
+
+SQL> REM DISPLAY JOB_ID WISE LOWEST COUNT OF EMPLOYEES
+SQL> 
+SQL> SELECT MIN(COUNT(*)) FROM EMPLOYEES GROUP BY JOB_ID;
+
+MIN(COUNT(*))                                                                                                                                                                                           
+-------------                                                                                                                                                                                           
+            1                                                                                                                                                                                           
+
+SQL> REM DISPLAY MANAGER_ID WISE LOWEST TOTAL SALARY AND HIGHEST TOTAL SALARY
+SQL> 
+SQL> SELECT MIN(SUM(SALARY)) , MAX(SUM(SALARY)) FROM EMPLOYEES GROUP BY MANAGER_ID;
+
+MIN(SUM(SALARY)) MAX(SUM(SALARY))                                                                                                                                                                       
+---------------- ----------------                                                                                                                                                                       
+            6000            63300                                                                                                                                                                       
+
+SQL> REM HIRE QUARTER WISE LOWEST COUNT OF EMPLOYEES AND HIGHEST COUNT OF EMPLOYEES
+SQL> 
+SQL> SELECT MIN(COUNT(*)),MAX(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q');
+SELECT MIN(COUNT(*)),MAX(SALARY) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q')
+                         *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT MIN(COUNT(*)),MAX(COUNT(*)) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q');
+
+MIN(COUNT(*)) MAX(COUNT(*))                                                                                                                                                                             
+------------- -------------                                                                                                                                                                             
+            2             8                                                                                                                                                                             
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs       TRAJS      650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> REM PCM TO BE DONE
+SQL> 
+SQL> SPOOL OFF

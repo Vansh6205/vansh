@@ -1,0 +1,358 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM SUB QUERY :
+SQL> 
+SQL> REM SUB QUERY : A SELECT STATEMENT WITHIN ANOTHER STATEMENT IS CALLED SUB QUERY.
+SQL> 
+SQL> REM SUB - INNER - CHILD
+SQL> 
+SQL> REM MAIN - OUTER - PARENT
+SQL> 
+SQL> REM WHEN WE USE SUB QUERY, IT GETS EXECUTED FIRST AND THEN IT'S RESULT IS USED BY MAIN QUERY.
+SQL> 
+SQL> 
+SQL> REM RESULT OF SUB QUERY IS NOT DISPLAYED ON SCREEN BUT IS USED BY MAIN QUERY.
+SQL> 
+SQL> REM RESULT OF MAIN QUERY WILL GET DISPLAYED ON SCREEN.
+SQL> 
+SQL> 
+SQL> 
+SQL> REM WE NEED TO USE SUB QUERY IN 4 BELOW TYPE QUESTIONS :
+SQL> 
+SQL> REM 1 WHEN WE WANT TO COMPARE SUMMARY FUNCTION WITHIN 'WHERE' CLAUSE.
+SQL> 
+SQL> REM 2 WHEN OUR MAIN QUERY/REQUIREMENT HAS SOME HIDDEN REQUIREMENT.
+SQL> 
+SQL> REM 3 WHEN WE WANT TO COMPARE NESTED SUMMARY FUNCTION IN 'HAVING' CLAUSE.
+SQL> 
+SQL> REM 4 WHEN WE WANT TO USE RESULT OF SUB QUERY AS TABLE FOR MAIN QUERY.
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> 
+SQL> REM 1 WHEN WE WANT TO COMPARE SUMMARY FUNCTION WITHIN 'WHERE' CLAUSE.
+SQL> 
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEE WHO GETS HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> REM SALARY = MAX(SALARY)
+SQL> 
+SQL> REM NON-SUMMARY ITEM = SUMMARY ITEM
+SQL> 
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = MAX(SALARY);
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = MAX(SALARY)
+                                                         *
+ERROR at line 1:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEES WHO WAS HIRED FIRST IN COMPANY
+SQL> 
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE = MIN(HIRE_DATE);
+WHERE HIRE_DATE = MIN(HIRE_DATE)
+                  *
+ERROR at line 3:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE = (SELECT MIN(HIRE_DATE) FROM EMPLOYEES);
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Steven     17-JUL-87                                                                                                                                                                                    
+
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEES WHO GETS HIGHEST COMMISSION AMOUNT.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY * COMMISSION_PCT COMM_AMOUNT
+  2  FROM EMPLOYEES
+  3  WHERE (SALARY * COMMISSION_PCT) = (SELECT MAX(SALARY * COMMISSION_PCT) FROM EMPLOYEES);
+
+FIRST_NAME COMM_AMOUNT                                                                                                                                                                                  
+---------- -----------                                                                                                                                                                                  
+Ellen             3300                                                                                                                                                                                  
+
+SQL> REM DISPLAY THOSE WHO GETS HIGHER SALARY THAN AVERAGE SALARY PAID BY COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY > AVG(SALARY);
+WHERE SALARY > AVG(SALARY)
+               *
+ERROR at line 2:
+ORA-00934: group function is not allowed here 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE (SELECT AVG(SALARY) FROM EMPLOYEES) < SALARY;
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+
+8 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS LOWEST OR HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES)
+  3  OR    SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> REM LOGICAL : OR , AND , NOT
+SQL> 
+SQL> REM SPECIAL OPERATOR : IN BETWEEN LIKE   IS NULL
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY IN  ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                    (SELECT MIN(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY IN  ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                    (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> REM MULTI ROW OPERATORS : ANY/SOME  ALL
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY = ANY ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                     (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY = SOME ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                     (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> REM DISPLAY ALL EXCEPT THOSE WHO GETS LOWEST OR HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY <> ALL ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                     (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY = SOME ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                     (SELECT MAX(SALARY) FROM EMPLOYEES))
+  4  
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY NOT IN ((SELECT MIN(SALARY) FROM EMPLOYEES),
+  3                     (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE NOT (SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES) OR
+  3                      (SELECT MAX(SALARY) FROM EMPLOYEES));
+WHERE NOT (SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES) OR
+                  *
+ERROR at line 2:
+ORA-00936: missing expression 
+
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE NOT (SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES) OR
+  3            SALARY=  (SELECT MAX(SALARY) FROM EMPLOYEES));
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY > (SELECT MIN(SALARY) FROM EMPLOYEES) AND
+  3        SALARY < (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY BETWEEN (SELECT MIN(SALARY)+1 FROM EMPLOYEES) AND
+  3                       (SELECT MAX(SALARY)-1 FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES
+  2  WHERE SALARY BETWEEN (SELECT MIN(SALARY) FROM EMPLOYEES)+1 AND
+  3                       (SELECT MAX(SALARY) FROM EMPLOYEES)-1;
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+18 rows selected.
+
+SQL> SPOOL OFF

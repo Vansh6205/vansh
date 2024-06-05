@@ -1,0 +1,211 @@
+SQL> 
+SQL> CL SCR
+
+SQL> REM CREATE TABLE :
+SQL> 
+SQL> DESC EMPLOYEES
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(10)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(10)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> REM TABLE HAS : 1 DEFINITION 2 DATA
+SQL> 
+SQL> REM DEFINITION INCLUDES : TABLENAME , COLUMN NAMES , DATA TYPES , SIZES , DEFAULT VALUES , CONSTRAINTS ( COLUMN , TABLE )
+SQL> 
+SQL> REM WE CAN CREATE TABLE IN TWO STYLES : 1 FROM SCRATCH 2 USING SUBQUERY/EXISTING TABLE
+SQL> 
+SQL> REM SYNTAX FOR CREATING TABLE FROM SCRATCH : CREATE TABLE table_name ( column_name data_type (size) DEFAULT default_value column_level_constraints,...,table_level_constraints);
+SQL> 
+SQL> REM ORACLE SUPPORTS TWO TYPES OF NAMING CONVENTIONS : 1 CASE INSENSITIVE (DEFAULT) 2 CASE SENSITIVE (NOT RECOMMENDED)
+SQL> 
+SQL> 
+SQL> 
+SQL> REM RULES FOR CASE INSENSITIVE TABLE NAMING :
+SQL> 
+SQL> REM 1 MINIMUM 1 CHARACTER , MAXIMUM 128 CHARACTERS
+SQL> 
+SQL> 
+SQL> REM 2 FIRST CHARACTER MUST BE ALPHABET
+SQL> 
+SQL> REM 3 REMAINING CHARACTERS MAY BE ALPHABETS, DIGITS OR ANY OF THE 3 SPECIAL CHARACTERS : _ # $
+SQL> 
+SQL> REM 4 WE CAN'T USE IDENTICAL NAME, WHICH IS ALREADY USED BY SAME USER.
+SQL> 
+SQL> REM 5 WE CAN'T USE ORACLE/SQL KEY/RESERVE WORD AS TABLE NAME,BUT IT MAY BE PART OF NAME.
+SQL> 
+SQL> 
+SQL> REM 1 ABC 2 123 3 _#$ 4 ABC123 5 _#$123 6 A_B#3$ 7 JOBS 8 SELect 9 into 10 into_#$
+SQL> 
+SQL> REM 1 T   2 F   3 F   4 T      5 F      6 T      7 F    8 F      9 F    10 T
+SQL> 
+SQL> 
+SQL> REM RULES FOR CASE SENSITIVE TABLE NAMING :
+SQL> 
+SQL> REM 1 MINIMUM 1 CHARACTER , MAXIMUM 128 CHARACTERS
+SQL> 
+SQL> REM 2 WE CAN USE ALMOST ALL CHARACTERS EXCEPT " AND &
+SQL> 
+SQL> REM 3 WE CAN CREATE TABLE WITH IDENTICAL SPELLING WITH EITHER DIFFERENT CASE OR SPACE.
+SQL> 
+SQL> REM 4 WE CAN CREATE TABLE WITH ANY SQL/ORACLE KEY/RESERVE WORD.
+SQL> 
+SQL> REM 5 WE SHOULD NOT USE ALL CAPITAL ALPHABETS, OTHERWISE IT WILL BE CONSIDERED AS CASE INSENSITIVE NAME.
+SQL> 
+SQL> REM 6 WE MUST 1 DELIMIT IT WITH DOUBLE QUOTES 2 USE SAME SPELLING 3 USE SAME CASE 4 USE SAME SPACING
+SQL> 
+SQL> 
+SQL> REM 1 "Select" 2 Teni 3 "gaNEsh 4 'hihello' 5 "Party malshe?" 6 from 7 "abc!@#" 8 "king' 9 "tabLE" 10 "HI"
+SQL> 
+SQL> REM 1 T        2 F    3 F       4 F         5 T               6 F    7 T        8 F      9 T       10 T
+SQL> 
+SQL> 
+SQL> REM CASE INSENSITIVE NAMING EXAMPLE
+SQL> 
+SQL> create table abc(no number);
+create table abc(no number)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> drop table abc;
+
+Table dropped.
+
+SQL> create table abc(no number);
+
+Table created.
+
+SQL> insert into Abc(10);
+insert into Abc(10)
+                *
+ERROR at line 1:
+ORA-00928: missing SELECT keyword 
+
+
+SQL> insert into Abc values (10);
+
+1 row created.
+
+SQL> insert into ABc values (20);
+
+1 row created.
+
+SQL> insert into ABC values (30);
+
+1 row created.
+
+SQL> SELECT * FROM AbC;
+
+        NO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> SELECT * FROM aBc;
+
+        NO                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+        10                                                                                                                                                                                              
+        20                                                                                                                                                                                              
+        30                                                                                                                                                                                              
+
+SQL> 
+SQL> CREATE TABLE "Xyz" (c char);
+CREATE TABLE "Xyz" (c char)
+             *
+ERROR at line 1:
+ORA-00955: name is already used by an existing object 
+
+
+SQL> DROP TABLE "Xyz";
+
+Table dropped.
+
+SQL> CREATE TABLE "Xyz" (c char);
+
+Table created.
+
+SQL> insert into Xyz values ('A');
+insert into Xyz values ('A')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> insert into 'Xyz' values ('A');
+insert into 'Xyz' values ('A')
+            *
+ERROR at line 1:
+ORA-00903: invalid table name 
+
+
+SQL> insert into "Xyz" values ('A');
+
+1 row created.
+
+SQL> insert into "XYz" values ('A');
+insert into "XYz" values ('A')
+            *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select * from "Xyz";
+
+C                                                                                                                                                                                                       
+-                                                                                                                                                                                                       
+A                                                                                                                                                                                                       
+
+SQL> select * from Xyz;
+select * from Xyz
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select * from "XyZ";
+select * from "XyZ"
+              *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> REM CHARACTER : CHAR , VARCHAR/VARCHAR2/NVARCHAR2
+SQL> 
+SQL> REM NUMERICAL : NUMBER
+SQL> 
+SQL> REM DATE : DATE TIMESTAMP   TIMESTAMP WITH TIME ZONE   TIMESTAMP WITH LOCAL TIME ZONE
+SQL> 
+SQL> REM INTERAL : INTERVAL DAY TO SECOND  , INTERVAL YEAR TO MONTH
+SQL> 
+SQL> REM BINARY DATA : BFILE
+SQL> 
+SQL> 
+SQL> DESC EMPLOYEES
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                 VARCHAR2(10)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(10)
+ EMAIL                                                                                                                      VARCHAR2(10)
+ PHONE_NUMBER                                                                                                               VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                     NUMBER(8,2)
+ COMMISSION_PCT                                                                                                             NUMBER(2,2)
+ MANAGER_ID                                                                                                                 NUMBER(6)
+ DEPARTMENT_ID                                                                                                              NUMBER(4)
+
+SQL> SPOOL OFF

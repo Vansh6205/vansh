@@ -1,0 +1,947 @@
+SQL> 
+SQL> CL SCR
+SQL> REM SUB QUERY :
+SQL> 
+SQL> REM SUB QUERY : IT IS SELECT STATEMENT WITHIN ANOTHER STATEMENT.
+SQL> 
+SQL> REM SUB QUERY : QUERY WITHIN ANOTHER QUERY/STATEMENT
+SQL> 
+SQL> REM SUB - MAIN
+SQL> 
+SQL> REM INNER - OUTER
+SQL> 
+SQL> REM CHILD - PARENT
+SQL> 
+SQL> REM WHEN WE USE SUB QUERY, IT IS EXECUTED FIRST THEN IT'S RETURN VALUE IS USED BY MAIN STATEMENT.
+SQL> 
+SQL> REM RESULT OF SUB QUERY IS NOT DISPLAYED ON SCREEN BUT IS USED BY MAIN STATEMENT.
+SQL> 
+SQL> REM RESULT OF MAIN QUERY IS DISPLAYED ON SCREEN.
+SQL> 
+SQL> REM 4 TYPES OF QUESTIONS/SITUATIONS WHEN WE NEED SUB QUERY :
+SQL> 
+SQL> REM 1 WHEN WE NEED TO COMPARE SUMMARY ITEM/FUNCTION WITHIN 'WHERE' CLAUSE.
+SQL> 
+SQL> REM SYNTAX SELECT : SELECT ... FROM ... WHERE ... GROUP BY / HAVING ... ORDER BY ... OFFSET ... FETCH ...;
+SQL> 
+SQL> REM EXECUTION PRECEDENCE : FROM ... WHERE ... GROUP BY ... HAVING ... COLUMN ALIAS ... ORDER BY ... OFFSET ... FETCH ... SELECT ...;
+SQL> 
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEE WHO GETS HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> REM INDIVIDUAL SALARY = MAX(SALARY)
+SQL> 
+SQL> REM NON-SUMMARY ITEM = SUMMARY ITEM
+SQL> 
+SQL> REM SUMMARY ITEMS/FUNCTIONS : MIN MAX COUNT   SUM AVG
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = MAX(SALARY);
+SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = MAX(SALARY)
+                                                         *
+ERROR at line 1:
+ORA-00934: group function is not allowed here 
+
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY = (SELECT MAX(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+
+SQL> REM OFFSET = TOTAL - RESULT
+SQL> 
+SQL> REM DISPLAY LAST 7 ROWS
+SQL> 
+SQL> REM OFFSET = TOTAL - RESULT
+SQL> 
+SQL> REM OFFSET = 20 = 7 = 13
+SQL> 
+SQL> SELECT * FROM EMPLOYEES OFFSET 13 ROWS;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+7 rows selected.
+
+SQL> SELECT * FROM EMPLOYEES OFFSET (SELECT COUNT(*) FROM EMPLOYEES) - 7 ROWS;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+7 rows selected.
+
+SQL> REM DISPLAY INFO. ABOUT EMPLOYEES WHO WERE HIRED LAST IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES
+  2  WHERE HIRE_DATE = (SELECT MAX(HIRE_DATE) FROM EMPLOYEES);
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Eleni      29-JAN-00                                                                                                                                                                                    
+
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES
+  2  WHERE (SELECT MAX(HIRE_DATE) FROM EMPLOYEES) = HIRE_DATE;
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Eleni      29-JAN-00                                                                                                                                                                                    
+
+SQL> REM DISPLAY THOSE WHO GETS LOWEST COMMISSION_PCT IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , COMMISSION_PCT
+  2  FROM EMPLOYEES
+  3  WHERE COMMISSION_PCT = (SELECT MIN(COMMISSION_PCT) FROM EMPLOYEES);
+
+FIRST_NAME COMMISSION_PCT                                                                                                                                                                               
+---------- --------------                                                                                                                                                                               
+Kimerely              .15                                                                                                                                                                               
+
+SQL> REM DISPLAY THOSE WHO GETS HIGHEST COMMISSION AMOUNT IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY * COMMISSION_PCT COMM_AMOUNT
+  2  FROM EMPLOYEES
+  3  WHERE SALARY * COMMISSION_PCT = (SELECT SALARY * COMMISSION_PCT FROM EMPLOYEES);
+WHERE SALARY * COMMISSION_PCT = (SELECT SALARY * COMMISSION_PCT FROM EMPLOYEES)
+                                 *
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> SELECT FIRST_NAME , SALARY * COMMISSION_PCT COMM_AMOUNT
+  2  FROM EMPLOYEES
+  3  WHERE SALARY * COMMISSION_PCT = (SELECT MAX(SALARY * COMMISSION_PCT) FROM EMPLOYEES);
+
+  
+
+FIRST_NAME COMM_AMOUNT                                                                                                                                                                                  
+---------- -----------                                                                                                                                                                                  
+Ellen             3300                                                                                                                                                                                  
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS HIGHER SALARY THAN THE AVERAGE SALARY PAID BY COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Alexander        9000                                                                                                                                                                                   
+Eleni           10500                                                                                                                                                                                   
+Ellen           11000                                                                                                                                                                                   
+Michael         13000                                                                                                                                                                                   
+Shelley         12000                                                                                                                                                                                   
+
+8 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS EITHER LOWEST OR HIGHEST SALARY IN COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME,SALARY FROM EMPLOYEES WHERE SALARY=(SELECT MAX(SALARY) FROM EMPLOYEES) OR SALARY=(SELECT MIN(SALARY) FROM EMPLOYEES);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> REM USING 1 LOGICAL OPERATOR 2 SPECIAL OPERATOR 3 MULTI ROW OPERATOR
+SQL> 
+SQL> SELECT FIRST_NAME ,  SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY = ANY((SELECT MAX(SALARY) FROM EMPLOYEES) ,(SELECT MIN(SALARY) FROM EMPLOYEES) )  ;
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> select first_name , salary
+  2  from employees
+  3  where salary not between (select min(salary) from employees)+1 and (select max(salary) from employees)-1;
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> select first_name from employees where salary in ((select max(salary) from employees),(select min(salary) from employees));
+
+FIRST_NAME                                                                                                                                                                                              
+----------                                                                                                                                                                                              
+Steven                                                                                                                                                                                                  
+Peter                                                                                                                                                                                                   
+
+SQL> select first_name , salary
+  2  from employees
+  3  where salary not between (select min(salary)+1 from employees) and (select max(salary)-1 from employees);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> select first_name , salary
+  2  from employees
+  3  where salary not between (select min(salary+1) from employees) and (select max(salary-1) from employees);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Steven          24000                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS LOWER SALARY THAN AVERAGE SALARY PAID TO DEPARTMENT 60
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY FROM EMPLOYEES WHERE SALARY < (SELECT AVG(SALARY) FROM EMPLOYEES WHERE DEPARTMENT_ID=60);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Kevin            5800                                                                                                                                                                                   
+Trenna           3500                                                                                                                                                                                   
+Curtis           3100                                                                                                                                                                                   
+Randall          2600                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+
+9 rows selected.
+
+SQL> REM DISPLAY THOSE SA_REP WHO GETS HIGHER SALARY THAN AVERAGE SALARY PAID BY COMPANY.
+SQL> 
+SQL> SELECT FIRST_NAME , JOB_ID  ,SALARY FROM EMPLOYEES WHERE JOB_ID = 'SA_REP' AND SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES );
+
+FIRST_NAME JOB_ID         SALARY                                                                                                                                                                        
+---------- ---------- ----------                                                                                                                                                                        
+Ellen      SA_REP          11000                                                                                                                                                                        
+
+SQL> SELECT * FROM EMPLOYEES;
+
+EMPLOYEE_ID FIRST_NAME LAST_NAME  EMAIL      PHONE_NUMBER         HIRE_DATE JOB_ID         SALARY COMMISSION_PCT MANAGER_ID DEPARTMENT_ID                                                               
+----------- ---------- ---------- ---------- -------------------- --------- ---------- ---------- -------------- ---------- -------------                                                               
+        100 Steven     King       SKING      515.123.4567         17-JUL-87 AD_PRES         24000                                      90                                                               
+        101 Neena      Kochhar    NKOCHHAR   515.123.4568         21-SEP-89 AD_VP           17000                       100            90                                                               
+        102 Lex        De Haan    LDEHAAN    515.123.4569         13-JAN-93 AD_VP           17000                       100            90                                                               
+        103 Alexander  Hunold     AHUNOLD    590.423.4567         03-JAN-90 IT_PROG          9000                       102            60                                                               
+        104 Bruce      Ernst      BERNST     590.423.4568         21-MAY-91 IT_PROG          6000                       103            60                                                               
+        107 Diana      Lorentz    DLORENTZ   590.423.5567         07-FEB-99 IT_PROG          4200                       103            60                                                               
+        124 Kevin      Mourgos    KMOURGOS   650.123.5234         16-NOV-99 ST_MAN           5800                       100            50                                                               
+        141 Trenna     Rajs                  650.121.8009         17-OCT-95 ST_CLERK         3500                       124            50                                                               
+        142 Curtis     Davies     CDAVIES    650.121.2994         29-JAN-97 ST_CLERK         3100                       124            50                                                               
+        143 Randall    Matos      RMATOS     650.121.2874         15-MAR-98 ST_CLERK         2600                       124            50                                                               
+        144 Peter      Vargas     PVARGAS    650.121.2004         09-JUL-98 ST_CLERK         2500                       124            50                                                               
+        149 Eleni      Zlotkey    EZLOTKEY   011.44.1344.429018   29-JAN-00 SA_MAN          10500             .2        100            80                                                               
+        174 Ellen      Abel       EABEL      011.44.1644.429267   11-MAY-96 SA_REP          11000             .3        149            80                                                               
+        176 Jonathon   Taylor     JTAYLOR    011.44.1644.429265   24-MAR-98 SA_REP           8600             .3        149            80                                                               
+        178 Kimerely   Grant      KGRANT     011.44.1644.429263   24-MAY-99 SA_REP           7000            .15        149                                                                             
+        200 Jennifer   Whalen     JWHALEN    515.123.4444         17-SEP-87 AD_ASST          4400                       101            10                                                               
+        201 Michael    Hartstein  MHARTSTE   515.123.5555         17-FEB-96 MK_MAN          13000                       100            20                                                               
+        202 Pat        Fay        PFAY       603.123.6666         17-AUG-97 MK_REP           6000                       201            20                                                               
+        205 Shelley    Higgins    SHIGGINS   515.123.8080         07-JUN-94 AC_MGR          12000                       101           110                                                               
+        206 William    Gietz      WGIETZ     515.123.8181         07-JUN-94 AC_ACCOUNT       8300                       205           110                                                               
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE EMPLOYEES OF DEPARTMENT 20 WHO GETS HIGHER SALARY THAN AVERAGE SALARY PAID TO IT_PROG.
+SQL> 
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , JOB_ID FROM EMPLOYEES WHERE DEPARTMENT_ID = 20 AND SALARY > (SELECT AVG(SALARY) FROM EMPLOYEES WHERE JOB_ID = 'IT_PROG')
+  2  ;
+
+FIRST_NAME DEPARTMENT_ID JOB_ID                                                                                                                                                                         
+---------- ------------- ----------                                                                                                                                                                     
+Michael               20 MK_MAN                                                                                                                                                                         
+
+SQL> REM DISPLAY THOSE WHO GETS LOWEST SALARY FOR THEIR DEPARTMENT.
+SQL> 
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+WHERE SALARY = (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID)
+                *
+ERROR at line 3:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY = ANY (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+10 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY = SOME (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+10 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY IN (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Bruce            6000                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Kimerely         7000                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+
+10 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE SALARY IN (SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME DEPARTMENT_ID     SALARY                                                                                                                                                                     
+---------- ------------- ----------                                                                                                                                                                     
+Neena                 90      17000                                                                                                                                                                     
+Lex                   90      17000                                                                                                                                                                     
+Bruce                 60       6000                                                                                                                                                                     
+Diana                 60       4200                                                                                                                                                                     
+Peter                 50       2500                                                                                                                                                                     
+Jonathon              80       8600                                                                                                                                                                     
+Kimerely                       7000                                                                                                                                                                     
+Jennifer              10       4400                                                                                                                                                                     
+Pat                   20       6000                                                                                                                                                                     
+William              110       8300                                                                                                                                                                     
+
+10 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , SALARY) IN (SELECT DEPARTMENT_ID , MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME     SALARY                                                                                                                                                                                   
+---------- ----------                                                                                                                                                                                   
+Neena           17000                                                                                                                                                                                   
+Lex             17000                                                                                                                                                                                   
+Pat              6000                                                                                                                                                                                   
+William          8300                                                                                                                                                                                   
+Peter            2500                                                                                                                                                                                   
+Jonathon         8600                                                                                                                                                                                   
+Diana            4200                                                                                                                                                                                   
+Jennifer         4400                                                                                                                                                                                   
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , SALARY
+  2  FROM EMPLOYEES
+  3  WHERE (DEPARTMENT_ID , SALARY) IN (SELECT DEPARTMENT_ID , MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME DEPARTMENT_ID     SALARY                                                                                                                                                                     
+---------- ------------- ----------                                                                                                                                                                     
+Neena                 90      17000                                                                                                                                                                     
+Lex                   90      17000                                                                                                                                                                     
+Pat                   20       6000                                                                                                                                                                     
+William              110       8300                                                                                                                                                                     
+Peter                 50       2500                                                                                                                                                                     
+Jonathon              80       8600                                                                                                                                                                     
+Diana                 60       4200                                                                                                                                                                     
+Jennifer              10       4400                                                                                                                                                                     
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , SALARY
+  2  FROM EMPLOYEES 
+  3  WHERE (NVL(DEPARTMENT_ID,0) , SALARY) IN (SELECT NVL(DEPARTMENT_ID,0) , MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID);
+
+FIRST_NAME DEPARTMENT_ID     SALARY                                                                                                                                                                     
+---------- ------------- ----------                                                                                                                                                                     
+Kimerely                       7000                                                                                                                                                                     
+Neena                 90      17000                                                                                                                                                                     
+Lex                   90      17000                                                                                                                                                                     
+Pat                   20       6000                                                                                                                                                                     
+William              110       8300                                                                                                                                                                     
+Peter                 50       2500                                                                                                                                                                     
+Jonathon              80       8600                                                                                                                                                                     
+Diana                 60       4200                                                                                                                                                                     
+Jennifer              10       4400                                                                                                                                                                     
+
+9 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS HIGHEST SALARY FOR THEIR JOB_ID.
+SQL> SELECT MIN(SALARY) FROM EMPLOYEES GROUP BY DEPARTMENT_ID;
+
+MIN(SALARY)                                                                                                                                                                                             
+-----------                                                                                                                                                                                             
+       7000                                                                                                                                                                                             
+      17000                                                                                                                                                                                             
+       6000                                                                                                                                                                                             
+       8300                                                                                                                                                                                             
+       2500                                                                                                                                                                                             
+       8600                                                                                                                                                                                             
+       4200                                                                                                                                                                                             
+       4400                                                                                                                                                                                             
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME , DEPARTMENT_ID , SALARY
+  2  FROM EMPLOYEES;
+
+FIRST_NAME DEPARTMENT_ID     SALARY                                                                                                                                                                     
+---------- ------------- ----------                                                                                                                                                                     
+Steven                90      24000                                                                                                                                                                     
+Neena                 90      17000                                                                                                                                                                     
+Lex                   90      17000                                                                                                                                                                     
+Alexander             60       9000                                                                                                                                                                     
+Bruce                 60       6000                                                                                                                                                                     
+Diana                 60       4200                                                                                                                                                                     
+Kevin                 50       5800                                                                                                                                                                     
+Trenna                50       3500                                                                                                                                                                     
+Curtis                50       3100                                                                                                                                                                     
+Randall               50       2600                                                                                                                                                                     
+Peter                 50       2500                                                                                                                                                                     
+Eleni                 80      10500                                                                                                                                                                     
+Ellen                 80      11000                                                                                                                                                                     
+Jonathon              80       8600                                                                                                                                                                     
+Kimerely                       7000                                                                                                                                                                     
+Jennifer              10       4400                                                                                                                                                                     
+Michael               20      13000                                                                                                                                                                     
+Pat                   20       6000                                                                                                                                                                     
+Shelley              110      12000                                                                                                                                                                     
+William              110       8300                                                                                                                                                                     
+
+20 rows selected.
+
+SQL> REM DISPLAY THOSE WHO GETS HIGHEST SALARY FOR THEIR JOB_ID.
+SQL> 
+SQL> SELECT FIRST_NAME , JOB_ID , SALARY
+  2  FROM EMPLOYEES 
+  3  WHERE (JOB_ID , SALARY) = ANY (SELECT JOB_ID , MAX(SALARY) FROM EMPLOYEES GROUP BY JOB_ID);
+
+FIRST_NAME JOB_ID         SALARY                                                                                                                                                                        
+---------- ---------- ----------                                                                                                                                                                        
+Alexander  IT_PROG          9000                                                                                                                                                                        
+Shelley    AC_MGR          12000                                                                                                                                                                        
+William    AC_ACCOUNT       8300                                                                                                                                                                        
+Kevin      ST_MAN           5800                                                                                                                                                                        
+Jennifer   AD_ASST          4400                                                                                                                                                                        
+Neena      AD_VP           17000                                                                                                                                                                        
+Lex        AD_VP           17000                                                                                                                                                                        
+Eleni      SA_MAN          10500                                                                                                                                                                        
+Michael    MK_MAN          13000                                                                                                                                                                        
+Steven     AD_PRES         24000                                                                                                                                                                        
+Ellen      SA_REP          11000                                                                                                                                                                        
+Pat        MK_REP           6000                                                                                                                                                                        
+Trenna     ST_CLERK         3500                                                                                                                                                                        
+
+13 rows selected.
+
+SQL> SELECT FIRST_NAME , SALARY,JOB_ID FROM EMPLOYEES WHERE (JOB_ID,SALARY ) IN (SELECT (JOB_ID,MAX(SALARY)) FROM EMPLOYEES GROUP BY JOB_ID );
+SELECT FIRST_NAME , SALARY,JOB_ID FROM EMPLOYEES WHERE (JOB_ID,SALARY ) IN (SELECT (JOB_ID,MAX(SALARY)) FROM EMPLOYEES GROUP BY JOB_ID )
+                                                                                          *
+ERROR at line 1:
+ORA-00920: invalid relational operator 
+
+
+SQL> REM DISPLAY THOSE WHO WERE HIRED FIRST AND LAST IN EACH QUARTER. (IGNORE YEAR AND DATE)
+SQL> 
+SQL>  SELECT FIRST_NAME ,HIRE_DATE , TO_CHAR(HIRE_DATE,'Q')FROM EMPLOYEES WHERE HIRE_DATE = ANY (SELECT  MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q') )  OR HIRE_DATE = ANY (SELECT  MAX(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q') );
+
+FIRST_NAME HIRE_DATE T                                                                                                                                                                                  
+---------- --------- -                                                                                                                                                                                  
+Steven     17-JUL-87 3                                                                                                                                                                                  
+Alexander  03-JAN-90 1                                                                                                                                                                                  
+Bruce      21-MAY-91 2                                                                                                                                                                                  
+Kevin      16-NOV-99 4                                                                                                                                                                                  
+Trenna     17-OCT-95 4                                                                                                                                                                                  
+Peter      09-JUL-98 3                                                                                                                                                                                  
+Eleni      29-JAN-00 1                                                                                                                                                                                  
+Kimerely   24-MAY-99 2                                                                                                                                                                                  
+
+8 rows selected.
+
+SQL>  SELECT FIRST_NAME ,HIRE_DATE , TO_CHAR(HIRE_DATE,'Q')FROM EMPLOYEES WHERE HIRE_DATE = ANY (SELECT  MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q') )  OR HIRE_DATE = ANY (SELECT  MAX(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'Q') ) ORDER BY 3,2;
+
+FIRST_NAME HIRE_DATE T                                                                                                                                                                                  
+---------- --------- -                                                                                                                                                                                  
+Alexander  03-JAN-90 1                                                                                                                                                                                  
+Eleni      29-JAN-00 1                                                                                                                                                                                  
+Bruce      21-MAY-91 2                                                                                                                                                                                  
+Kimerely   24-MAY-99 2                                                                                                                                                                                  
+Steven     17-JUL-87 3                                                                                                                                                                                  
+Peter      09-JUL-98 3                                                                                                                                                                                  
+Trenna     17-OCT-95 4                                                                                                                                                                                  
+Kevin      16-NOV-99 4                                                                                                                                                                                  
+
+8 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES ORDER BY TO_CHAR(HIRE_DATE,'DD') , TO_CHAR(HIRE_DATE,'MM');
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Alexander  03-JAN-90                                                                                                                                                                                    
+Diana      07-FEB-99                                                                                                                                                                                    
+Shelley    07-JUN-94                                                                                                                                                                                    
+William    07-JUN-94                                                                                                                                                                                    
+Peter      09-JUL-98                                                                                                                                                                                    
+Ellen      11-MAY-96                                                                                                                                                                                    
+Lex        13-JAN-93                                                                                                                                                                                    
+Randall    15-MAR-98                                                                                                                                                                                    
+Kevin      16-NOV-99                                                                                                                                                                                    
+Michael    17-FEB-96                                                                                                                                                                                    
+Steven     17-JUL-87                                                                                                                                                                                    
+Pat        17-AUG-97                                                                                                                                                                                    
+Jennifer   17-SEP-87                                                                                                                                                                                    
+Trenna     17-OCT-95                                                                                                                                                                                    
+Bruce      21-MAY-91                                                                                                                                                                                    
+Neena      21-SEP-89                                                                                                                                                                                    
+Jonathon   24-MAR-98                                                                                                                                                                                    
+Kimerely   24-MAY-99                                                                                                                                                                                    
+Eleni      29-JAN-00                                                                                                                                                                                    
+Curtis     29-JAN-97                                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES ORDER BY TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'D');
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Curtis     29-JAN-97                                                                                                                                                                                    
+Lex        13-JAN-93                                                                                                                                                                                    
+Alexander  03-JAN-90                                                                                                                                                                                    
+Eleni      29-JAN-00                                                                                                                                                                                    
+Diana      07-FEB-99                                                                                                                                                                                    
+Michael    17-FEB-96                                                                                                                                                                                    
+Randall    15-MAR-98                                                                                                                                                                                    
+Jonathon   24-MAR-98                                                                                                                                                                                    
+Kimerely   24-MAY-99                                                                                                                                                                                    
+Bruce      21-MAY-91                                                                                                                                                                                    
+Ellen      11-MAY-96                                                                                                                                                                                    
+Shelley    07-JUN-94                                                                                                                                                                                    
+William    07-JUN-94                                                                                                                                                                                    
+Peter      09-JUL-98                                                                                                                                                                                    
+Steven     17-JUL-87                                                                                                                                                                                    
+Pat        17-AUG-97                                                                                                                                                                                    
+Neena      21-SEP-89                                                                                                                                                                                    
+Jennifer   17-SEP-87                                                                                                                                                                                    
+Trenna     17-OCT-95                                                                                                                                                                                    
+Kevin      16-NOV-99                                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES ORDER BY TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'DD');
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Alexander  03-JAN-90                                                                                                                                                                                    
+Lex        13-JAN-93                                                                                                                                                                                    
+Curtis     29-JAN-97                                                                                                                                                                                    
+Eleni      29-JAN-00                                                                                                                                                                                    
+Diana      07-FEB-99                                                                                                                                                                                    
+Michael    17-FEB-96                                                                                                                                                                                    
+Randall    15-MAR-98                                                                                                                                                                                    
+Jonathon   24-MAR-98                                                                                                                                                                                    
+Ellen      11-MAY-96                                                                                                                                                                                    
+Bruce      21-MAY-91                                                                                                                                                                                    
+Kimerely   24-MAY-99                                                                                                                                                                                    
+Shelley    07-JUN-94                                                                                                                                                                                    
+William    07-JUN-94                                                                                                                                                                                    
+Peter      09-JUL-98                                                                                                                                                                                    
+Steven     17-JUL-87                                                                                                                                                                                    
+Pat        17-AUG-97                                                                                                                                                                                    
+Jennifer   17-SEP-87                                                                                                                                                                                    
+Neena      21-SEP-89                                                                                                                                                                                    
+Trenna     17-OCT-95                                                                                                                                                                                    
+Kevin      16-NOV-99                                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'DD');
+SELECT HIRE_DATE FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'DD')
+       *
+ERROR at line 1:
+ORA-00979: not a GROUP BY expression 
+
+
+SQL> SELECT MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') , TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'DD');
+
+MIN(HIRE_                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+17-AUG-97                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+07-FEB-99                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+17-SEP-87                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+24-MAR-98                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+11-MAY-96                                                                                                                                                                                               
+24-MAY-99                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+
+18 rows selected.
+
+SQL> SELECT MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q');
+
+MIN(HIRE_                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+
+SQL> SELECT MIN(HIRE_DATE) , MAX(HIRE_dATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q');
+
+MIN(HIRE_ MAX(HIRE_                                                                                                                                                                                     
+--------- ---------                                                                                                                                                                                     
+03-JAN-90 29-JAN-00                                                                                                                                                                                     
+17-JUL-87 09-JUL-98                                                                                                                                                                                     
+21-MAY-91 24-MAY-99                                                                                                                                                                                     
+17-OCT-95 16-NOV-99                                                                                                                                                                                     
+
+SQL> SELECT TO_CHAR(HIRE_dATE,'Q') , MIN(HIRE_DATE) , MAX(HIRE_dATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q');
+
+T MIN(HIRE_ MAX(HIRE_                                                                                                                                                                                   
+- --------- ---------                                                                                                                                                                                   
+1 03-JAN-90 29-JAN-00                                                                                                                                                                                   
+3 17-JUL-87 09-JUL-98                                                                                                                                                                                   
+2 21-MAY-91 24-MAY-99                                                                                                                                                                                   
+4 17-OCT-95 16-NOV-99                                                                                                                                                                                   
+
+SQL> SELECT TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON') FROM EMPLOYEES;
+
+TO_DATE(S                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+17-JUL-23                                                                                                                                                                                               
+21-SEP-23                                                                                                                                                                                               
+13-JAN-23                                                                                                                                                                                               
+03-JAN-23                                                                                                                                                                                               
+21-MAY-23                                                                                                                                                                                               
+07-FEB-23                                                                                                                                                                                               
+16-NOV-23                                                                                                                                                                                               
+17-OCT-23                                                                                                                                                                                               
+29-JAN-23                                                                                                                                                                                               
+15-MAR-23                                                                                                                                                                                               
+09-JUL-23                                                                                                                                                                                               
+29-JAN-23                                                                                                                                                                                               
+11-MAY-23                                                                                                                                                                                               
+24-MAR-23                                                                                                                                                                                               
+24-MAY-23                                                                                                                                                                                               
+17-SEP-23                                                                                                                                                                                               
+17-FEB-23                                                                                                                                                                                               
+17-AUG-23                                                                                                                                                                                               
+07-JUN-23                                                                                                                                                                                               
+07-JUN-23                                                                                                                                                                                               
+
+20 rows selected.
+
+SQL> SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q');
+
+MIN(TO_DA                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+03-JAN-23                                                                                                                                                                                               
+09-JUL-23                                                                                                                                                                                               
+11-MAY-23                                                                                                                                                                                               
+17-OCT-23                                                                                                                                                                                               
+
+SQL> SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');
+
+MIN(TO_DA                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+03-JAN-23                                                                                                                                                                                               
+11-MAY-23                                                                                                                                                                                               
+09-JUL-23                                                                                                                                                                                               
+17-OCT-23                                                                                                                                                                                               
+
+SQL> SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');
+SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q')
+                                                                                                     *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');
+SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q')
+                                                                                                                                                                                 *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');
+
+MIN(TO_DA MAX(TO_DA                                                                                                                                                                                     
+--------- ---------                                                                                                                                                                                     
+03-JAN-23 24-MAR-23                                                                                                                                                                                     
+11-MAY-23 07-JUN-23                                                                                                                                                                                     
+09-JUL-23 21-SEP-23                                                                                                                                                                                     
+17-OCT-23 16-NOV-23                                                                                                                                                                                     
+
+SQL> SELECT MIN(HIRE_DATE) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') , TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'DD');
+
+MIN(HIRE_                                                                                                                                                                                               
+---------                                                                                                                                                                                               
+09-JUL-98                                                                                                                                                                                               
+21-MAY-91                                                                                                                                                                                               
+29-JAN-97                                                                                                                                                                                               
+17-JUL-87                                                                                                                                                                                               
+17-OCT-95                                                                                                                                                                                               
+17-AUG-97                                                                                                                                                                                               
+03-JAN-90                                                                                                                                                                                               
+07-FEB-99                                                                                                                                                                                               
+16-NOV-99                                                                                                                                                                                               
+17-SEP-87                                                                                                                                                                                               
+21-SEP-89                                                                                                                                                                                               
+24-MAR-98                                                                                                                                                                                               
+15-MAR-98                                                                                                                                                                                               
+11-MAY-96                                                                                                                                                                                               
+24-MAY-99                                                                                                                                                                                               
+17-FEB-96                                                                                                                                                                                               
+07-JUN-94                                                                                                                                                                                               
+13-JAN-93                                                                                                                                                                                               
+
+18 rows selected.
+
+SQL> SELECT FIRST_NAME , HIRE_DATE FROM EMPLOYEES ORDER BY TO_CHAR(HIRE_DATE,'MM') , TO_CHAR(HIRE_DATE,'DD');
+
+FIRST_NAME HIRE_DATE                                                                                                                                                                                    
+---------- ---------                                                                                                                                                                                    
+Alexander  03-JAN-90                                                                                                                                                                                    
+Lex        13-JAN-93                                                                                                                                                                                    
+Curtis     29-JAN-97                                                                                                                                                                                    
+Eleni      29-JAN-00                                                                                                                                                                                    
+Diana      07-FEB-99                                                                                                                                                                                    
+Michael    17-FEB-96                                                                                                                                                                                    
+Randall    15-MAR-98                                                                                                                                                                                    
+Jonathon   24-MAR-98                                                                                                                                                                                    
+Ellen      11-MAY-96                                                                                                                                                                                    
+Bruce      21-MAY-91                                                                                                                                                                                    
+Kimerely   24-MAY-99                                                                                                                                                                                    
+Shelley    07-JUN-94                                                                                                                                                                                    
+William    07-JUN-94                                                                                                                                                                                    
+Peter      09-JUL-98                                                                                                                                                                                    
+Steven     17-JUL-87                                                                                                                                                                                    
+Pat        17-AUG-97                                                                                                                                                                                    
+Jennifer   17-SEP-87                                                                                                                                                                                    
+Neena      21-SEP-89                                                                                                                                                                                    
+Trenna     17-OCT-95                                                                                                                                                                                    
+Kevin      16-NOV-99                                                                                                                                                                                    
+
+20 rows selected.
+
+SQL> SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) , MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q') ORDER BY TO_CHAR(HIRE_dATE,'Q');
+
+MIN(TO_DA MAX(TO_DA                                                                                                                                                                                     
+--------- ---------                                                                                                                                                                                     
+03-JAN-23 24-MAR-23                                                                                                                                                                                     
+11-MAY-23 07-JUN-23                                                                                                                                                                                     
+09-JUL-23 21-SEP-23                                                                                                                                                                                     
+17-OCT-23 16-NOV-23                                                                                                                                                                                     
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  (SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  (SELECT MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')));
+(SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+                                                                                                    *
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  (SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'),
+  5  (SELECT MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'));
+(SELECT MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'))
+                                                                                                   *
+ERROR at line 5:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  (SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  (SELECT MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'));
+(SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+                                                                                                    *
+ERROR at line 4:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  ((SELECT MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  (SELECT MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')) FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')));
+WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+      *
+ERROR at line 3:
+ORA-01840: input value not long enough for date format 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  ((SELECT SUBSTR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  ((SELECT SUBSTR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')));
+((SELECT SUBSTR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')))
+                                                                                                                      *
+ERROR at line 5:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  ((SELECT SUBSTR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  (SELECT SUBSTR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')));
+((SELECT SUBSTR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+                                                             *
+ERROR at line 4:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE SUBSTR(HIRE_DATE,1,6) IN
+  4  ((SELECT SUBSTR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  (SELECT SUBSTR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')));
+((SELECT SUBSTR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+                                                             *
+ERROR at line 4:
+ORA-01722: invalid number 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') IN
+  4  ((SELECT TO_CHAR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  5  (SELECT TO_CHAR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')));
+((SELECT TO_CHAR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')),
+  *
+ERROR at line 4:
+ORA-01427: single-row subquery returns more than one row 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') =
+  4  ((SELECT TO_CHAR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')) OR
+  5  TO_CHAR(HIRE_DATE,'DD-MON') =
+  6  ((SELECT TO_CHAR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'));
+((SELECT TO_CHAR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')) OR
+                                                                                                                        *
+ERROR at line 4:
+ORA-00907: missing right parenthesis 
+
+
+SQL> SELECT FIRST_NAME , HIRE_DATE
+  2  FROM EMPLOYEES
+  3  WHERE TO_CHAR(HIRE_DATE,'DD-MON') =
+  4  (SELECT TO_CHAR(MIN(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q')) OR
+  5  (SELECT TO_CHAR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'));
+(SELECT TO_CHAR(MAX(TO_DATE(SUBSTR(HIRE_DATE,1,6),'DD-MON')),'DD-MON') FROM EMPLOYEES GROUP BY TO_CHAR(HIRE_dATE,'Q'))
+                                                                                                                     *
+ERROR at line 5:
+ORA-00936: missing expression 
+
+
+SQL> SPOOL OFF
