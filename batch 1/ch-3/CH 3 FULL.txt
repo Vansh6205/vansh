@@ -382,7 +382,7 @@ WilliamGietz
 
 20 rows selected.
 
-SQL> SELECT FIRST_NAME || LAST_NAME "FULL NAME" FROM EMPLOYEES;
+SQL> SELECT FIRST_NAME || LAST_NAME "FULL NAME" FROM EMPLOYEES;  
 
 FULL NAME                                                                                                                                                                                               
 --------------------                                                                                                                                                                                    
