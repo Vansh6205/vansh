@@ -561,7 +561,7 @@ ORA-00923: FROM keyword not found where expected
 SQL> SELECT CONCAT(CONCAT(FIRST_NAME , ' ') , LAST_NAME) "FULL NAME" FROM EMPLOYEES;
 
 FULL NAME                                                                                                                                                                                               
----------------------                                                                                                                                                                                   
+------------------                                                                                                                                                                                  
 Steven King                                                                                                                                                                                             
 Neena Kochhar                                                                                                                                                                                           
 Lex De Haan                                                                                                                                                                                             
@@ -617,7 +617,7 @@ SQL>
 SQL> SELECT SALARY , LPAD(SALARY,10,'*') FROM EMPLOYEES;
 
     SALARY LPAD(SALARY,10,'*')                                                                                                                                                                          
----------- ----------------------------------------                                                                                                                                                     
+---------- -----------------------------                                                                                                                                                    
      24000 *****24000                                                                                                                                                                                   
      17000 *****17000                                                                                                                                                                                   
      17000 *****17000                                                                                                                                                                                   

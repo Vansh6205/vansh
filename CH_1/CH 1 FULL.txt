@@ -2517,7 +2517,7 @@ ORA-00923: FROM keyword not found where expected
 SQL> SELECT ROWNUM , REGIONS.* FROM REGIONS;
 
     ROWNUM        RID REGION_NAME                                                                                                                                                                       
----------- ---------- -------------------------                                                                                                                                                         
+---------- ---------- ---------------------                                                                                                                                                         
          1          1 Europe                                                                                                                                                                            
          2          2 Americas                                                                                                                                                                          
          3          3 Asia                                                                                                                                                                              
@@ -2526,7 +2526,7 @@ SQL> SELECT ROWNUM , REGIONS.* FROM REGIONS;
 SQL> SELECT ROWID , REGIONS.* FROM REGIONS;
 
 ROWID                     RID REGION_NAME                                                                                                                                                               
------------------- ---------- -------------------------                                                                                                                                                 
+------------------ ---------- ----------------                                                                                                                                               
 AAAVN3AAHAAAADUAAA          1 Europe                                                                                                                                                                    
 AAAVN3AAHAAAADUAAB          2 Americas                                                                                                                                                                  
 AAAVN3AAHAAAADUAAC          3 Asia                                                                                                                                                                      
